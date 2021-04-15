@@ -4,10 +4,11 @@ import com.badlogic.gdx.Game;
 import com.tower.defence.screen.MainMenuScreen;
 
 
-public class MyGdxGame extends Game {
+public class TowerDefense extends Game {
 
     public void create() {
-        this.setScreen(new MainMenuScreen(this));
+        //set first screen to main menu
+        this.setScreen(new MainMenuScreen());
     }
 
     public void render() {

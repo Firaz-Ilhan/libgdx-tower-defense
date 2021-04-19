@@ -1,4 +1,4 @@
-package Tower;
+package com.tower.defence.Tower;
 
 public class Tower_2 extends Towers {
 

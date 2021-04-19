@@ -1,4 +1,4 @@
-package Tower;
+package com.tower.defence.Tower;
 
 public abstract class Towers implements ITower {
     int cost;

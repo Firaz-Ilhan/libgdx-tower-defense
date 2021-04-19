@@ -1,6 +1,7 @@
 package com.tower.defence.Player;
 
-import java.util.ArrayList;
+import com.tower.defence.Tower.ITower;
+
 import java.util.List;
 
 public class Player {
@@ -9,7 +10,7 @@ public class Player {
     private boolean right;
     private boolean left;
     private int lifepoints = 200;
-    // private List<ITower> inventory;
+    private List<ITower> inventory;
 
     public Player(String name, boolean left,boolean right){
         this.name= name;
@@ -23,28 +24,28 @@ public class Player {
     }
 
 
-    /**
-     * Because there is no ITower by now, I commented this method
-     *
+
      public List<ITower> getInventory(){
-     return List.copyOf(inventory);
+     return inventory;
      }
 
      public void buyTower(ITower tower){
      inventory.add(tower);
      wallet = wallet - tower.getCost();
      }
-     public void sellTower(int i){
-     inventory.remove(i);
-     wallet = wallet + tower.getCost*0.8; //selling Towers only regain 80% of the costs
-     }
+     public void sellTower(int index){
+        ITower tower = inventory.get(index);
+        wallet = (int) (wallet + tower.getCost()*0.8); //selling Towers only regain 80% of the costs
+        inventory.remove(index);
 
-     public void placeTower(int index, int x,int y){
-     inventory[index].setX = x;
-     inventory[index].setY = y;
-     //the command for communication with the server must be implemented here
      }
-     */
+     
+     /* public void placeTower(int index, int x,int y){
+     inventory.get(index).setX(x);
+     inventory.get(index).setY(y);
+     //the command for communication with the server must be implemented here
+     }*/
+
     public int getWalletValue(){
         return wallet;
     }

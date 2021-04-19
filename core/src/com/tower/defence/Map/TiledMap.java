@@ -17,12 +17,11 @@ public class TiledMap extends ApplicationAdapter{
 
     @Override
     public void create(){
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
-        camera.zoom = 3f;
+        camera.setToOrtho(false,width,height);
         camera.update();
         tiledMap = new TmxMapLoader().load("map\\testmap.tmx");
         tiledMapRenderer = new OrthoCachedTiledMapRenderer(tiledMap);

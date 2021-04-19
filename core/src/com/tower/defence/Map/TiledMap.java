@@ -2,7 +2,6 @@ package com.tower.defence.Map;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,8 +22,7 @@ public class TiledMap extends ApplicationAdapter{
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
-        camera.position.x = 800;
-        camera.position.y = 450;
+        camera.zoom = 3f;
         camera.update();
         tiledMap = new TmxMapLoader().load("map\\testmap.tmx");
         tiledMapRenderer = new OrthoCachedTiledMapRenderer(tiledMap);

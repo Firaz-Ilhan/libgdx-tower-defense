@@ -1,4 +1,4 @@
-package Player;
+package com.tower.defence.Player;
 
 import java.util.ArrayList;
 import java.util.List;

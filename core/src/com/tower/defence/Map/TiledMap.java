@@ -23,7 +23,7 @@ public class TiledMap extends ApplicationAdapter{
         camera = new OrthographicCamera();
         camera.setToOrtho(false,width,height);
         camera.update();
-        tiledMap = new TmxMapLoader().load("map\\testmap.tmx");
+        tiledMap = new TmxMapLoader().load("map\\TowerDefenseMapPrototypeWIP.tmx");
         tiledMapRenderer = new OrthoCachedTiledMapRenderer(tiledMap);
     }
 

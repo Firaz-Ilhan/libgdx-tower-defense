@@ -39,7 +39,9 @@ public class Player {
         wallet = wallet + tower.getCost*0.8; //selling Towers only regain 80% of the costs
     }
 
-     public void placeTower(ITower tower, int x,int y){
+     public void placeTower(int index, int x,int y){
+        inventory[index].setX = x;
+        inventory[index].setY = y;
         //the command for communication with the server must be implemented here
     }
  */

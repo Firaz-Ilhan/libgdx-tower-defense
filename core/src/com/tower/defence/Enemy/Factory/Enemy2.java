@@ -3,6 +3,7 @@ package com.tower.defence.Enemy.Factory;
 import com.tower.defence.Enemy.IEnemy;
 
 public class Enemy2 implements IEnemy{
+
         private int x;
         private int y;
         private int lifepoints = 10;

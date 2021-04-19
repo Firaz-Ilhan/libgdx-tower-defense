@@ -28,8 +28,6 @@ public class TiledMap extends ApplicationAdapter{
         camera.update();
         tiledMap = new TmxMapLoader().load("map\\testmap.tmx");
         tiledMapRenderer = new OrthoCachedTiledMapRenderer(tiledMap);
-        Gdx.input.setInputProcessor(this);
-
     }
 
     @Override

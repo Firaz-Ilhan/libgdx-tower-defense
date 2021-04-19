@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Player {
     private String name;
-    private int wallet = 0;
+    private int wallet = 100;
     private boolean right;
     private boolean left;
     private int lifepoints = 200;
@@ -32,7 +32,7 @@ public class Player {
 
     public void buyTower(ITower tower){
         inventory.add(tower);
-        wallet = wallet - tower.getCost;
+        wallet = wallet - tower.getCost();
     }
     public void sellTower(int i){
         inventory.remove(i);

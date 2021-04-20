@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 
 public class TiledMap extends ApplicationAdapter{
-    Texture img;
     com.badlogic.gdx.maps.tiled.TiledMap tiledMap;
     OrthographicCamera camera;
     TiledMapRenderer tiledMapRenderer;
@@ -37,4 +36,9 @@ public class TiledMap extends ApplicationAdapter{
         tiledMapRenderer.render();
     }
     
+	@Override
+	public void dispose () {
+		tiledMap.dispose();
+	}
+
 }

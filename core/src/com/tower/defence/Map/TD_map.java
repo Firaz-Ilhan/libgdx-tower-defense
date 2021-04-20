@@ -51,9 +51,11 @@ public class TD_map extends ApplicationAdapter{
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //setting the render view to the camera
         camera.update();
         renderer.setView(camera);
 
+        //rendering the map
         renderer.getBatch().begin();
         renderer.renderTileLayer(groundLayer);
         renderer.getBatch().end();

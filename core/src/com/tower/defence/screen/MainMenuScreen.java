@@ -15,8 +15,8 @@ import com.tower.defence.TowerDefense;
 public class MainMenuScreen implements Screen {
 
     private final Stage stage;
-    private Skin skin;
-    private TowerDefense game;
+    private final Skin skin;
+    private final TowerDefense game;
 
     public MainMenuScreen(TowerDefense game) {
         this.game = game;
@@ -63,7 +63,6 @@ public class MainMenuScreen implements Screen {
                 game.setScreen(new SettingsScreen(game));
             }
         });
-
     }
 
     @Override

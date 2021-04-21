@@ -13,12 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defence.TowerDefense;
+import com.tower.defence.helper.Settings;
 
 public class SettingsScreen implements Screen {
 
     private final Stage stage;
-    private Skin skin;
-    private TowerDefense game;
+    private final Skin skin;
+    private final TowerDefense game;
 
     public SettingsScreen(final TowerDefense game) {
         this.game = game;
@@ -39,7 +40,7 @@ public class SettingsScreen implements Screen {
         headerTable.setDebug(false);
         stage.addActor(headerTable);
 
-        final TextButton mainMenuButton = new TextButton("Go Back", skin, "default");
+        final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
         final CheckBox windowedModeCheckBox = new CheckBox("Windowed Mode", skin, "default");
 
         mainMenuButton.addListener(new ChangeListener() {
@@ -48,6 +49,10 @@ public class SettingsScreen implements Screen {
                 game.setScreen(new MainMenuScreen(game));
             }
         });
+
+        if (!Gdx.graphics.isFullscreen()) {
+            windowedModeCheckBox.setChecked(true);
+        }
 
         windowedModeCheckBox.addListener(new ChangeListener() {
             @Override
@@ -60,7 +65,7 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        headerTable.align(Align.topLeft);
+        headerTable.align(Align.top);
         headerTable.add(mainMenuButton);
 
         settingsTable.defaults().pad(10f);

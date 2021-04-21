@@ -12,8 +12,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 public class TD_map extends ApplicationAdapter{
-    private AssetManager manager;
-
+    
     private TiledMap map;
     private TiledMapTileLayer groundLayer;
     private int[] decorationLayerIndices;
@@ -61,10 +60,5 @@ public class TD_map extends ApplicationAdapter{
         renderer.getBatch().end();
         renderer.render(decorationLayerIndices);
     }
-    
-	@Override
-	public void dispose () {
-		manager.dispose();
-	}
 
 }

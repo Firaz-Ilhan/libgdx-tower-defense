@@ -1,4 +1,4 @@
-package com.tower.defence.Map;
+package com.tower.defense.map;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

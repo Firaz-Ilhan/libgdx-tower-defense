@@ -1,12 +1,12 @@
-package com.tower.defence.Tower;
+package com.tower.defense.Tower;
 
-public class Tower_1 extends Towers {
+public class Tower_2 extends Towers {
 
-    public Tower_1(){
-        this.damage = 1;
+    public Tower_2(){
+        this.damage = 5;
         this.firerate = 1;
         this.range = 100;
-        this.cost = 50;
+        this.cost = 200;
     }
 
     @Override

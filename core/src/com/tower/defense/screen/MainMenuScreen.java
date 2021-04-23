@@ -1,74 +1,68 @@
-package com.tower.defence.screen;
+package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.tower.defence.TowerDefense;
+import com.tower.defense.TowerDefense;
 
-public class SettingsScreen implements Screen {
+public class MainMenuScreen implements Screen {
 
     private final Stage stage;
     private final Skin skin;
     private final TowerDefense game;
 
-    public SettingsScreen(final TowerDefense game) {
+    public MainMenuScreen(TowerDefense game) {
         this.game = game;
         skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
+        //create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
-        final Table settingsTable = new Table();
-        settingsTable.setFillParent(true);
-        settingsTable.setDebug(false);
-        stage.addActor(settingsTable);
+        final Table menuTable = new Table();
+        menuTable.setFillParent(true);
+        menuTable.setDebug(false);
+        stage.addActor(menuTable);
 
-        final Table headerTable = new Table();
-        headerTable.setFillParent(true);
-        headerTable.setDebug(false);
-        stage.addActor(headerTable);
+        //create buttons
+        final TextButton multiplayerButton = new TextButton("Multiplayer", skin, "default");
+        final TextButton settingsButton = new TextButton("Settings", skin, "default");
+        final TextButton aboutButton = new TextButton("About", skin, "default");
+        final TextButton exitButton = new TextButton("Exit", skin, "default");
 
-        final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
-        final CheckBox windowedModeCheckBox = new CheckBox("Windowed Mode", skin, "default");
+        //add buttons to table
+        menuTable.defaults().pad(10f);
+        menuTable.add(multiplayerButton);
+        menuTable.row();
+        menuTable.add(settingsButton);
+        menuTable.row();
+        menuTable.add(aboutButton);
+        menuTable.row();
+        menuTable.add(exitButton);
 
-        mainMenuButton.addListener(new ChangeListener() {
+        //create button listeners
+        exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenuScreen(game));
+                Gdx.app.exit();
             }
         });
 
-        if (!Gdx.graphics.isFullscreen()) {
-            windowedModeCheckBox.setChecked(true);
-        }
-
-        windowedModeCheckBox.addListener(new ChangeListener() {
+        settingsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (windowedModeCheckBox.isChecked()) {
-                    Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-                } else {
-                    Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-                }
+                game.setScreen(new SettingsScreen(game));
             }
         });
-
-        headerTable.align(Align.top);
-        headerTable.add(mainMenuButton);
-
-        settingsTable.defaults().pad(10f);
-        settingsTable.add(windowedModeCheckBox);
     }
 
     @Override
@@ -80,22 +74,20 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        // updates the stage's viewport when the screen size is changed
         stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override

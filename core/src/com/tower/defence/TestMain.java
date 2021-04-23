@@ -96,7 +96,8 @@ public class TestMain extends ApplicationAdapter {
             IEnemy enemy = iter.next();
             int newYLocation = (int)(enemy.getY()-30 * Gdx.graphics.getDeltaTime());
             enemy.setY(newYLocation);
-            if(enemy.getY() < 0 + 20) {
+            if(enemy.getY() < 20) {
+
                 iter.remove();
             }
             if(enemy.getLifepoints() <= 0) {
@@ -107,7 +108,7 @@ public class TestMain extends ApplicationAdapter {
             IEnemy enemy = iter.next();
             int newYLocation = (int)(enemy.getY()-30 * Gdx.graphics.getDeltaTime());
             enemy.setY(newYLocation);
-            if(enemy.getY() < 0 + 20) {
+            if(enemy.getY() < 20) {
                 iter.remove();
             }
             if(enemy.getLifepoints() <= 0) {

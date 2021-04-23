@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defence.TowerDefense;
-import com.tower.defence.helper.Settings;
 
 public class SettingsScreen implements Screen {
 

@@ -7,6 +7,8 @@ public interface IEnemy {
 
      int getDamage();
 
+     int getLifepoints();
+
      void setY(int y);
 
      void setLifepoints(int damageReceived);

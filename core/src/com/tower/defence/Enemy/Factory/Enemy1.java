@@ -55,4 +55,8 @@ public class Enemy1 implements IEnemy {
     public void setLifepoints(int damageReceived){
         lifepoints -= damageReceived;
     }
+
+    public int getLifepoints(){
+        return lifepoints;
+    }
 }

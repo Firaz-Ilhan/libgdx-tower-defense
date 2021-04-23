@@ -1,9 +1,6 @@
 package com.tower.defence.Player;
-<<<<<<< HEAD
-=======
 
 import com.tower.defence.Tower.ITower;
->>>>>>> developer
 
 import java.util.List;
 

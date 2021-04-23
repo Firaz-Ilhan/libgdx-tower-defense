@@ -63,6 +63,13 @@ public class MainMenuScreen implements Screen {
                 game.setScreen(new SettingsScreen(game));
             }
         });
+
+        multiplayerButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new GameScreen(game));
+            }
+        });
     }
 
     @Override

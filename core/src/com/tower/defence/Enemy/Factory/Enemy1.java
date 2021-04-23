@@ -2,6 +2,9 @@ package com.tower.defence.Enemy.Factory;
 
 import com.tower.defence.Enemy.IEnemy;
 
+/**
+ * 
+ */
 public class Enemy1 implements IEnemy {
     private int x;
     private int y;
@@ -14,20 +17,41 @@ public class Enemy1 implements IEnemy {
         this.y = y;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getY() {
         return y;
     }
-
+    /**
+     *
+     * @return
+     */
     public int getX() {
         return x;
     }
-
+    /**
+     *
+     * @return
+     */
     public int getDamage() {
         return damage;
     }
+
+    /**
+     *
+     * @param y
+     */
     public void setY(int y){
         this.y = y;
     }
+
+    /**
+     *
+     * @param damageReceived
+     * The damaged dealt by towers is subtracted from the remaining LP here
+     */
     public void setLifepoints(int damageReceived){
         lifepoints -= damageReceived;
     }

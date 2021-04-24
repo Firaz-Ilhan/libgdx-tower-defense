@@ -43,8 +43,8 @@ public class GameScreen implements Screen {
         };
 
         //setting up the camera
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
+        float width = 1600;
+        float height = 900;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, width, height);
         camera.update();

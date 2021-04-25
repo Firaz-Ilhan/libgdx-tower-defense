@@ -1,14 +1,14 @@
 package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
 
-public class GameScreen implements Screen, InputProcessor{
+public class GameScreen implements Screen{
 
     private final TowerDefense game;
     private final Stage stage;
@@ -29,6 +29,7 @@ public class GameScreen implements Screen, InputProcessor{
 
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
+    private SpriteBatch spriteBatch;
 
     private Vector2 mousePosition;
 
@@ -71,6 +72,8 @@ public class GameScreen implements Screen, InputProcessor{
         //creating the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
 
+        spriteBatch = new SpriteBatch();
+
         //setting up the font for the helper variables that show the mouse position
         font = new BitmapFont();
         font.setColor(Color.WHITE);
@@ -111,9 +114,15 @@ public class GameScreen implements Screen, InputProcessor{
         renderer.render(decorationLayerIndices);
 
         //rendering the hoveredTile visually on top of all tiles
-        renderer.getBatch().begin();
-        renderer.getBatch().draw(hoveredTile, tileX * 50, tileY * 50);
-        renderer.getBatch().end();
+        spriteBatch.begin();
+        spriteBatch.draw(hoveredTile, tileX * 50, tileY * 50);
+        spriteBatch.end();
+
+        if(Gdx.input.isButtonPressed(Buttons.LEFT)){
+            spriteBatch.begin();
+            spriteBatch.draw(turret, tileX * 50, tileY * 50);
+            spriteBatch.end();
+        }  
 
     }
 
@@ -142,58 +151,5 @@ public class GameScreen implements Screen, InputProcessor{
         map.dispose();
         game.dispose();
         stage.dispose();
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(button == Input.Buttons.LEFT){
-            /*renderer.getBatch().begin();
-            renderer.getBatch().draw(turret, tileX * 50, tileY * 50);
-            renderer.getBatch().end();*/
-            return true;
-        }        
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        // TODO Auto-generated method stub
-        return false;
     }
 }

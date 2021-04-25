@@ -1,19 +1,25 @@
 package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
 
-public class GameScreen implements Screen {
+public class GameScreen implements Screen, InputProcessor{
 
     private final TowerDefense game;
     private final Stage stage;
@@ -23,6 +29,17 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
+
+    private Vector2 mousePosition;
+
+    private int tileX;
+    private int tileY;
+
+    //Help variables to show mouse position
+    private BitmapFont font;
+
+    private Texture hoveredTile;
+    private Texture turret;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -34,6 +51,8 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
+        hoveredTile = new Texture(Gdx.files.internal("hovered_tile.png"));
+        turret = new Texture(Gdx.files.internal("turret.png"));
 
         //getting the layers of the map
         MapLayers mapLayers = map.getLayers();
@@ -51,6 +70,11 @@ public class GameScreen implements Screen {
 
         //creating the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
+
+        //setting up the font for the helper variables that show the mouse position
+        font = new BitmapFont();
+        font.setColor(Color.WHITE);
+        font.getData().setScale(2, 2);
     }
 
     @Override
@@ -63,11 +87,34 @@ public class GameScreen implements Screen {
         camera.update();
         renderer.setView(camera);
 
+        //getting the current mouse position
+        mousePosition = new Vector2(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY());
+
+        //x position of hovered tile
+        tileX = (int) mousePosition.x / 50;
+        //y position of hovered tile
+        tileY = (int) mousePosition.y / 50;
+
         //rendering the map
         renderer.getBatch().begin();
+
         renderer.renderTileLayer(groundLayer);
+        //temporary help
+        font.draw(renderer.getBatch(),String.valueOf(mousePosition.x),0,40);
+        font.draw(renderer.getBatch(),String.valueOf(mousePosition.y),100,40);
+        font.draw(renderer.getBatch(),String.valueOf(tileX),0,100);
+        font.draw(renderer.getBatch(),String.valueOf(tileY),100,100);
+
         renderer.getBatch().end();
+        
+        //rendering the detocation on top of the ground tiles
         renderer.render(decorationLayerIndices);
+
+        //rendering the hoveredTile visually on top of all tiles
+        renderer.getBatch().begin();
+        renderer.getBatch().draw(hoveredTile, tileX * 50, tileY * 50);
+        renderer.getBatch().end();
+
     }
 
     @Override
@@ -95,5 +142,58 @@ public class GameScreen implements Screen {
         map.dispose();
         game.dispose();
         stage.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(button == Input.Buttons.LEFT){
+            /*renderer.getBatch().begin();
+            renderer.getBatch().draw(turret, tileX * 50, tileY * 50);
+            renderer.getBatch().end();*/
+            return true;
+        }        
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

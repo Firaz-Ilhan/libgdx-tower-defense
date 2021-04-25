@@ -10,7 +10,7 @@ public class DesktopLauncher {
         config.title = "Tower Defense";
         config.width = 1600;
         config.height = 900;
-        config.fullscreen = true;
+        config.fullscreen = false;
         config.vSyncEnabled = true;
         config.foregroundFPS = 60;
         config.backgroundFPS = 30;

@@ -53,6 +53,7 @@ public class GameScreen implements Screen{
     public void show() {
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
         hoveredTile = new Texture(Gdx.files.internal("hovered_tile.png"));
+        //temporary
         turret = new Texture(Gdx.files.internal("turret.png"));
 
         //getting the layers of the map
@@ -98,9 +99,9 @@ public class GameScreen implements Screen{
         //y position of hovered tile
         tileY = (int) mousePosition.y / 50;
 
-        //rendering the map
         renderer.getBatch().begin();
 
+        //rendering the groundLayer
         renderer.renderTileLayer(groundLayer);
         //temporary help
         font.draw(renderer.getBatch(),String.valueOf(mousePosition.x),0,40);
@@ -110,7 +111,7 @@ public class GameScreen implements Screen{
 
         renderer.getBatch().end();
         
-        //rendering the detocation on top of the ground tiles
+        //rendering the decocation on top of the ground tiles
         renderer.render(decorationLayerIndices);
 
         //rendering the hoveredTile visually on top of all tiles
@@ -118,6 +119,7 @@ public class GameScreen implements Screen{
         spriteBatch.draw(hoveredTile, tileX * 50, tileY * 50);
         spriteBatch.end();
 
+        //temporary left click method to show the turret
         if(Gdx.input.isButtonPressed(Buttons.LEFT)){
             spriteBatch.begin();
             spriteBatch.draw(turret, tileX * 50, tileY * 50);

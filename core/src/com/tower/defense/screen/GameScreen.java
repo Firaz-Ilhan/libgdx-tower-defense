@@ -19,6 +19,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.helper.PlayerOneTiles;
+import com.tower.defense.helper.PlayerTwoTiles;
 
 public class GameScreen implements Screen{
 
@@ -40,7 +42,13 @@ public class GameScreen implements Screen{
     private BitmapFont font;
 
     private Texture hoveredTileTexture;
+    private Texture hoveredTileNotAllowed;
     private Texture turret;
+
+    private boolean playerSide;
+
+    private PlayerOneTiles playerOneTiles;
+    private PlayerTwoTiles playerTwoTiles;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -53,6 +61,7 @@ public class GameScreen implements Screen{
     public void show() {
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
+        hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
         //temporary
         turret = new Texture(Gdx.files.internal("turret.png"));
 
@@ -75,10 +84,16 @@ public class GameScreen implements Screen{
 
         spriteBatch = new SpriteBatch();
 
+        //checks which side the player is on based on boolean value
+        playerSide = true;
+
         //setting up the font for the helper variables that show the mouse position
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         font.getData().setScale(2, 2);
+        
+        playerOneTiles = new PlayerOneTiles();
+        playerTwoTiles = new PlayerTwoTiles();
     }
 
     @Override
@@ -117,18 +132,35 @@ public class GameScreen implements Screen{
         //rendering the decocation on top of the ground tiles
         renderer.render(decorationLayerIndices);
 
-        //rendering the hoveredTile visually on top of all tiles
+        //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
         spriteBatch.begin();
-        //TODO if( )
-        spriteBatch.draw(hoveredTileTexture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+
+        if(playerSide == true){
+            if(playerOneTiles.tileInArray(hoveredTilePosition) == true){
+                spriteBatch.draw(hoveredTileTexture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+            }
+
+            else{
+                spriteBatch.draw(hoveredTileNotAllowed, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+            }
+        }
+        else{
+            if(playerTwoTiles.tileInArray(hoveredTilePosition) == true){
+                spriteBatch.draw(hoveredTileTexture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+            }
+            else{
+                spriteBatch.draw(hoveredTileNotAllowed, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+            }
+        }
+
         spriteBatch.end();
 
         //temporary left click method to show the turret
-        if(Gdx.input.isButtonPressed(Buttons.LEFT)){
+        /*if(Gdx.input.isButtonPressed(Buttons.LEFT)){
             spriteBatch.begin();
             spriteBatch.draw(turret, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             spriteBatch.end();
-        }  
+        } */ 
 
     }
 

@@ -16,7 +16,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.helper.AllowedTiles;
 
@@ -29,6 +30,7 @@ public class GameScreen implements Screen{
     private int[] decorationLayerIndices;
 
     private OrthographicCamera camera;
+    private ScalingViewport viewport;
     private OrthogonalTiledMapRenderer renderer;
     private SpriteBatch spriteBatch;
 
@@ -49,8 +51,9 @@ public class GameScreen implements Screen{
 
     public GameScreen(TowerDefense game) {
         this.game = game;
+        viewport = new FitViewport(1600, 900);
         //create stage and set it as input processor
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -70,8 +73,11 @@ public class GameScreen implements Screen{
         };
 
         //setting up the camera
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
+        //float width = Gdx.graphics.getWidth();
+        //float height = Gdx.graphics.getHeight();
+        float width = 1600;
+        float height = 900;
+        
         camera = new OrthographicCamera();
         camera.setToOrtho(false, width, height);
         camera.update();
@@ -107,7 +113,7 @@ public class GameScreen implements Screen{
         camera.unproject(touchPos);
 
         //getting the current mouse position
-        mousePosition = new Vector2((int)touchPos.x, (int)touchPos.y);
+        mousePosition = new Vector2((int)touchPos.x,(int)touchPos.y);
 
         //position of the hovered tile
         hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
@@ -161,7 +167,8 @@ public class GameScreen implements Screen{
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, false);
+        viewport.update(width, height);
+        camera.update();
     }
 
     @Override

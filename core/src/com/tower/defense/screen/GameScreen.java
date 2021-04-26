@@ -18,8 +18,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
-import com.tower.defense.helper.PlayerOneTiles;
-import com.tower.defense.helper.PlayerTwoTiles;
+import com.tower.defense.helper.AllowedTiles;
 
 public class GameScreen implements Screen{
 
@@ -46,8 +45,7 @@ public class GameScreen implements Screen{
 
     private boolean playerSide;
 
-    private PlayerOneTiles playerOneTiles;
-    private PlayerTwoTiles playerTwoTiles;
+    private AllowedTiles allowedTiles;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -91,8 +89,7 @@ public class GameScreen implements Screen{
         font.setColor(Color.WHITE);
         font.getData().setScale(2, 2);
         
-        playerOneTiles = new PlayerOneTiles();
-        playerTwoTiles = new PlayerTwoTiles();
+        allowedTiles = new AllowedTiles();
     }
 
     @Override
@@ -110,7 +107,6 @@ public class GameScreen implements Screen{
         camera.unproject(touchPos);
 
         //getting the current mouse position
-        //mousePosition = new Vector2(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY());
         mousePosition = new Vector2((int)touchPos.x, (int)touchPos.y);
 
         //position of the hovered tile
@@ -135,7 +131,7 @@ public class GameScreen implements Screen{
         spriteBatch.begin();
 
         if(playerSide == true){
-            if(playerOneTiles.tileInArray(hoveredTilePosition) == true){
+            if(allowedTiles.tileInArray(hoveredTilePosition,AllowedTiles.playerOneAllowedTiles) == true){
                 spriteBatch.draw(hoveredTileTexture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             }
 
@@ -144,7 +140,7 @@ public class GameScreen implements Screen{
             }
         }
         else{
-            if(playerTwoTiles.tileInArray(hoveredTilePosition) == true){
+            if(allowedTiles.tileInArray(hoveredTilePosition,AllowedTiles.playerTwoAllowedTiles) == true){
                 spriteBatch.draw(hoveredTileTexture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             }
             else{

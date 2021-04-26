@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
 
@@ -23,6 +24,7 @@ public class GameScreen implements Screen {
 
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
+    private FitViewport viewport;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -43,14 +45,16 @@ public class GameScreen implements Screen {
         };
 
         //setting up the camera
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
+        float width = 1600;
+        float height = 900;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, width, height);
         camera.update();
 
         //creating the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
+
+        viewport = new FitViewport(width, height, camera);
     }
 
     @Override
@@ -72,7 +76,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, false);
+        viewport.update(width, height);
     }
 
     @Override

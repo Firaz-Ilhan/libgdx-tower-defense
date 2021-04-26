@@ -107,8 +107,8 @@ public class GameScreen implements Screen{
         camera.update();
         renderer.setView(camera);
 
+        //position is required to properly calculate the hovered tile
         Vector2 position = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
-        //temporary
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
 
@@ -123,6 +123,7 @@ public class GameScreen implements Screen{
 
         //rendering the groundLayer
         renderer.renderTileLayer(groundLayer);
+        
         //temporary help
         font.draw(renderer.getBatch(),String.valueOf(mousePosition.x),0,40);
         font.draw(renderer.getBatch(),String.valueOf(mousePosition.y),100,40);

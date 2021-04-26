@@ -14,7 +14,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -36,7 +35,6 @@ public class GameScreen implements Screen{
 
     private Vector2 mousePosition;
     private Vector2 hoveredTilePosition;
-    private Vector3 touchPos;
 
     //Help variables to show mouse position
     private BitmapFont font;
@@ -48,6 +46,9 @@ public class GameScreen implements Screen{
     private boolean playerSide;
 
     private AllowedTiles allowedTiles;
+
+    private int screenHeight;
+    private int screenWidth;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -73,8 +74,6 @@ public class GameScreen implements Screen{
         };
 
         //setting up the camera
-        //float width = Gdx.graphics.getWidth();
-        //float height = Gdx.graphics.getHeight();
         float width = 1600;
         float height = 900;
         
@@ -108,12 +107,14 @@ public class GameScreen implements Screen{
         camera.update();
         renderer.setView(camera);
 
-        //touchPos is used to translate the screen coordinates to the world coordinates
-        touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        camera.unproject(touchPos);
+        Vector2 position = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
+        //temporary
+        screenWidth = Gdx.graphics.getWidth();
+        screenHeight = Gdx.graphics.getHeight();
 
-        //getting the current mouse position
-        mousePosition = new Vector2((int)touchPos.x,(int)touchPos.y);
+        //getting the current mouse position                  
+        mousePosition = new Vector2((int)position.x - (screenWidth - 1600) / 1600,
+                                     (int)position.y - (screenHeight - 900) / 900);
 
         //position of the hovered tile
         hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
@@ -127,6 +128,8 @@ public class GameScreen implements Screen{
         font.draw(renderer.getBatch(),String.valueOf(mousePosition.y),100,40);
         font.draw(renderer.getBatch(),String.valueOf(hoveredTilePosition.x),0,100);
         font.draw(renderer.getBatch(),String.valueOf(hoveredTilePosition.y),100,100);
+        font.draw(renderer.getBatch(),String.valueOf(screenWidth),0,160);
+        font.draw(renderer.getBatch(),String.valueOf(screenHeight),100,160);
 
         renderer.getBatch().end();
         

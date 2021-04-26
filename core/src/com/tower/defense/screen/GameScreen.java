@@ -2,7 +2,6 @@ package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -43,7 +42,7 @@ public class GameScreen implements Screen{
 
     private Texture hoveredTileTexture;
     private Texture hoveredTileNotAllowed;
-    private Texture turret;
+    //private Texture turret;
 
     private boolean playerSide;
 
@@ -63,7 +62,7 @@ public class GameScreen implements Screen{
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
         //temporary
-        turret = new Texture(Gdx.files.internal("turret.png"));
+        //turret = new Texture(Gdx.files.internal("turret.png"));
 
         //getting the layers of the map
         MapLayers mapLayers = map.getLayers();

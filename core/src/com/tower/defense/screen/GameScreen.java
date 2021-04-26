@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.helper.AllowedTiles;
 
-public class GameScreen implements Screen{
+public class GameScreen implements Screen {
 
     private final TowerDefense game;
     private final Stage stage;
@@ -29,7 +29,7 @@ public class GameScreen implements Screen{
     private int[] decorationLayerIndices;
 
     private OrthographicCamera camera;
-    private ScalingViewport viewport;
+    private final ScalingViewport viewport;
     private OrthogonalTiledMapRenderer renderer;
     private SpriteBatch spriteBatch;
 
@@ -52,7 +52,7 @@ public class GameScreen implements Screen{
 
     public GameScreen(TowerDefense game) {
         this.game = game;
-        viewport = new FitViewport(1600, 900);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         //create stage and set it as input processor
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
@@ -76,7 +76,7 @@ public class GameScreen implements Screen{
         //setting up the camera
         float width = 1600;
         float height = 900;
-        
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, width, height);
         camera.update();
@@ -93,7 +93,7 @@ public class GameScreen implements Screen{
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         font.getData().setScale(2, 2);
-        
+
         allowedTiles = new AllowedTiles();
     }
 
@@ -108,8 +108,8 @@ public class GameScreen implements Screen{
         renderer.setView(camera);
 
         //getting the current mouse position
-        mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(),Gdx.input.getY()));
-        
+        mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
 
@@ -120,37 +120,33 @@ public class GameScreen implements Screen{
 
         //rendering the groundLayer
         renderer.renderTileLayer(groundLayer);
-        
+
         //temporary help
-        font.draw(renderer.getBatch(),String.valueOf(mousePosition.x),0,40);
-        font.draw(renderer.getBatch(),String.valueOf(mousePosition.y),100,40);
-        font.draw(renderer.getBatch(),String.valueOf(hoveredTilePosition.x),0,100);
-        font.draw(renderer.getBatch(),String.valueOf(hoveredTilePosition.y),100,100);
-        font.draw(renderer.getBatch(),String.valueOf(screenWidth),0,160);
-        font.draw(renderer.getBatch(),String.valueOf(screenHeight),100,160);
+        font.draw(renderer.getBatch(), String.valueOf(mousePosition.x), 0, 40);
+        font.draw(renderer.getBatch(), String.valueOf(mousePosition.y), 100, 40);
+        font.draw(renderer.getBatch(), String.valueOf(hoveredTilePosition.x), 0, 100);
+        font.draw(renderer.getBatch(), String.valueOf(hoveredTilePosition.y), 100, 100);
+        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 0, 160);
+        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 100, 160);
 
         renderer.getBatch().end();
-        
+
         //rendering the decocation on top of the ground tiles
         renderer.render(decorationLayerIndices);
 
         //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
         spriteBatch.begin();
 
-        if(playerSide == true){
-            if(allowedTiles.tileInArray(hoveredTilePosition,AllowedTiles.playerOneAllowedTiles) == true){
+        if (playerSide) {
+            if (allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles)) {
                 spriteBatch.draw(hoveredTileTexture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
-            }
-
-            else{
+            } else {
                 spriteBatch.draw(hoveredTileNotAllowed, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             }
-        }
-        else{
-            if(allowedTiles.tileInArray(hoveredTilePosition,AllowedTiles.playerTwoAllowedTiles) == true){
+        } else {
+            if (allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerTwoAllowedTiles)) {
                 spriteBatch.draw(hoveredTileTexture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
-            }
-            else{
+            } else {
                 spriteBatch.draw(hoveredTileNotAllowed, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             }
         }
@@ -162,7 +158,7 @@ public class GameScreen implements Screen{
             spriteBatch.begin();
             spriteBatch.draw(turret, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             spriteBatch.end();
-        } */ 
+        } */
 
     }
 

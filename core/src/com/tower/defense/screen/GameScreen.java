@@ -52,9 +52,10 @@ public class GameScreen implements Screen {
 
     public GameScreen(TowerDefense game) {
         this.game = game;
-        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        this.camera = new OrthographicCamera();
+        this.viewport = new FitViewport(1600, 900);
         //create stage and set it as input processor
-        stage = new Stage(viewport);
+        this.stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -77,7 +78,7 @@ public class GameScreen implements Screen {
         float width = 1600;
         float height = 900;
 
-        camera = new OrthographicCamera();
+
         camera.setToOrtho(false, width, height);
         camera.update();
 
@@ -134,6 +135,9 @@ public class GameScreen implements Screen {
         //rendering the decocation on top of the ground tiles
         renderer.render(decorationLayerIndices);
 
+        viewport.apply();
+        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+
         //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
         spriteBatch.begin();
 
@@ -152,6 +156,8 @@ public class GameScreen implements Screen {
         }
 
         spriteBatch.end();
+        stage.getViewport().apply();
+        stage.draw();
 
         //temporary left click method to show the turret
         /*if(Gdx.input.isButtonPressed(Buttons.LEFT)){

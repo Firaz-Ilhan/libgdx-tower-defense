@@ -123,10 +123,10 @@ public class GameScreen implements Screen {
         renderer.renderTileLayer(groundLayer);
 
         //temporary help
-        font.draw(renderer.getBatch(), String.valueOf(mousePosition.x), 0, 40);
-        font.draw(renderer.getBatch(), String.valueOf(mousePosition.y), 100, 40);
-        font.draw(renderer.getBatch(), String.valueOf(hoveredTilePosition.x), 0, 100);
-        font.draw(renderer.getBatch(), String.valueOf(hoveredTilePosition.y), 100, 100);
+        font.draw(renderer.getBatch(), String.valueOf((int)mousePosition.x), 0, 40);
+        font.draw(renderer.getBatch(), String.valueOf((int)mousePosition.y), 100, 40);
+        font.draw(renderer.getBatch(), String.valueOf((int)hoveredTilePosition.x), 0, 100);
+        font.draw(renderer.getBatch(), String.valueOf((int)hoveredTilePosition.y), 100, 100);
         font.draw(renderer.getBatch(), String.valueOf(screenWidth), 0, 160);
         font.draw(renderer.getBatch(), String.valueOf(screenHeight), 100, 160);
 

@@ -1,4 +1,4 @@
-package com.tower.defence.screen;
+package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.tower.defence.TowerDefense;
+import com.tower.defense.TowerDefense;
 
 public class SettingsScreen implements Screen {
 

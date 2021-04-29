@@ -1,4 +1,4 @@
-package com.tower.defence;
+package com.tower.defense;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -10,25 +10,27 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.tower.defence.Enemy.IEnemy;
-import com.tower.defence.Player.Player;
+
+import com.tower.defense.enemy.IEnemy;
+import com.tower.defense.player.Player;
 
 import java.util.Iterator;
 
-import static com.tower.defence.Enemy.Factory.EnemyFactory.getEnemyInstance;
+
+import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
 
 public class TestMain extends ApplicationAdapter {
     private Texture enemyImage;
     private Texture towerImage;
     private SpriteBatch batch;
     private OrthographicCamera camera;
-    private Array<IEnemy> waveLeft;
-    private Array<IEnemy> waveRight;
+    public static Array<IEnemy> waveLeft;
+    public static Array<IEnemy> waveRight;
     private long lastSpawnTime;
-    private Player player1;
-    private Player player2;
-    private int enemiesPastLeft = 0;
-    private int enemiesPastRight = 0;
+    public static Player player1;
+    public static Player player2;
+    public static int enemiesPastLeft = 0;
+    public static int enemiesPastRight = 0;
     private int waveCount = 0;
     private int enemiesSpawned = 1;
     private double waveSize = 7;
@@ -38,6 +40,7 @@ public class TestMain extends ApplicationAdapter {
         @Override
         public void run() {
             endOfWave();
+
         }
     });
     @Override

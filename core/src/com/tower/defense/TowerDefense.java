@@ -1,9 +1,9 @@
-package com.tower.defence;
+package com.tower.defense;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.tower.defence.screen.MainMenuScreen;
+import com.tower.defense.screen.MainMenuScreen;
 
 
 public class TowerDefense extends Game {

@@ -1,6 +1,6 @@
-package com.tower.defence.Player;
+package com.tower.defense.player;
 
-import com.tower.defence.Tower.ITower;
+import com.tower.defense.tower.ITower;
 
 import java.util.List;
 

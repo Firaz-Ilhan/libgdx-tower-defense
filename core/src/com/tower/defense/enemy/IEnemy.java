@@ -1,4 +1,4 @@
-package com.tower.defence.Enemy;
+package com.tower.defense.enemy;
 
 public interface IEnemy {
      int getY();

@@ -1,6 +1,6 @@
-package com.tower.defence.Enemy.Factory;
+package com.tower.defense.enemy.Factory;
 
-import com.tower.defence.Enemy.IEnemy;
+import com.tower.defense.enemy.IEnemy;
 
 public class EnemyFactory {
     public static IEnemy getEnemyInstance(String difficulty, int x, int y){

@@ -1,4 +1,4 @@
-package com.tower.defence.screen;
+package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.tower.defence.TowerDefense;
+import com.tower.defense.TowerDefense;
 
 public class MainMenuScreen implements Screen {
 
@@ -61,6 +61,13 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new SettingsScreen(game));
+            }
+        });
+
+        multiplayerButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new GameScreen(game));
             }
         });
     }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.helper.Settings;
 
 public class SettingsScreen implements Screen {
 
@@ -56,11 +57,7 @@ public class SettingsScreen implements Screen {
         windowedModeCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (windowedModeCheckBox.isChecked()) {
-                    Gdx.graphics.setWindowedMode(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-                } else {
-                    Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
-                }
+                Settings.toggleDisplayMode();
             }
         });
 

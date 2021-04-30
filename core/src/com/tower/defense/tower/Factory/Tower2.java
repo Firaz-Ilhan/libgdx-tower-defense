@@ -1,6 +1,8 @@
 package com.tower.defense.tower.Factory;
 
-public class Tower2 {
+import com.tower.defense.tower.ITower;
+
+public class Tower2 implements ITower {
 
     private int x;
     private int y;

@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
-import com.tower.defense.helper.Settings;
 
 public class SettingsScreen implements Screen {
 
@@ -40,8 +39,9 @@ public class SettingsScreen implements Screen {
         headerTable.setDebug(false);
         stage.addActor(headerTable);
 
+        // create gui elements
         final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
-        final CheckBox windowedModeCheckBox = new CheckBox("Windowed Mode", skin, "default");
+        final CheckBox fullscreenModeCheckBox = new CheckBox("Fullscreen", skin, "default");
 
         mainMenuButton.addListener(new ChangeListener() {
             @Override
@@ -50,14 +50,15 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        if (!Gdx.graphics.isFullscreen()) {
-            windowedModeCheckBox.setChecked(true);
+        if (game.getSettings().isFullscreenEnabled()) {
+            fullscreenModeCheckBox.setChecked(true);
         }
 
-        windowedModeCheckBox.addListener(new ChangeListener() {
+        fullscreenModeCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Settings.toggleDisplayMode();
+                game.getSettings().setFullscreenMode(fullscreenModeCheckBox.isChecked());
+                game.getSettings().toggleDisplayMode();
             }
         });
 
@@ -65,7 +66,7 @@ public class SettingsScreen implements Screen {
         headerTable.add(mainMenuButton);
 
         settingsTable.defaults().pad(10f);
-        settingsTable.add(windowedModeCheckBox);
+        settingsTable.add(fullscreenModeCheckBox);
     }
 
     @Override
@@ -98,5 +99,7 @@ public class SettingsScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        skin.dispose();
+        game.dispose();
     }
 }

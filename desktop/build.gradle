@@ -5,6 +5,8 @@ sourceSets.main.resources.srcDirs = ["../core/assets"]
 project.ext.mainClassName = "com.tower.defense.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")
 
+eclipse.project.name = appName + "-desktop"
+
 import org.gradle.internal.os.OperatingSystem
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -16,6 +18,7 @@ task run(dependsOn: classes, type: JavaExec) {
 
     if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
         // Required for execution under macOS
+        // see https://github.com/libgdx/libgdx/wiki/Starter-classes-and-configuration#common-issues-1
         jvmArgs += "-XstartOnFirstThread"
     }
 }
@@ -29,18 +32,24 @@ task debug(dependsOn: classes, type: JavaExec) {
     debug = true
 }
 
-task dist(type: Jar) {
+jar {
+    // sets the name of the .jar file
+    archiveBaseName.set(appName)
+    // the duplicatesStrategy will matter starting in Gradle 7.0
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    dependsOn configurations.runtimeClasspath
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    // remove unnecessary files in the jar
+    exclude('META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA')
+    dependencies {
+        exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
+    }
+    // setting the manifest makes the JAR runnable
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
-    dependsOn configurations.runtimeClasspath
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    // may help on some OSes that need extra instruction to make runnable jars
+    doLast {
+        file(archiveFile).setExecutable(true, false)
     }
-    with jar
 }
-
-
-dist.dependsOn classes
-
-eclipse.project.name = appName + "-desktop"

@@ -20,7 +20,7 @@ public class Wave {
     private int enemiesPastLeft = 0;
     private int enemiesPastRight = 0;
     //w
-    private int waveCount = 0;
+    private int waveCount = 1;
     private int enemiesSpawned = 0;
     private double waveSize = 5;
     // waveSpeed is compared to lastSpawnTime,
@@ -28,6 +28,9 @@ public class Wave {
     private long waveSpeed = 2000000000L;
     private int waveReward = 30;
     private int enemySpeed = 25;
+    private long timeSinceBreak;
+    private boolean pausing = false;
+    private final long BREAKTIME = 10000L;
 
 
     public Wave() {
@@ -37,20 +40,25 @@ public class Wave {
     }
 
     public void spawnEnemy() {
-
-        if (enemiesSpawned == waveSize) {
-            if (waveRight.size != 0 && waveLeft.size != 0) {
-
+        if (!pausing) {
+            if (enemiesSpawned == waveSize) {
+                if (waveRight.size == 0 && waveLeft.size == 0) {
+                    endOfWave();
+                }
             } else {
-                endOfWave();
+                IEnemy enemyLeft = getEnemyInstance("easy", 522, 650);
+                IEnemy enemyRight = getEnemyInstance("easy", 1022, 650);
+                waveLeft.add(enemyLeft);
+                waveRight.add(enemyRight);
+                lastSpawnTime = TimeUtils.nanoTime();
+                enemiesSpawned++;
             }
-        } else {
-            IEnemy enemyLeft = getEnemyInstance("easy", 522, 650);
-            IEnemy enemyRight = getEnemyInstance("easy", 1022, 650);
-            waveLeft.add(enemyLeft);
-            waveRight.add(enemyRight);
-            lastSpawnTime = TimeUtils.nanoTime();
-            enemiesSpawned++;
+        }
+        else{
+            if(TimeUtils.millis() - timeSinceBreak > BREAKTIME ){
+                pausing = false;
+                waveCount++;
+            }
         }
     }
 
@@ -84,7 +92,6 @@ public class Wave {
     public void endOfWave() {
         GameScreen.player1.addToWallet(waveReward, enemiesPastLeft);
         GameScreen.player2.addToWallet(waveReward, enemiesPastRight);
-        waveCount++;
         waveSpeed = Math.round(waveSpeed * 0.95);
         waveSize = Math.round(waveSize * 1.2);
         waveReward = (int) Math.round(waveReward * 1.5);
@@ -92,6 +99,8 @@ public class Wave {
         enemiesSpawned = 0;
         enemiesPastLeft = 0;
         enemiesPastRight = 0;
+        pausing= true;
+        timeSinceBreak = TimeUtils.millis();
     }
 
     //for displaying which wave this is

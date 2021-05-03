@@ -78,8 +78,9 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
-        enemyImage = new Texture(Gdx.files.internal("core/assets/virus.png"));
-        towerImage = new Texture(Gdx.files.internal("core/assets/drop.png"));
+
+        enemyImage = new Texture(Gdx.files.internal("virus.png"));
+        towerImage = new Texture(Gdx.files.internal("drop.png"));
         //temporary
         //turret = new Texture(Gdx.files.internal("turret.png"));
 

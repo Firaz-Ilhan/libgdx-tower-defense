@@ -37,8 +37,8 @@ public class TestMain extends ApplicationAdapter {
         player1 = new Player("Tester",true, false);
         player1 = new Player("Tester2",false, true);
         // load the images for the enemy and the Towers
-        enemyImage = new Texture(Gdx.files.internal("core/assets/drop.png"));
-        towerImage = new Texture(Gdx.files.internal("core/assets/drop.png"));
+        enemyImage = new Texture(Gdx.files.internal("drop.png"));
+        towerImage = new Texture(Gdx.files.internal("drop.png"));
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();

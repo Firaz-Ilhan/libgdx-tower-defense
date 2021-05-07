@@ -116,6 +116,8 @@ public class GameScreen implements Screen {
         // WAVE: initiating Players and Wave
         player1 = new Player("Tester", true, false);
         player2 = new Player("Tester2", false, true);
+        //for testing
+        //player2.reduceLifepoints(40);
         wave = new Wave();
     }
 
@@ -200,7 +202,7 @@ public class GameScreen implements Screen {
         wave.renderWave(false, waveRight, player2);
         //END OF GAME
         if(player1.getLifepoints()<=0 ||player2.getLifepoints()<=0){
-            game.setScreen(new MainMenuScreen(game));
+            game.setScreen(new EndScreen(game));
         }
         stage.getViewport().apply();
         stage.draw();

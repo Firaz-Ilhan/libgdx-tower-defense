@@ -72,7 +72,7 @@ public class Player {
 
     /**
      *
-     * @return
+     * @return wallet
      */
     public int getWalletValue(){
         return wallet;
@@ -88,9 +88,16 @@ public class Player {
     }
     /**
      *
-     * @return
+     * @return lifepoints
      */
     public int getLifepoints(){
         return lifepoints;
     }
+
+    /**
+     *
+     * @return name
+     */
+    public String getName(){ return name; }
+
 }

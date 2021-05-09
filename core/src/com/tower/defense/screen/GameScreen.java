@@ -78,7 +78,8 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
-        enemyImage = new Texture(Gdx.files.internal("drop.png"));
+
+        enemyImage = new Texture(Gdx.files.internal("virus.png"));
         towerImage = new Texture(Gdx.files.internal("drop.png"));
         //temporary
         //turret = new Texture(Gdx.files.internal("turret.png"));
@@ -115,6 +116,8 @@ public class GameScreen implements Screen {
         // WAVE: initiating Players and Wave
         player1 = new Player("Tester", true, false);
         player2 = new Player("Tester2", false, true);
+        //for testing
+        //player2.reduceLifepoints(40);
         wave = new Wave();
     }
 
@@ -149,6 +152,11 @@ public class GameScreen implements Screen {
         font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 100, 100);
         font.draw(renderer.getBatch(), String.valueOf(screenWidth), 0, 160);
         font.draw(renderer.getBatch(), String.valueOf(screenHeight), 100, 160);
+        font.draw(renderer.getBatch(), "LP: "+ String.valueOf(player1.getLifepoints()),0,900);
+        font.draw(renderer.getBatch(), "LP: "+ String.valueOf(player2.getLifepoints()),1400,900);
+        font.draw(renderer.getBatch(), "Money: "+ String.valueOf(player1.getWalletValue()),0,850);
+        font.draw(renderer.getBatch(), "Money: "+ String.valueOf(player2.getWalletValue()),1400,850);
+        font.draw(renderer.getBatch(), "Wave: "+ String.valueOf(wave.getWaveCount()),800,900);
 
         renderer.getBatch().end();
 
@@ -192,7 +200,10 @@ public class GameScreen implements Screen {
         // the screen or that have no more LP.
         wave.renderWave(true, waveLeft, player1);
         wave.renderWave(false, waveRight, player2);
-
+        //END OF GAME
+        if(player1.getLifepoints()<=0 ||player2.getLifepoints()<=0){
+            game.setScreen(new EndScreen(game));
+        }
         stage.getViewport().apply();
         stage.draw();
 

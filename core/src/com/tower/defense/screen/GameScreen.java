@@ -19,6 +19,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.helper.AllowedTiles;
+import com.tower.defense.tower.Factory.Tower1;
+import com.tower.defense.tower.Factory.Tower2;
+
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class GameScreen implements Screen {
 
@@ -41,7 +46,19 @@ public class GameScreen implements Screen {
 
     private Texture hoveredTileTexture;
     private Texture hoveredTileNotAllowed;
-    //private Texture turret;
+    private Texture turret1Texture;
+    private Texture turret2Texture;
+
+    private LinkedList turretsPlaced = new LinkedList();
+
+    //Booleans to avoid creating multiple turrets by clicking once
+    private boolean canDraw;
+    private boolean leftMouseButtonDown;
+
+    private Tower1 tower1;
+    private Tower2 tower2;
+
+
 
     private boolean playerSide;
 
@@ -57,6 +74,10 @@ public class GameScreen implements Screen {
         //create stage and set it as input processor
         this.stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
+
+        this.leftMouseButtonDown = false;
+        this.canDraw = false;
+
     }
 
     @Override
@@ -138,6 +159,12 @@ public class GameScreen implements Screen {
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 
+
+        //creating the textures of the turrets
+        turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
+        turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
+
+
         //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
         spriteBatch.begin();
 
@@ -155,16 +182,38 @@ public class GameScreen implements Screen {
             }
         }
 
+
+
+        //if statement to avoid multiple spawning of turrets by clicking the left mousebutton once;
+        if (Gdx.input.isButtonPressed(0) && !leftMouseButtonDown) {
+            canDraw = true;
+        }
+
+
+        //drawing the turret at the selected tile
+        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles)) {
+            spawnTurret1();
+            System.out.println("tower placed");
+        } else {
+            canDraw = false;
+        }
+
+        //iterator to draw all currently stored turrets of kind 1
+
+        ListIterator<Tower1> tower1ListIterator = turretsPlaced.listIterator();
+
+        while (tower1ListIterator.hasNext()) {
+            tower1 = tower1ListIterator.next();
+            tower1.draw();
+        }
+
+        leftMouseButtonDown = Gdx.input.isButtonPressed(0);
+
+
         spriteBatch.end();
         stage.getViewport().apply();
         stage.draw();
 
-        //temporary left click method to show the turret
-        /*if(Gdx.input.isButtonPressed(Buttons.LEFT)){
-            spriteBatch.begin();
-            spriteBatch.draw(turret, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
-            spriteBatch.end();
-        } */
 
     }
 
@@ -194,5 +243,16 @@ public class GameScreen implements Screen {
         map.dispose();
         game.dispose();
         stage.dispose();
+    }
+
+    /**
+     * Method to spawn a Turret1 and add him to the turretsPlaced list
+     */
+    public void spawnTurret1() {
+        turretsPlaced.add(new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch));
+    }
+
+    public void spawnTurret2() {
+
     }
 }

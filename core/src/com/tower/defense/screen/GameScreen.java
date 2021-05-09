@@ -53,7 +53,9 @@ public class GameScreen implements Screen {
 
     //Booleans to avoid creating multiple turrets by clicking once
     private boolean canDraw;
+    private boolean canDelete;
     private boolean leftMouseButtonDown;
+    private boolean rightMouseButtonDown;
 
     private Tower1 tower1;
     private Tower2 tower2;
@@ -76,7 +78,9 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         this.leftMouseButtonDown = false;
+        this.rightMouseButtonDown = false;
         this.canDraw = false;
+        this.canDelete = false;
 
     }
 
@@ -189,6 +193,11 @@ public class GameScreen implements Screen {
             canDraw = true;
         }
 
+        //avoid multiple rightclicking
+        if (Gdx.input.isButtonPressed(1) && !rightMouseButtonDown) {
+            canDelete = true;
+        }
+
 
         //drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
         if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles)) {
@@ -208,8 +217,19 @@ public class GameScreen implements Screen {
             tower1.draw();
         }
 
-        leftMouseButtonDown = Gdx.input.isButtonPressed(0);
 
+
+        //removing turrets
+
+        if (canDelete && !rightMouseButtonDown) {
+      //      turretsPlaced.remove();
+            System.out.println("tower removed");
+        } else {
+            canDelete = false;
+        }
+
+        leftMouseButtonDown = Gdx.input.isButtonPressed(0);
+        rightMouseButtonDown = Gdx.input.isButtonPressed(1);
 
         spriteBatch.end();
         stage.getViewport().apply();

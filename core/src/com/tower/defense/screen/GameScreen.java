@@ -190,10 +190,11 @@ public class GameScreen implements Screen {
         }
 
 
-        //drawing the turret at the selected tile
+        //drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
         if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles)) {
             spawnTurret1();
             System.out.println("tower placed");
+            AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
         } else {
             canDraw = false;
         }

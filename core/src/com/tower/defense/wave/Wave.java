@@ -30,7 +30,7 @@ public class Wave {
     private int enemySpeed = 25;
     private long timeSinceBreak;
     private boolean pausing = false;
-    private final long BREAKTIME = 10000L;
+    private final long breaktime = 10000L;
 
 
     public Wave() {
@@ -53,9 +53,8 @@ public class Wave {
                 lastSpawnTime = TimeUtils.nanoTime();
                 enemiesSpawned++;
             }
-        }
-        else{
-            if(TimeUtils.millis() - timeSinceBreak > BREAKTIME ){
+        } else {
+            if (TimeUtils.millis() - timeSinceBreak > breaktime) {
                 pausing = false;
                 waveCount++;
             }
@@ -99,7 +98,7 @@ public class Wave {
         enemiesSpawned = 0;
         enemiesPastLeft = 0;
         enemiesPastRight = 0;
-        pausing= true;
+        pausing = true;
         timeSinceBreak = TimeUtils.millis();
     }
 

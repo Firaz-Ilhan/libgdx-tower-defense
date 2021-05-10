@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
     private TiledMapTileLayer groundLayer;
     private int[] decorationLayerIndices;
 
-    private OrthographicCamera camera;
+    private final OrthographicCamera camera;
     private final ScalingViewport viewport;
     private OrthogonalTiledMapRenderer renderer;
     private SpriteBatch spriteBatch;
@@ -152,11 +152,11 @@ public class GameScreen implements Screen {
         font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 100, 100);
         font.draw(renderer.getBatch(), String.valueOf(screenWidth), 0, 160);
         font.draw(renderer.getBatch(), String.valueOf(screenHeight), 100, 160);
-        font.draw(renderer.getBatch(), "LP: "+ String.valueOf(player1.getLifepoints()),0,900);
-        font.draw(renderer.getBatch(), "LP: "+ String.valueOf(player2.getLifepoints()),1400,900);
-        font.draw(renderer.getBatch(), "Money: "+ String.valueOf(player1.getWalletValue()),0,850);
-        font.draw(renderer.getBatch(), "Money: "+ String.valueOf(player2.getWalletValue()),1400,850);
-        font.draw(renderer.getBatch(), "Wave: "+ String.valueOf(wave.getWaveCount()),800,900);
+        font.draw(renderer.getBatch(), "LP: " + player1.getLifepoints(), 0, 900);
+        font.draw(renderer.getBatch(), "LP: " + player2.getLifepoints(), 1400, 900);
+        font.draw(renderer.getBatch(), "Money: " + player1.getWalletValue(), 0, 850);
+        font.draw(renderer.getBatch(), "Money: " + player2.getWalletValue(), 1400, 850);
+        font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 800, 900);
 
         renderer.getBatch().end();
 
@@ -201,7 +201,7 @@ public class GameScreen implements Screen {
         wave.renderWave(true, waveLeft, player1);
         wave.renderWave(false, waveRight, player2);
         //END OF GAME
-        if(player1.getLifepoints()<=0 ||player2.getLifepoints()<=0){
+        if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {
             game.setScreen(new EndScreen(game));
         }
         stage.getViewport().apply();

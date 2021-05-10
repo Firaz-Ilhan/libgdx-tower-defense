@@ -33,28 +33,26 @@ public class EndScreen implements Screen {
 
     @Override
     public void show() {
-        final Table settingsTable = new Table();
-        settingsTable.setFillParent(true);
-        settingsTable.setDebug(false);
-        stage.addActor(settingsTable);
+        final Table table = new Table();
+        table.setFillParent(true);
+        table.setDebug(false);
+        stage.addActor(table);
 
         final Table headerTable = new Table();
         headerTable.setFillParent(true);
         headerTable.setDebug(false);
         stage.addActor(headerTable);
-        if(player1.getLifepoints()<0 && player2.getLifepoints()<0){
+        if (player1.getLifepoints() < 0 && player2.getLifepoints() < 0) {
             winner = "Draw";
-        }
-        else if(player1.getLifepoints()<0 && player2.getLifepoints()>0){
+        } else if (player1.getLifepoints() < 0 && player2.getLifepoints() > 0) {
             winner = player2.getName() + " has won";
-        }
-        else{
+        } else {
             winner = player1.getName() + " has won";
         }
 
         // create gui elements
         final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
-        final Label whoWon = new Label(winner,skin,"big");
+        final Label whoWon = new Label(winner, skin, "big");
 
         mainMenuButton.addListener(new ChangeListener() {
             @Override
@@ -65,9 +63,10 @@ public class EndScreen implements Screen {
         headerTable.align(Align.top);
         headerTable.add(mainMenuButton);
 
-        settingsTable.add(whoWon);
-        settingsTable.defaults().pad(10f);
+        table.add(whoWon);
+        table.defaults().pad(10f);
     }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);

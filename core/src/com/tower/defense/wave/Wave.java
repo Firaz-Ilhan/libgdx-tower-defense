@@ -53,9 +53,8 @@ public class Wave {
                 lastSpawnTime = TimeUtils.nanoTime();
                 enemiesSpawned++;
             }
-        }
-        else{
-            if(TimeUtils.millis() - timeSinceBreak > BREAKTIME ){
+        } else {
+            if (TimeUtils.millis() - timeSinceBreak > BREAKTIME) {
                 pausing = false;
                 waveCount++;
             }
@@ -99,7 +98,7 @@ public class Wave {
         enemiesSpawned = 0;
         enemiesPastLeft = 0;
         enemiesPastRight = 0;
-        pausing= true;
+        pausing = true;
         timeSinceBreak = TimeUtils.millis();
     }
 

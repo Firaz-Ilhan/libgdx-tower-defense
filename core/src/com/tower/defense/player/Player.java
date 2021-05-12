@@ -77,7 +77,7 @@ public class Player {
      */
     public void reduceLifepoints(int damage) {
         lifepoints = lifepoints - damage;
-        log.info("lifepoints: {}", lifepoints);
+        log.debug("lifepoints: {}", lifepoints);
     }
 
     /**

@@ -42,7 +42,7 @@ public class Wave {
         waveLeft = new Array<IEnemy>();
         waveRight = new Array<IEnemy>();
         spawnEnemy();
-        log.info("wave #{}", waveCount);
+        log.info("wave count: {}", waveCount);
     }
 
     public void spawnEnemy() {
@@ -63,7 +63,7 @@ public class Wave {
             if (TimeUtils.millis() - timeSinceBreak > breaktime) {
                 pausing = false;
                 waveCount++;
-                log.info("wave #{}", waveCount);
+                log.info("wave count: {}", waveCount);
             }
         }
     }

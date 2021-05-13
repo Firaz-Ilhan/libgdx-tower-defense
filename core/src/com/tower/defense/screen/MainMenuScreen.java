@@ -11,8 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MainMenuScreen implements Screen {
+
+    private final static Logger log = LogManager.getLogger(MainMenuScreen.class);
 
     private final Stage stage;
     private final Skin skin;
@@ -54,6 +58,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
+                log.info("user has closed the program with the exit button");
             }
         });
 
@@ -61,6 +66,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new SettingsScreen(game));
+                log.info("set screen to {}", game.getScreen().getClass());
             }
         });
 
@@ -68,6 +74,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new GameScreen(game));
+                log.info("set screen to {}", game.getScreen().getClass());
             }
         });
     }

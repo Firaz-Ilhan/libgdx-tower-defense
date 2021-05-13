@@ -45,7 +45,7 @@ public class GameScreen implements Screen {
     private Vector2 mousePosition;
     private Vector2 hoveredTilePosition;
 
-    //Help variables to show mouse position
+    // Help variables to show mouse position
     private BitmapFont font;
 
     private Texture hoveredTileTexture;
@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
 
     private int screenHeight;
     private int screenWidth;
-    //WAVE
+    // WAVE
     private Wave wave;
     public static Player player1;
     public static Player player2;
@@ -69,44 +69,41 @@ public class GameScreen implements Screen {
         this.game = game;
         this.camera = new OrthographicCamera();
         this.viewport = new FitViewport(1600, 900);
-        //create stage and set it as input processor
+        // create stage and set it as input processor
         this.stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
-        //Loading Textures
+        // Loading Textures
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
 
         enemyImage = new Texture(Gdx.files.internal("virus.png"));
 
-        //getting the layers of the map
+        // getting the layers of the map
         MapLayers mapLayers = map.getLayers();
         groundLayer = (TiledMapTileLayer) mapLayers.get("ground");
-        decorationLayerIndices = new int[]{
-                mapLayers.getIndex("decoration")
-        };
+        decorationLayerIndices = new int[] { mapLayers.getIndex("decoration") };
 
-        //setting up the camera
+        // setting up the camera
         float width = 1600;
         float height = 900;
-
 
         camera.setToOrtho(false, width, height);
         camera.update();
 
-        //creating the renderer
+        // creating the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
 
         spriteBatch = new SpriteBatch();
 
-        //checks which side the player is on based on boolean value
+        // checks which side the player is on based on boolean value
         playerSide = true;
 
-        //setting up the font for the helper variables that show the mouse position
+        // setting up the font for the helper variables that show the mouse position
         font = new BitmapFont();
         font.setColor(Color.WHITE);
         font.getData().setScale(2, 2);
@@ -115,10 +112,10 @@ public class GameScreen implements Screen {
         // WAVE: initiating Players and Wave
         player1 = new Player("Tester", true, false);
         player2 = new Player("Tester2", false, true);
-        //for testing
-        //player2.reduceLifepoints(40);
+        // for testing
+        // player2.reduceLifepoints(40);
         wave = new Wave();
-        wavePattern = new ArrayList<String>(Arrays.asList("DOWN","LEFT","DOWN"));
+        wavePattern = new ArrayList<String>(Arrays.asList("DOWN", "LEFT", "DOWN"));
     }
 
     @Override
@@ -127,25 +124,25 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //setting the render view to the camera
+        // setting the render view to the camera
         camera.update();
         renderer.setView(camera);
 
-        //getting the current mouse position
+        // getting the current mouse position
         mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
 
-        //position of the hovered tile
+        // position of the hovered tile
         hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
 
         renderer.getBatch().begin();
 
-        //rendering the groundLayer
+        // rendering the groundLayer
         renderer.renderTileLayer(groundLayer);
 
-        //temporary help
+        // temporary help
         font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 0, 40);
         font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 100, 40);
         font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 0, 100);
@@ -160,13 +157,14 @@ public class GameScreen implements Screen {
 
         renderer.getBatch().end();
 
-        //rendering the decocation on top of the ground tiles
+        // rendering the decocation on top of the ground tiles
         renderer.render(decorationLayerIndices);
 
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 
-        //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
+        // drawing the hoveredTile based on what player side you are on and whether you
+        // allowed to or not
         spriteBatch.begin();
 
         if (playerSide) {
@@ -182,7 +180,7 @@ public class GameScreen implements Screen {
                 spriteBatch.draw(hoveredTileNotAllowed, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             }
         }
-        //WAVE: drawing the enemies
+        // WAVE: drawing the enemies
         for (IEnemy enemy : waveRight) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
         }
@@ -200,7 +198,7 @@ public class GameScreen implements Screen {
         // the screen or that have no more LP.
         wave.renderWave(true, waveLeft, player1, wavePattern);
         wave.renderWave(false, waveRight, player2, wavePattern);
-        //END OF GAME
+        // END OF GAME
         if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {
             game.setScreen(new EndScreen(game));
         }

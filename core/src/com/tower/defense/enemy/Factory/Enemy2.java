@@ -9,7 +9,8 @@ public class Enemy2 implements IEnemy {
     private int posY;
     private int lifepoints = 10;
     private int damage = 5;
-    //private int movementspeed = movementspeed*1; //static movementspeed, die am Anfang der Runde in der Main Klasse? gesetzt wird
+    // private int movementspeed = movementspeed*1; //static movementspeed, die am
+    // Anfang der Runde in der Main Klasse? gesetzt wird
 
     public Enemy2(int posX, int posY) {
         this.posX = posX;
@@ -24,8 +25,8 @@ public class Enemy2 implements IEnemy {
         return posX;
     }
 
-    public Vector2 getPosition(){
-        return new Vector2(getX(),getY());
+    public Vector2 getPosition() {
+        return new Vector2(getX(), getY());
     }
 
     public int getDamage() {
@@ -40,9 +41,9 @@ public class Enemy2 implements IEnemy {
         this.posX = posX;
     }
 
-    public void setPosition(Vector2 newPos){
-        this.posX = (int)newPos.x;
-        this.posY = (int)newPos.y;
+    public void setPosition(Vector2 newPos) {
+        this.posX = (int) newPos.x;
+        this.posY = (int) newPos.y;
     }
 
     public void setLifepoints(int damageReceived) {

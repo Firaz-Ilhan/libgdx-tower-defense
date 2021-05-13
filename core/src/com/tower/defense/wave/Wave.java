@@ -1,7 +1,6 @@
 package com.tower.defense.wave;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.enemy.IEnemy;
@@ -14,14 +13,14 @@ import java.util.Iterator;
 import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
 
 public class Wave {
-    //Arraylist of existing Enemies
+    // Arraylist of existing Enemies
     public static Array<IEnemy> waveLeft;
     public static Array<IEnemy> waveRight;
-    //lastSpawnTime is checked before creating an enemy
+    // lastSpawnTime is checked before creating an enemy
     private long lastSpawnTime;
     private int enemiesPastLeft = 0;
     private int enemiesPastRight = 0;
-    //w
+    // w
     private int waveCount = 1;
     private int enemiesSpawned = 0;
     private double waveSize = 5;
@@ -29,7 +28,7 @@ public class Wave {
     // if its high it takes longer to spawn a new enemy
     private long waveSpeed = 2000000000L;
     private int waveReward = 30;
-    private int enemySpeed = 50;
+    private int enemySpeed = 25;
     private long timeSinceBreak;
     private boolean pausing = false;
     private final long breaktime = 10000L;
@@ -69,53 +68,47 @@ public class Wave {
         }
     }
 
-    public void renderWave(boolean playerSide, Array<IEnemy> wave, Player player,ArrayList<String> wavePattern) {
-        for (Iterator<IEnemy> iter = wave.iterator(); iter.hasNext(); ) {
+    public void renderWave(boolean playerSide, Array<IEnemy> wave, Player player, ArrayList<String> wavePattern) {
+        for (Iterator<IEnemy> iter = wave.iterator(); iter.hasNext();) {
             IEnemy enemy = iter.next();
-            if(player.getName() == "Tester"){
-            if(enemy.getY() >= 525){
-                int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                enemy.setY(newYLocation);}
-
-            else if(enemy.getX() >= 325 && enemy.getY() > 400){
-            int newXLocation = (int) (enemy.getX() - enemySpeed / 15);
-            enemy.setX(newXLocation);
-            }
-            else if(enemy.getY() >= 225){
-                int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                enemy.setY(newYLocation);
-            }
-            else if(enemy.getX() <= 425){
-                int newXLocation = (int) (enemy.getX() + enemySpeed / 15);
-                enemy.setX(newXLocation);
-            }
-            else{
-                int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                enemy.setY(newYLocation);
-            }
+            if (player.getName() == "Tester") {
+                if (enemy.getY() >= 525) {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
+                    enemy.setY(newYLocation);
                 }
 
-              else if(player.getName()  == "Tester2"){
-                    if(enemy.getY() >= 525){
-                        int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                        enemy.setY(newYLocation);
-                    }
-                    else if(enemy.getX() < 1225  && enemy.getY() > 400){
+                else if (enemy.getX() >= 325 && enemy.getY() > 400) {
+                    int newXLocation = (int) (enemy.getX() - enemySpeed / 15);
+                    enemy.setX(newXLocation);
+                } else if (enemy.getY() >= 225) {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
+                    enemy.setY(newYLocation);
+                } else if (enemy.getX() <= 425) {
+                    int newXLocation = (int) (enemy.getX() + enemySpeed / 15);
+                    enemy.setX(newXLocation);
+                } else {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
+                    enemy.setY(newYLocation);
+                }
+            }
+
+            else if (player.getName() == "Tester2") {
+                if (enemy.getY() >= 525) {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
+                    enemy.setY(newYLocation);
+                } else if (enemy.getX() < 1225 && enemy.getY() > 400) {
                     enemy.setX((int) (enemy.getX() + enemySpeed / 15));
-                    }
-                    else if(enemy.getY() >= 225){
-                        int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                        enemy.setY(newYLocation);
-                        }
-                    else if(enemy.getX() >= 1125){
-                            int newXLocation = (int) (enemy.getX() - enemySpeed / 15);
-                            enemy.setX(newXLocation);
-                        }
-                    else{
-                            int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                            enemy.setY(newYLocation);
-                        }   
-                        }
+                } else if (enemy.getY() >= 225) {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
+                    enemy.setY(newYLocation);
+                } else if (enemy.getX() >= 1125) {
+                    int newXLocation = (int) (enemy.getX() - enemySpeed / 15);
+                    enemy.setX(newXLocation);
+                } else {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
+                    enemy.setY(newYLocation);
+                }
+            }
             if (enemy.getY() < 20) {
                 player.reduceLifepoints(enemy.getDamage());
                 iter.remove();
@@ -145,45 +138,43 @@ public class Wave {
         timeSinceBreak = TimeUtils.millis();
     }
 
-    //for displaying which wave this is
+    // for displaying which wave this is
     public int getWaveCount() {
         return waveCount;
     }
 
-    public void doNextStep(Player player, ArrayList<String> wavePattern, IEnemy enemy){
+    public void doNextStep(Player player, ArrayList<String> wavePattern, IEnemy enemy) {
         int stepAmount = wavePattern.size();
-        for(int currentStepPosition = 0; currentStepPosition < stepAmount; currentStepPosition++){
+        for (int currentStepPosition = 0; currentStepPosition < stepAmount; currentStepPosition++) {
             String currentStep = wavePattern.get(currentStepPosition);
-            
-        if(player.getName() == "Tester"){
-            if(enemy.getY() >= 525){
-                int newYLocation = (int) (enemy.getY() - enemySpeed * Gdx.graphics.getDeltaTime());
-                enemy.setY(newYLocation);}
 
-            else if(enemy.getX() >= 325){
-            int newXLocation = (int) (enemy.getX() - enemySpeed * Gdx.graphics.getDeltaTime());
-            enemy.setX(newXLocation);
+            if (player.getName() == "Tester") {
+                if (enemy.getY() >= 525) {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed * Gdx.graphics.getDeltaTime());
+                    enemy.setY(newYLocation);
+                }
+
+                else if (enemy.getX() >= 325) {
+                    int newXLocation = (int) (enemy.getX() - enemySpeed * Gdx.graphics.getDeltaTime());
+                    enemy.setX(newXLocation);
+                } else if (enemy.getY() >= 225) {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed * Gdx.graphics.getDeltaTime());
+                    enemy.setY(newYLocation);
+                }
             }
-            else if(enemy.getY() >= 225){
-                int newYLocation = (int) (enemy.getY() - enemySpeed * Gdx.graphics.getDeltaTime());
-                enemy.setY(newYLocation);
-                }
+
+            else if (player.getName() == "Tester2") {
+                if (enemy.getY() >= 525) {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
+                    enemy.setY(newYLocation);
+                } else if (enemy.getX() < 1225) {
+                    enemy.setX((int) (enemy.getX() + enemySpeed / 15));
+                } else if (enemy.getY() >= 225) {
+                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
+                    enemy.setY(newYLocation);
                 }
 
-              else if(player.getName()  == "Tester2"){
-                    if(enemy.getY() >= 525){
-                        int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                        enemy.setY(newYLocation);
-                    }
-                    else if(enemy.getX() < 1225){
-                    enemy.setX((int) (enemy.getX() + enemySpeed / 15));
-                    }
-                    else if(enemy.getY() >= 225){
-                        int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                        enemy.setY(newYLocation);
-                        }
-                        
-                    }
+            }
+        }
     }
-}
 }

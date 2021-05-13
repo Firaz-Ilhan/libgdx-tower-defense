@@ -5,7 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -14,13 +14,17 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
 
-public class SettingsScreen implements Screen {
+import static com.tower.defense.screen.GameScreen.player1;
+import static com.tower.defense.screen.GameScreen.player2;
+
+public class EndScreen implements Screen {
 
     private final Stage stage;
     private final Skin skin;
     private final TowerDefense game;
+    private String winner;
 
-    public SettingsScreen(final TowerDefense game) {
+    public EndScreen(final TowerDefense game) {
         this.game = game;
         skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
         stage = new Stage(new ScreenViewport());
@@ -29,19 +33,26 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void show() {
-        final Table settingsTable = new Table();
-        settingsTable.setFillParent(true);
-        settingsTable.setDebug(false);
-        stage.addActor(settingsTable);
+        final Table table = new Table();
+        table.setFillParent(true);
+        table.setDebug(false);
+        stage.addActor(table);
 
         final Table headerTable = new Table();
         headerTable.setFillParent(true);
         headerTable.setDebug(false);
         stage.addActor(headerTable);
+        if (player1.getLifepoints() < 0 && player2.getLifepoints() < 0) {
+            winner = "Draw";
+        } else if (player1.getLifepoints() < 0 && player2.getLifepoints() > 0) {
+            winner = player2.getName() + " has won";
+        } else {
+            winner = player1.getName() + " has won";
+        }
 
         // create gui elements
         final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
-        final CheckBox fullscreenModeCheckBox = new CheckBox("Fullscreen", skin, "default");
+        final Label whoWon = new Label(winner, skin, "big");
 
         mainMenuButton.addListener(new ChangeListener() {
             @Override
@@ -49,24 +60,11 @@ public class SettingsScreen implements Screen {
                 game.setScreen(new MainMenuScreen(game));
             }
         });
-
-        if (game.getSettings().isFullscreenEnabled()) {
-            fullscreenModeCheckBox.setChecked(true);
-        }
-
-        fullscreenModeCheckBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.getSettings().setFullscreenMode(fullscreenModeCheckBox.isChecked());
-                game.getSettings().toggleDisplayMode();
-            }
-        });
-
         headerTable.align(Align.top);
         headerTable.add(mainMenuButton);
 
-        settingsTable.defaults().pad(10f);
-        settingsTable.add(fullscreenModeCheckBox);
+        table.add(whoWon);
+        table.defaults().pad(10f);
     }
 
     @Override

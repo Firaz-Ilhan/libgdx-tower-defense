@@ -1,14 +1,16 @@
 package com.tower.defense.enemy;
 
 public interface IEnemy {
-     int getY();
+    int getY();
 
-     int getX();
+    int getX();
 
-     int getDamage();
+    int getDamage();
 
-     void setY(int y);
+    int getLifepoints();
 
-     void setLifepoints(int damageReceived);
+    void setY(int y);
+
+    void setLifepoints(int damageReceived);
 
 }

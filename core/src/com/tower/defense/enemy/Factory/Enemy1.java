@@ -3,36 +3,35 @@ package com.tower.defense.enemy.Factory;
 import com.tower.defense.enemy.IEnemy;
 
 /**
- * 
+ *
  */
 public class Enemy1 implements IEnemy {
-    private int x;
-    private int y;
+    private int posX;
+    private int posY;
     private int lifepoints = 7;
     private int damage = 2;
     //private int movementspeed = movementspeed*1; //static movementspeed, die am Anfang der Runde in der Main Klasse? gesetzt wird
 
-    public Enemy1(int x, int y){
-        this.x = x;
-        this.y = y;
+    public Enemy1(int x, int y) {
+        this.posX = x;
+        this.posY = y;
     }
 
     /**
-     *
      * @return
      */
     public int getY() {
-        return y;
+        return posY;
     }
+
     /**
-     *
      * @return
      */
     public int getX() {
-        return x;
+        return posX;
     }
+
     /**
-     *
      * @return
      */
     public int getDamage() {
@@ -40,19 +39,20 @@ public class Enemy1 implements IEnemy {
     }
 
     /**
-     *
-     * @param y
+     * @param posY
      */
-    public void setY(int y){
-        this.y = y;
+    public void setY(int posY) {
+        this.posY = posY;
     }
 
     /**
-     *
-     * @param damageReceived
-     * The damaged dealt by towers is subtracted from the remaining LP here
+     * @param damageReceived The damaged dealt by towers is subtracted from the remaining LP here
      */
-    public void setLifepoints(int damageReceived){
+    public void setLifepoints(int damageReceived) {
         lifepoints -= damageReceived;
+    }
+
+    public int getLifepoints() {
+        return lifepoints;
     }
 }

@@ -18,7 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.enemy.IEnemy;
 import com.tower.defense.helper.AllowedTiles;
+
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.Factory.Tower2;
 import com.tower.defense.tower.ITower;
@@ -26,6 +28,13 @@ import sun.tools.jconsole.JConsole;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
+
+import com.tower.defense.player.Player;
+import com.tower.defense.wave.Wave;
+
+import static com.tower.defense.wave.Wave.waveLeft;
+import static com.tower.defense.wave.Wave.waveRight;
+
 
 public class GameScreen implements Screen {
 
@@ -35,7 +44,7 @@ public class GameScreen implements Screen {
     private TiledMapTileLayer groundLayer;
     private int[] decorationLayerIndices;
 
-    private OrthographicCamera camera;
+    private final OrthographicCamera camera;
     private final ScalingViewport viewport;
     private OrthogonalTiledMapRenderer renderer;
     private SpriteBatch spriteBatch;
@@ -48,6 +57,7 @@ public class GameScreen implements Screen {
 
     private Texture hoveredTileTexture;
     private Texture hoveredTileNotAllowed;
+
     private Texture turret1Texture;
     private Texture turret2Texture;
 
@@ -64,12 +74,21 @@ public class GameScreen implements Screen {
 
     //private boolean deleteTurret;
 
+
+    private Texture enemyImage;
+    private Texture towerImage;
+    //private Texture turret;
+
     private boolean playerSide;
 
     private AllowedTiles allowedTiles;
 
     private int screenHeight;
     private int screenWidth;
+    //WAVE
+    private Wave wave;
+    public static Player player1;
+    public static Player player2;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -88,9 +107,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        //Loading Textures
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
+
+        enemyImage = new Texture(Gdx.files.internal("virus.png"));
+        towerImage = new Texture(Gdx.files.internal("drop.png"));
         //temporary
         //turret = new Texture(Gdx.files.internal("turret.png"));
 
@@ -123,6 +146,12 @@ public class GameScreen implements Screen {
         font.getData().setScale(2, 2);
 
         allowedTiles = new AllowedTiles();
+        // WAVE: initiating Players and Wave
+        player1 = new Player("Tester", true, false);
+        player2 = new Player("Tester2", false, true);
+        //for testing
+        //player2.reduceLifepoints(40);
+        wave = new Wave();
     }
 
     @Override
@@ -150,12 +179,17 @@ public class GameScreen implements Screen {
         renderer.renderTileLayer(groundLayer);
 
         //temporary help
-        font.draw(renderer.getBatch(), String.valueOf((int)mousePosition.x), 0, 40);
-        font.draw(renderer.getBatch(), String.valueOf((int)mousePosition.y), 100, 40);
-        font.draw(renderer.getBatch(), String.valueOf((int)hoveredTilePosition.x), 0, 100);
-        font.draw(renderer.getBatch(), String.valueOf((int)hoveredTilePosition.y), 100, 100);
+        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 0, 40);
+        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 100, 40);
+        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 0, 100);
+        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 100, 100);
         font.draw(renderer.getBatch(), String.valueOf(screenWidth), 0, 160);
         font.draw(renderer.getBatch(), String.valueOf(screenHeight), 100, 160);
+        font.draw(renderer.getBatch(), "LP: " + player1.getLifepoints(), 0, 900);
+        font.draw(renderer.getBatch(), "LP: " + player2.getLifepoints(), 1400, 900);
+        font.draw(renderer.getBatch(), "Money: " + player1.getWalletValue(), 0, 850);
+        font.draw(renderer.getBatch(), "Money: " + player2.getWalletValue(), 1400, 850);
+        font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 800, 900);
 
         renderer.getBatch().end();
 
@@ -186,6 +220,13 @@ public class GameScreen implements Screen {
             } else {
                 spriteBatch.draw(hoveredTileNotAllowed, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             }
+        }
+        //WAVE: drawing the enemies
+        for (IEnemy enemy : waveRight) {
+            spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
+        }
+        for (IEnemy enemy : waveLeft) {
+            spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
         }
 
 
@@ -242,9 +283,28 @@ public class GameScreen implements Screen {
         rightMouseButtonDown = Gdx.input.isButtonPressed(1);
 
         spriteBatch.end();
+
+        // WAVE: check if we need to create a enemy
+        wave.newEnemySpawn();
+
+        // WAVE:
+        // move the enemy, remove any that are beneath the bottom edge of
+        // the screen or that have no more LP.
+        wave.renderWave(true, waveLeft, player1);
+        wave.renderWave(false, waveRight, player2);
+        //END OF GAME
+        if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {
+            game.setScreen(new EndScreen(game));
+        }
         stage.getViewport().apply();
         stage.draw();
 
+        //temporary left click method to show the turret
+        /*if(Gdx.input.isButtonPressed(Buttons.LEFT)){
+            spriteBatch.begin();
+            spriteBatch.draw(turret, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+            spriteBatch.end();
+        } */
 
     }
 
@@ -271,6 +331,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        enemyImage.dispose();
         map.dispose();
         game.dispose();
         stage.dispose();

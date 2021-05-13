@@ -21,6 +21,8 @@ import com.tower.defense.TowerDefense;
 import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.Factory.Tower2;
+import com.tower.defense.tower.ITower;
+import sun.tools.jconsole.JConsole;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -49,7 +51,7 @@ public class GameScreen implements Screen {
     private Texture turret1Texture;
     private Texture turret2Texture;
 
-    private LinkedList turretsPlaced = new LinkedList();
+    private LinkedList turretsPlaced = new LinkedList<ITower>();
 
     //Booleans to avoid creating multiple turrets by clicking once
     private boolean canDraw;
@@ -60,7 +62,7 @@ public class GameScreen implements Screen {
     private Tower1 tower1;
     private Tower2 tower2;
 
-
+    //private boolean deleteTurret;
 
     private boolean playerSide;
 
@@ -204,6 +206,7 @@ public class GameScreen implements Screen {
             spawnTurret1();
             System.out.println("tower placed");
             AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
+            System.out.println(turretsPlaced);
         } else {
             canDraw = false;
         }
@@ -215,6 +218,7 @@ public class GameScreen implements Screen {
         while (tower1ListIterator.hasNext()) {
             tower1 = tower1ListIterator.next();
             tower1.draw();
+
         }
 
 
@@ -222,8 +226,14 @@ public class GameScreen implements Screen {
         //removing turrets
 
         if (canDelete && !rightMouseButtonDown) {
-      //      turretsPlaced.remove();
-            System.out.println("tower removed");
+
+
+            if(hoveredTilePosition.x * 50 == tower1.getX() && hoveredTilePosition.y * 50 == tower1.getY()){
+                turretsPlaced.remove();
+                System.out.println("tower removed");
+            }
+
+
         } else {
             canDelete = false;
         }

@@ -26,6 +26,9 @@ import com.tower.defense.wave.Wave;
 import static com.tower.defense.wave.Wave.waveLeft;
 import static com.tower.defense.wave.Wave.waveRight;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class GameScreen implements Screen {
 
     private final TowerDefense game;
@@ -49,8 +52,6 @@ public class GameScreen implements Screen {
     private Texture hoveredTileNotAllowed;
 
     private Texture enemyImage;
-    private Texture towerImage;
-    //private Texture turret;
 
     private boolean playerSide;
 
@@ -62,6 +63,7 @@ public class GameScreen implements Screen {
     private Wave wave;
     public static Player player1;
     public static Player player2;
+    private ArrayList<String> wavePattern;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -80,9 +82,6 @@ public class GameScreen implements Screen {
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
 
         enemyImage = new Texture(Gdx.files.internal("virus.png"));
-        towerImage = new Texture(Gdx.files.internal("drop.png"));
-        //temporary
-        //turret = new Texture(Gdx.files.internal("turret.png"));
 
         //getting the layers of the map
         MapLayers mapLayers = map.getLayers();
@@ -119,6 +118,7 @@ public class GameScreen implements Screen {
         //for testing
         //player2.reduceLifepoints(40);
         wave = new Wave();
+        wavePattern = new ArrayList<String>(Arrays.asList("DOWN","LEFT","DOWN"));
     }
 
     @Override
@@ -198,21 +198,14 @@ public class GameScreen implements Screen {
         // WAVE:
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
-        wave.renderWave(true, waveLeft, player1);
-        wave.renderWave(false, waveRight, player2);
+        wave.renderWave(true, waveLeft, player1, wavePattern);
+        wave.renderWave(false, waveRight, player2, wavePattern);
         //END OF GAME
         if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {
             game.setScreen(new EndScreen(game));
         }
         stage.getViewport().apply();
         stage.draw();
-
-        //temporary left click method to show the turret
-        /*if(Gdx.input.isButtonPressed(Buttons.LEFT)){
-            spriteBatch.begin();
-            spriteBatch.draw(turret, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
-            spriteBatch.end();
-        } */
 
     }
 

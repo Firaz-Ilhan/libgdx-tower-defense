@@ -1,5 +1,6 @@
 package com.tower.defense.enemy.Factory;
 
+import com.badlogic.gdx.math.Vector2;
 import com.tower.defense.enemy.IEnemy;
 
 /**
@@ -32,6 +33,13 @@ public class Enemy1 implements IEnemy {
     }
 
     /**
+     * @return current location
+     */
+    public Vector2 getPosition(){
+        return new Vector2(getX(),getY());
+    }
+
+    /**
      * @return
      */
     public int getDamage() {
@@ -46,6 +54,18 @@ public class Enemy1 implements IEnemy {
     }
 
     /**
+     * @param posX
+     */
+    public void setX(int posX) {
+        this.posX = posX;
+    }
+
+    public void setPosition(Vector2 newPos){
+        this.posX = (int)newPos.x;
+        this.posY = (int)newPos.y;
+    }
+
+    /**
      * @param damageReceived The damaged dealt by towers is subtracted from the remaining LP here
      */
     public void setLifepoints(int damageReceived) {
@@ -55,4 +75,5 @@ public class Enemy1 implements IEnemy {
     public int getLifepoints() {
         return lifepoints;
     }
+
 }

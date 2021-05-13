@@ -1,5 +1,6 @@
 package com.tower.defense.enemy.Factory;
 
+import com.badlogic.gdx.math.Vector2;
 import com.tower.defense.enemy.IEnemy;
 
 public class Enemy2 implements IEnemy {
@@ -23,12 +24,25 @@ public class Enemy2 implements IEnemy {
         return posX;
     }
 
+    public Vector2 getPosition(){
+        return new Vector2(getX(),getY());
+    }
+
     public int getDamage() {
         return damage;
     }
 
     public void setY(int posY) {
         this.posY = posY;
+    }
+
+    public void setX(int posX) {
+        this.posX = posX;
+    }
+
+    public void setPosition(Vector2 newPos){
+        this.posX = (int)newPos.x;
+        this.posY = (int)newPos.y;
     }
 
     public void setLifepoints(int damageReceived) {

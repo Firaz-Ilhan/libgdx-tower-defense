@@ -5,6 +5,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.enemy.IEnemy;
 import com.tower.defense.player.Player;
 import com.tower.defense.screen.GameScreen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,7 +14,10 @@ import java.util.Iterator;
 import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
 
 public class Wave {
-    // Arraylist of existing Enemies
+
+    private final static Logger log = LogManager.getLogger(Wave.class);
+
+    //Arraylist of existing Enemies
     public static Array<IEnemy> waveLeft;
     public static Array<IEnemy> waveRight;
     // lastSpawnTime is checked before creating an enemy
@@ -36,6 +41,7 @@ public class Wave {
         waveLeft = new Array<IEnemy>();
         waveRight = new Array<IEnemy>();
         spawnEnemy();
+        log.info("wave count: {}", waveCount);
     }
 
     public void spawnEnemy() {
@@ -56,6 +62,7 @@ public class Wave {
             if (TimeUtils.millis() - timeSinceBreak > breaktime) {
                 pausing = false;
                 waveCount++;
+                log.info("wave count: {}", waveCount);
             }
         }
     }
@@ -127,7 +134,9 @@ public class Wave {
         waveSpeed = Math.round(waveSpeed * 0.95);
         waveSize = Math.round(waveSize * 1.2);
         waveReward = (int) Math.round(waveReward * 1.5);
+        log.info("wave reward: {}", waveReward);
         enemySpeed += 5;
+        log.info("enemy speed: {}", enemySpeed);
         enemiesSpawned = 0;
         enemiesPastLeft = 0;
         enemiesPastRight = 0;

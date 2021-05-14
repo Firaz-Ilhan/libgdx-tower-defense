@@ -22,6 +22,8 @@ import com.tower.defense.enemy.IEnemy;
 import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static com.tower.defense.wave.Wave.waveLeft;
 import static com.tower.defense.wave.Wave.waveRight;
@@ -30,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameScreen implements Screen {
+
+    private final static Logger log = LogManager.getLogger(GameScreen.class);
 
     private final TowerDefense game;
     private final Stage stage;
@@ -201,6 +205,7 @@ public class GameScreen implements Screen {
         // END OF GAME
         if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {
             game.setScreen(new EndScreen(game));
+            log.info("set screen to {}", game.getScreen().getClass());
         }
         stage.getViewport().apply();
         stage.draw();

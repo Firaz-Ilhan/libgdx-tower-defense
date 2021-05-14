@@ -31,7 +31,7 @@ public class TowerDefense extends Game {
         // load settings
         settings = new Settings();
         settings.toggleDisplayMode(); // can ignore the default value in DesktopLauncher
-
+        
         // loading assets
         assetManager = new AssetManager();
         assetManager.load("skins/glassyui/glassy-ui.json", Skin.class);

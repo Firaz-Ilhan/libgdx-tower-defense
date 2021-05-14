@@ -114,8 +114,8 @@ public class GameScreen implements Screen {
 
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
-        player1 = new Player("Tester", true, false);
-        player2 = new Player("Tester2", false, true);
+        player1 = new Player("Tester");
+        player2 = new Player("Tester2");
         // for testing
         // player2.reduceLifepoints(40);
         wave = new Wave();

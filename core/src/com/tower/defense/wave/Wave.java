@@ -1,5 +1,6 @@
 package com.tower.defense.wave;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.enemy.IEnemy;
@@ -32,7 +33,7 @@ public class Wave {
     // if its high it takes longer to spawn a new enemy
     private long waveSpeed = 2000000000L;
     private int waveReward = 30;
-    private int enemySpeed = 25;
+    private int enemySpeed = 75;
     private long timeSinceBreak;
     private boolean pausing = false;
     private final long breaktime = 10000L;
@@ -79,20 +80,20 @@ public class Wave {
             IEnemy enemy = iter.next();
             if (player.getName() == "Tester") {
                 if (enemy.getY() >= 525) {
-                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                    enemy.setY(newYLocation);
+                     float newYLocation = (enemy.getY() - (enemySpeed * Gdx.graphics.getDeltaTime()));
+                    enemy.setY((int)newYLocation);
                 } else if (enemy.getX() >= 325 && enemy.getY() > 400) {
-                    int newXLocation = (int) (enemy.getX() - enemySpeed / 15);
-                    enemy.setX(newXLocation);
+                    float newXLocation = (enemy.getX() - (enemySpeed * Gdx.graphics.getDeltaTime()));
+                    enemy.setX((int)newXLocation);
                 } else if (enemy.getY() >= 225) {
-                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                    enemy.setY(newYLocation);
+                    float newYLocation = (enemy.getY() - (enemySpeed * Gdx.graphics.getDeltaTime()));
+                    enemy.setY((int)newYLocation);
                 } else if (enemy.getX() <= 425) {
-                    int newXLocation = (int) (enemy.getX() + enemySpeed / 15);
-                    enemy.setX(newXLocation);
+                    float newXLocation = (enemy.getX() + (enemySpeed * Gdx.graphics.getDeltaTime()));
+                    enemy.setX((int)newXLocation);
                 } else {
-                    int newYLocation = (int) (enemy.getY() - enemySpeed / 15);
-                    enemy.setY(newYLocation);
+                    float newYLocation = (int) (enemy.getY() - (enemySpeed * Gdx.graphics.getDeltaTime()));
+                    enemy.setY((int)newYLocation);
                 }
             }
 

@@ -13,12 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class SettingsScreen implements Screen {
-
-    private final static Logger log = LogManager.getLogger(SettingsScreen.class);
 
     private final Stage stage;
     private final Skin skin;
@@ -51,7 +47,6 @@ public class SettingsScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.setScreen(new MainMenuScreen(game));
-                log.info("set screen to {}", game.getScreen().getClass());
             }
         });
 

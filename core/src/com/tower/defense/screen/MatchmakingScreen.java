@@ -44,9 +44,10 @@ public class MatchmakingScreen implements Screen {
         final Label connectionStatus = new Label("not connected", skin, "default");
 
         final TextButton connectButton = new TextButton("Connect...", skin, "small");
+        final TextButton startGameButton = new TextButton("Start Game...", skin, "small");
 
         connectionTable.defaults().pad(10f);
-        connectionTable.align(Align.left);
+        connectionTable.align(Align.top);
         connectionTable.add(opponentIPLabel);
         connectionTable.add(opponentIPField);
         connectionTable.row();
@@ -55,21 +56,35 @@ public class MatchmakingScreen implements Screen {
         connectionTable.row();
         connectionTable.add(connectButton);
         connectionTable.add(connectionStatus);
+        connectionTable.row();
+        connectionTable.add(startGameButton);
+
+        final Table scrollTable = new Table(skin);
+        scrollTable.setDebug(false);
+        scrollTable.setFillParent(true);
+        scrollTable.align(Align.bottom);
+
+        final ScrollPane scroller = new ScrollPane(scrollTable, skin);
+        scroller.layout();
+        scroller.setScrollingDisabled(true, false);
+        scroller.setDebug(false);
+        scroller.setFadeScrollBars(false);
 
         final Table chatTable = new Table();
         chatTable.setFillParent(true);
         chatTable.setDebug(false);
-        stage.addActor(chatTable);
+        chatTable.align(Align.bottom);
+        chatTable.add(scroller).width(500f).height(300f).colspan(2);
 
-        final TextButton startGame = new TextButton("Start Game...", skin, "small");
-        final TextField chatInputField = new TextField("", skin, "default");
-
-        chatTable.defaults().pad(10f);
-        chatTable.align(Align.right);
-        chatTable.add(chatInputField);
         chatTable.row();
-        chatTable.add(startGame);
 
+        final TextField inputArea = new TextField("", skin, "default");
+        final TextButton sendMessageButton = new TextButton("Send", skin, "small");
+
+        chatTable.add(inputArea);
+        chatTable.add(sendMessageButton);
+
+        this.stage.addActor(chatTable);
 
         connectButton.addListener(new ChangeListener() {
             @Override
@@ -80,12 +95,30 @@ public class MatchmakingScreen implements Screen {
             }
         });
 
-        startGame.addListener(new ChangeListener() {
+        startGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // start the game only when the players are connected
                 game.setScreen(new GameScreen(game));
                 log.info("set screen to {}", game.getScreen().getClass());
+            }
+        });
+
+        sendMessageButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                // socket
+
+                final String msg = inputArea.getText();
+                if (!msg.isEmpty()) {
+                    final Label msglabel = new Label(msg, skin);
+                    msglabel.setAlignment(Align.center);
+                    msglabel.setWrap(true);
+                    scrollTable.add(msglabel);
+                    scrollTable.row();
+                }
+                inputArea.setText("");
+                scroller.scrollTo(0, 0, 0, 0); // scroll to bottom
             }
         });
     }

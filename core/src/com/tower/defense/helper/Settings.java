@@ -2,6 +2,9 @@ package com.tower.defense.helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.tower.defense.screen.MainMenuScreen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Settings are stored in...
@@ -9,6 +12,8 @@ import com.badlogic.gdx.Preferences;
  * Linux and OS X: ~/.prefs/Tower_Defense_Settings
  */
 public class Settings {
+
+    private final static Logger log = LogManager.getLogger(MainMenuScreen.class);
 
     private final String fullscreen = "fullscreen";
 
@@ -25,6 +30,7 @@ public class Settings {
     public void setFullscreenMode(boolean value) {
         getPreferences().putBoolean(fullscreen, value);
         getPreferences().flush();
+        log.info("player set fullscreen to: {}", value);
     }
 
     /**
@@ -43,8 +49,10 @@ public class Settings {
     public void toggleDisplayMode() {
         if (isFullscreenEnabled()) {
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            log.info("display was set to full screen mode");
         } else {
             Gdx.graphics.setWindowedMode(1600, 900);
+            log.info("display was set to windowed screen mode");
         }
     }
 }

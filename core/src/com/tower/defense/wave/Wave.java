@@ -106,7 +106,7 @@ public class Wave {
                     enemy.setY(newYLocation);
                 }
             }
-            if (enemy.getY() < 20) {
+            if (enemy.getY() < -10) {
                 player.reduceLifepoints(enemy.getDamage());
                 iter.remove();
                 if (playerSide) {

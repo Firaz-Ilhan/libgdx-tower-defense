@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -15,8 +16,10 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.sun.org.apache.xalan.internal.xsltc.dom.ArrayNodeListIterator;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.IEnemy;
 import com.tower.defense.helper.AllowedTiles;
@@ -26,8 +29,7 @@ import com.tower.defense.tower.Factory.Tower2;
 import com.tower.defense.tower.ITower;
 import sun.tools.jconsole.JConsole;
 
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.*;
 
 import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
@@ -62,6 +64,14 @@ public class GameScreen implements Screen {
     private Texture turret2Texture;
 
     private LinkedList turretsPlaced = new LinkedList<ITower>();
+    private ArrayList turretsPlacedArray = new ArrayList<ITower>();
+    private ArrayList turretsPlacedPostion = new ArrayList();
+    private float currentPosX;
+    private float currentPosY;
+
+    private Array currentTurret;
+    private int turretCounter;
+
 
     //Booleans to avoid creating multiple turrets by clicking once
     private boolean canDraw;
@@ -70,7 +80,8 @@ public class GameScreen implements Screen {
     private boolean rightMouseButtonDown;
 
     private Tower1 tower1;
-    private Tower2 tower2;
+    private Tower1 currentTower;
+
 
     //private boolean deleteTurret;
 
@@ -78,6 +89,7 @@ public class GameScreen implements Screen {
     private Texture enemyImage;
     private Texture towerImage;
     //private Texture turret;
+    private Object turret1;
 
     private boolean playerSide;
 
@@ -230,6 +242,9 @@ public class GameScreen implements Screen {
         }
 
 
+        //set turretCounter to zero
+
+        //currentTurret = new Array<>();
 
         //if statement to avoid multiple spawning of turrets by clicking the left mousebutton once;
         if (Gdx.input.isButtonPressed(0) && !leftMouseButtonDown) {
@@ -246,43 +261,153 @@ public class GameScreen implements Screen {
         if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles)) {
             spawnTurret1();
             System.out.println("tower placed");
-            AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
+            // player1TurretsPlaced[turretCounter].draw();
             System.out.println(turretsPlaced);
+            AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
+           // System.out.println(tower1.getX() + "," + tower1.getY());
+
         } else {
             canDraw = false;
         }
 
         //iterator to draw all currently stored turrets of kind 1
 
-        ListIterator<Tower1> tower1ListIterator = turretsPlaced.listIterator();
+        //ListIterator<Tower1> tower1ListIterator = turretsPlaced.listIterator();
 
-        while (tower1ListIterator.hasNext()) {
-            tower1 = tower1ListIterator.next();
+        /*
+        Iterator<Tower1> player1TowerIterator = player1TurretsPlaced.iterator();
+
+        while (player1TowerIterator.hasNext()) {
+
+            tower1 = player1TowerIterator.next();
             tower1.draw();
+            System.out.println("aloaa");
+        }
+
+         */
+
+
+        //tower1 = player1TowerIterator.next();
+
+
+
+
+
+
+
+
+
+
+        ListIterator<Tower1> tower1ListIterator1 = turretsPlaced.listIterator();
+
+
+        while (tower1ListIterator1.hasNext()) {
+
+            tower1 = tower1ListIterator1.next();
+            tower1.draw();
+
+            if (canDelete && !rightMouseButtonDown) {
+
+                //System.out.println("jo");
+                System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+
+
+                    if(tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 ){
+                        turretsPlaced.remove(tower1);
+                        AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
+                        System.out.println(turretsPlaced);
+                    }
+
+
+            }else{
+                canDelete = false;
+            }
+
 
         }
 
 
 
         //removing turrets
+/*
+        int j = -1;
 
         if (canDelete && !rightMouseButtonDown) {
 
+            //System.out.println("jo");
+            System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
-            if(hoveredTilePosition.x * 50 == tower1.getX() && hoveredTilePosition.y * 50 == tower1.getY()){
-                turretsPlaced.remove();
+            currentPosX = hoveredTilePosition.x * 50;
+            currentPosY = hoveredTilePosition.y * 50;
+            currentTower = new Tower1(turret1Texture,currentPosX,currentPosY, 50, 50,spriteBatch);
+
+            /*
+            for (int i = 0; i < turretsPlaced.size(); i++) {
+                //turretCounter = turretCounter + 1;
+
+                //System.out.println("aha");
+
+
+                if (turretsPlaced.get(i).equals(currentTower)) {
+
+                    //tower1.getX() == hoveredTilePosition.x * 50 && tower1.getX() == hoveredTilePosition.y
+                   // currentTurret.add(turretsPlaced.get(i));
+
+                    System.out.println("turret removed");
+                    turretsPlaced.remove(i);
+                    //turretCounter = turretCounter - 1;
+                    AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
+                }
+
+            }
+
+             */
+
+
+            /*
+            if (hoveredTilePosition.x * 50 == tower1.getX() && hoveredTilePosition.y * 50 == tower1.getY()) {
+
+                
+                turretsPlaced.removeLast();
+                AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                 System.out.println("tower removed");
             }
 
 
-        } else {
-            canDelete = false;
-        }
+
+            int i = 0;
+
+            //ListIterator<Tower1> deleteListIterator1 = turretsPlaced.listIterator();
+            while (tower1ListIterator1.hasNext()){
+                tower1 = tower1ListIterator1.next();
+                if(tower1.equals(currentTower)){
+                    turretsPlaced.removeLast();
+                    System.out.println("removed");
+
+
+
+                }
+
+
+
+
+
+            }
+
+
+
+
+                    } else {
+                        canDelete = false;
+                    }
+
+             */
 
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);
         rightMouseButtonDown = Gdx.input.isButtonPressed(1);
 
         spriteBatch.end();
+
 
         // WAVE: check if we need to create a enemy
         wave.newEnemySpawn();
@@ -299,12 +424,6 @@ public class GameScreen implements Screen {
         stage.getViewport().apply();
         stage.draw();
 
-        //temporary left click method to show the turret
-        /*if(Gdx.input.isButtonPressed(Buttons.LEFT)){
-            spriteBatch.begin();
-            spriteBatch.draw(turret, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
-            spriteBatch.end();
-        } */
 
     }
 
@@ -341,8 +460,16 @@ public class GameScreen implements Screen {
      * Method to spawn a Turret1 and add him to the turretsPlaced list
      */
     public void spawnTurret1() {
-        turretsPlaced.add(new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch));
+
+            tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
+             turretsPlaced.add(tower1);
+            //turretsPlacedArray.add(tower1);
+
+            //player1TurretsPlaced.add(tower1);
     }
+
+
+
 
     public void spawnTurret2() {
 

@@ -1,0 +1,13 @@
+main INFO  defense.TowerDefense - OS: Windows 10 amd64
+main INFO  defense.TowerDefense - JRE version: 11.0.6
+main INFO  defense.TowerDefense - libGDX version: 1.10.0
+main INFO  defense.TowerDefense - OpenGl version: 4.6
+main INFO  defense.TowerDefense - GPU: GeForce GTX 1050 Ti/PCIe/SSE2
+main INFO  defense.TowerDefense - Current Display: 1920x1080, bpp: 24, hz: 60
+main INFO  screen.MainMenuScreen - display was set to windowed screen mode
+main INFO  defense.TowerDefense - set screen to class com.tower.defense.screen.MainMenuScreen
+main INFO  screen.MainMenuScreen - set screen to class com.tower.defense.screen.MatchmakingScreen
+main INFO  player.Player - player: Tester
+main INFO  player.Player - player: Tester2
+main INFO  wave.Wave - wave count: 1
+main INFO  screen.MainMenuScreen - set screen to class com.tower.defense.screen.GameScreen

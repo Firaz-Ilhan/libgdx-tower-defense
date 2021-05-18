@@ -61,16 +61,16 @@ public class MatchmakingScreen implements Screen {
 
         final Table scrollTable = new Table(skin);
         scrollTable.setDebug(false);
-        scrollTable.setFillParent(true);
+        scrollTable.setFillParent(false);
         scrollTable.align(Align.bottom);
 
         final ScrollPane scroller = new ScrollPane(scrollTable, skin);
-        scroller.layout();
+        scroller.validate();
         scroller.setScrollingDisabled(true, false);
         scroller.setDebug(false);
         scroller.setFadeScrollBars(false);
 
-        final Table chatTable = new Table();
+        final Table chatTable = new Table(skin);
         chatTable.setFillParent(true);
         chatTable.setDebug(false);
         chatTable.align(Align.bottom);
@@ -111,11 +111,11 @@ public class MatchmakingScreen implements Screen {
 
                 final String msg = inputArea.getText();
                 if (!msg.isEmpty()) {
+                    scrollTable.row();
                     final Label msglabel = new Label(msg, skin);
                     msglabel.setAlignment(Align.center);
                     msglabel.setWrap(true);
-                    scrollTable.add(msglabel);
-                    scrollTable.row();
+                    scrollTable.add(msglabel).expandX().fillX();
                 }
                 inputArea.setText("");
                 scroller.scrollTo(0, 0, 0, 0); // scroll to bottom
@@ -127,6 +127,7 @@ public class MatchmakingScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
 

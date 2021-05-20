@@ -38,7 +38,10 @@ public class AllowedTiles {
     }
 
     public boolean tileInArray(Vector2 hoveredTilePosition, ArrayList<Vector2> list) {
-        return list.contains(hoveredTilePosition);
+        if (list.contains(hoveredTilePosition)) {
+            return true;
+        }
+        return false;
     }
 
 }

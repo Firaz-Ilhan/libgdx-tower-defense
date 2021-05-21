@@ -294,17 +294,35 @@ public class GameScreen implements Screen {
         //tower1 = player1TowerIterator.next();
 
 
-
-
-
-
-
-
-
-
         ListIterator<Tower1> tower1ListIterator1 = turretsPlaced.listIterator();
 
+        //for schleife daraus machen
 
+        for (int i = 0; i < turretsPlaced.size(); i ++){
+            tower1 = tower1ListIterator1.next();
+            tower1.draw();
+
+            }
+        if (canDelete && !rightMouseButtonDown) {
+
+            //System.out.println("jo");
+            System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+
+
+            if(tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 ){
+
+               turretsPlaced.remove(turretsPlaced.indexOf(tower1));
+
+                AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
+                System.out.println(turretsPlaced);
+            }else{
+                canDelete = false;
+            }
+
+
+
+
+        /*
         while (tower1ListIterator1.hasNext()) {
 
             tower1 = tower1ListIterator1.next();
@@ -323,10 +341,13 @@ public class GameScreen implements Screen {
                     }
 
 
+
+
             }else{
                 canDelete = false;
             }
 
+         */
 
         }
 

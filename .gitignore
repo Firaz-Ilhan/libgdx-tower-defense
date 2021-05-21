@@ -14,7 +14,6 @@ hs_err_pid*
 .apt_generated/
 .gwt/
 gwt-unitCache/
-www-testWave/
 .gwt-tmp/
 
 ## Android Studio and Intellij and Android in general
@@ -116,3 +115,4 @@ Thumbs.db
 
 .vscode/
 
+*.log

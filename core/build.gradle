@@ -11,6 +11,7 @@ sourceSets {
             srcDirs = ["src/main/resource", "../shared-resources"]
         }
     }
+
 }
 
 test {

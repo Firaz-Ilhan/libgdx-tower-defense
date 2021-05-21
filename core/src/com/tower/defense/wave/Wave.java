@@ -6,12 +6,17 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.enemy.IEnemy;
 import com.tower.defense.player.Player;
 import com.tower.defense.screen.GameScreen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 
 import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
 
 public class Wave {
+
+    private final static Logger log = LogManager.getLogger(Wave.class);
+
     //Arraylist of existing Enemies
     public static Array<IEnemy> waveLeft;
     public static Array<IEnemy> waveRight;
@@ -30,13 +35,14 @@ public class Wave {
     private int enemySpeed = 25;
     private long timeSinceBreak;
     private boolean pausing = false;
-    private final long BREAKTIME = 10000L;
+    private final long breaktime = 10000L;
 
 
     public Wave() {
         waveLeft = new Array<IEnemy>();
         waveRight = new Array<IEnemy>();
         spawnEnemy();
+        log.info("wave count: {}", waveCount);
     }
 
     public void spawnEnemy() {
@@ -53,11 +59,11 @@ public class Wave {
                 lastSpawnTime = TimeUtils.nanoTime();
                 enemiesSpawned++;
             }
-        }
-        else{
-            if(TimeUtils.millis() - timeSinceBreak > BREAKTIME ){
+        } else {
+            if (TimeUtils.millis() - timeSinceBreak > breaktime) {
                 pausing = false;
                 waveCount++;
+                log.info("wave count: {}", waveCount);
             }
         }
     }
@@ -69,7 +75,7 @@ public class Wave {
         }
     }
 
-    public void renderWave(boolean playerSide, Array<IEnemy> wave, Player player) {
+    public void renderWave(Array<IEnemy> wave, Player player) {
         for (Iterator<IEnemy> iter = wave.iterator(); iter.hasNext(); ) {
             IEnemy enemy = iter.next();
             int newYLocation = (int) (enemy.getY() - enemySpeed * Gdx.graphics.getDeltaTime());
@@ -77,7 +83,7 @@ public class Wave {
             if (enemy.getY() < 20) {
                 player.reduceLifepoints(enemy.getDamage());
                 iter.remove();
-                if (playerSide) {
+                if (player.isLeft()) {
                     enemiesPastLeft++;
                 } else {
                     enemiesPastRight++;
@@ -95,11 +101,13 @@ public class Wave {
         waveSpeed = Math.round(waveSpeed * 0.95);
         waveSize = Math.round(waveSize * 1.2);
         waveReward = (int) Math.round(waveReward * 1.5);
+        log.info("wave reward: {}", waveReward);
         enemySpeed += 5;
+        log.info("enemy speed: {}", enemySpeed);
         enemiesSpawned = 0;
         enemiesPastLeft = 0;
         enemiesPastRight = 0;
-        pausing= true;
+        pausing = true;
         timeSinceBreak = TimeUtils.millis();
     }
 
@@ -107,4 +115,5 @@ public class Wave {
     public int getWaveCount() {
         return waveCount;
     }
+    public boolean isPausing(){return pausing;}
 }

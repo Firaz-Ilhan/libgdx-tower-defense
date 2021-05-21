@@ -22,11 +22,15 @@ import com.tower.defense.enemy.IEnemy;
 import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static com.tower.defense.wave.Wave.waveLeft;
 import static com.tower.defense.wave.Wave.waveRight;
 
 public class GameScreen implements Screen {
+
+    private final static Logger log = LogManager.getLogger(GameScreen.class);
 
     private final TowerDefense game;
     private final Stage stage;
@@ -34,7 +38,7 @@ public class GameScreen implements Screen {
     private TiledMapTileLayer groundLayer;
     private int[] decorationLayerIndices;
 
-    private OrthographicCamera camera;
+    private final OrthographicCamera camera;
     private final ScalingViewport viewport;
     private OrthogonalTiledMapRenderer renderer;
     private SpriteBatch spriteBatch;
@@ -114,8 +118,8 @@ public class GameScreen implements Screen {
 
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
-        player1 = new Player("Tester", true, false);
-        player2 = new Player("Tester2", false, true);
+        player1 = new Player("Tester", true);
+        player2 = new Player("Tester2", false);
         //for testing
         //player2.reduceLifepoints(40);
         wave = new Wave();
@@ -152,11 +156,11 @@ public class GameScreen implements Screen {
         font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 100, 100);
         font.draw(renderer.getBatch(), String.valueOf(screenWidth), 0, 160);
         font.draw(renderer.getBatch(), String.valueOf(screenHeight), 100, 160);
-        font.draw(renderer.getBatch(), "LP: "+ String.valueOf(player1.getLifepoints()),0,900);
-        font.draw(renderer.getBatch(), "LP: "+ String.valueOf(player2.getLifepoints()),1400,900);
-        font.draw(renderer.getBatch(), "Money: "+ String.valueOf(player1.getWalletValue()),0,850);
-        font.draw(renderer.getBatch(), "Money: "+ String.valueOf(player2.getWalletValue()),1400,850);
-        font.draw(renderer.getBatch(), "Wave: "+ String.valueOf(wave.getWaveCount()),800,900);
+        font.draw(renderer.getBatch(), "LP: " + player1.getLifepoints(), 0, 900);
+        font.draw(renderer.getBatch(), "LP: " + player2.getLifepoints(), 1400, 900);
+        font.draw(renderer.getBatch(), "Money: " + player1.getWalletValue(), 0, 850);
+        font.draw(renderer.getBatch(), "Money: " + player2.getWalletValue(), 1400, 850);
+        font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 800, 900);
 
         renderer.getBatch().end();
 
@@ -198,11 +202,12 @@ public class GameScreen implements Screen {
         // WAVE:
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
-        wave.renderWave(true, waveLeft, player1);
-        wave.renderWave(false, waveRight, player2);
+        wave.renderWave(waveLeft, player1);
+        wave.renderWave(waveRight, player2);
         //END OF GAME
-        if(player1.getLifepoints()<=0 ||player2.getLifepoints()<=0){
+        if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {
             game.setScreen(new EndScreen(game));
+            log.info("set screen to {}", game.getScreen().getClass());
         }
         stage.getViewport().apply();
         stage.draw();

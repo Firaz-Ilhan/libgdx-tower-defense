@@ -97,7 +97,7 @@ public class ServerConnection extends Thread{
 				}
 				
 				PacketInChatMessage packetInChatMessage = (PacketInChatMessage) packet;
-				PacketOutChatMessage packetOutChatMessage = new PacketOutChatMessage(packetInChatMessage.getName(), packetInChatMessage.getText());
+				PacketOutChatMessage packetOutChatMessage = new PacketOutChatMessage(packetInChatMessage.getText());
 				
 				partnerConnection.sendPacketToClient(packetOutChatMessage);
 				

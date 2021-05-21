@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,6 +22,7 @@ import com.tower.defense.TowerDefense;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
+import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.client.PacketInSearchMatch;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
 
@@ -34,6 +36,9 @@ public class MatchmakingScreen implements Screen {
     private final MatchmakingScreen instance;
     
     private Label connectionStatus;
+    private Table scrollTable;
+    private ScrollPane scroller;
+    private TextField inputArea;
 
     public MatchmakingScreen(final TowerDefense game) {
         this.game = game;
@@ -74,12 +79,12 @@ public class MatchmakingScreen implements Screen {
         connectionTable.row();
         connectionTable.add(startGameButton);
 
-        final Table scrollTable = new Table(skin);
+        scrollTable = new Table(skin);
         scrollTable.setDebug(false);
         scrollTable.setFillParent(false);
         scrollTable.align(Align.bottom);
 
-        final ScrollPane scroller = new ScrollPane(scrollTable, skin);
+        scroller = new ScrollPane(scrollTable, skin);
         scroller.validate();
         scroller.setScrollingDisabled(true, false);
         scroller.setDebug(false);
@@ -93,7 +98,7 @@ public class MatchmakingScreen implements Screen {
 
         chatTable.row();
 
-        final TextField inputArea = new TextField("", skin, "default");
+        inputArea = new TextField("", skin, "default");
         final TextButton sendMessageButton = new TextButton("Send", skin, "small");
 
         chatTable.add(inputArea);
@@ -124,18 +129,11 @@ public class MatchmakingScreen implements Screen {
         sendMessageButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // socket
-
-                final String msg = inputArea.getText();
-                if (!msg.isEmpty()) {
-                    scrollTable.row();
-                    final Label msglabel = new Label(msg, skin);
-                    msglabel.setAlignment(Align.center);
-                    msglabel.setWrap(true);
-                    scrollTable.add(msglabel).expandX().fillX();
-                }
-                inputArea.setText("");
-                scroller.scrollTo(0, 0, 0, 0); // scroll to bottom
+            	if(connectionStatus.getText().toString().equals("Connected: Match found")) {
+            		final String msg = inputArea.getText();
+                	addMessageToBox(true, msg);
+                    game.getClient().sendPacket(new PacketInChatMessage(this.toString(), msg));
+            	}
             }
         });
     }
@@ -175,6 +173,26 @@ public class MatchmakingScreen implements Screen {
         game.dispose();
     }
     
+    private void addMessageToBox(boolean self, String msg) {
+        if (!msg.isEmpty()) {
+            scrollTable.row();
+            final Label msglabel = new Label(msg, skin);
+            
+            if(self) {
+            	msglabel.setAlignment(Align.right);
+            	msglabel.setColor(Color.GREEN);
+            } else {
+            	msglabel.setAlignment(Align.left);
+            	msglabel.setColor(Color.GRAY);
+            }
+            
+            msglabel.setWrap(true);
+            scrollTable.add(msglabel).expandX().fillX();
+        }
+        inputArea.setText("");
+        scroller.scrollTo(0, 0, 0, 0); // scroll to bottom
+    }
+    
     public void handle(Packet packet) {
     	PacketType type = packet.getPacketType();
 		
@@ -188,7 +206,8 @@ public class MatchmakingScreen implements Screen {
 				break;
 			case PACKETOUTCHATMESSAGE:
 				PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
-				System.err.println(packetOutChatMessage.getName() + ": " + packetOutChatMessage.getText());
+				addMessageToBox(false, packetOutChatMessage.getText());
+				break;
 			default:
 				break;	
 				

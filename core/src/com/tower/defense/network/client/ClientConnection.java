@@ -70,10 +70,8 @@ public class ClientConnection extends Thread{
 	}
 
 	private void handle(Packet packet) {
-		System.out.println(1);
 		Screen screen = client.getCurrentScreen();
 		if(screen instanceof MatchmakingScreen) {
-			System.out.println(2);
 			MatchmakingScreen matchmakingScreen = (MatchmakingScreen)screen;
 			matchmakingScreen.handle(packet);
 		}

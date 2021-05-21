@@ -67,7 +67,8 @@ public class GameScreen implements Screen {
     private Wave wave;
     public static Player player1;
     public static Player player2;
-    private ArrayList<String> wavePattern;
+    private ArrayList<Vector2> wavePatternLeft;
+    private ArrayList<Vector2> wavePatternRight;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -114,12 +115,15 @@ public class GameScreen implements Screen {
 
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
-        player1 = new Player("Tester");
-        player2 = new Player("Tester2");
+        player1 = new Player("Player1");
+        player2 = new Player("Player2");
         // for testing
         // player2.reduceLifepoints(40);
         wave = new Wave();
-        wavePattern = new ArrayList<String>(Arrays.asList("DOWN", "LEFT", "DOWN"));
+        wavePatternLeft = new ArrayList<>(Arrays.asList(new Vector2(525, 525), new Vector2(325, 525),
+                new Vector2(325, 225), new Vector2(425, 225), new Vector2(425, -10)));
+        wavePatternRight = new ArrayList<>(Arrays.asList(new Vector2(1025, 525), new Vector2(1225, 525),
+                new Vector2(1225, 225), new Vector2(1125, 225), new Vector2(1225, -10)));
     }
 
     @Override
@@ -200,8 +204,11 @@ public class GameScreen implements Screen {
         // WAVE:
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
-        wave.renderWave(true, waveLeft, player1, wavePattern);
-        wave.renderWave(false, waveRight, player2, wavePattern);
+        if (playerSide) {
+            wave.renderWave(waveLeft, player1, wavePatternLeft);
+        }
+        wave.renderWave(waveRight, player2, wavePatternRight);
+
         // END OF GAME
         if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {
             game.setScreen(new EndScreen(game));

@@ -15,7 +15,7 @@ public class testPlayer {
 
         moneyAtBeginning = player.getWalletValue();
         player.addToWallet(30, 10);
-        assertEquals(moneyAtBeginning + 28, player.getWalletValue());
+        assertEquals(moneyAtBeginning + 20, player.getWalletValue());
 
     }
 }

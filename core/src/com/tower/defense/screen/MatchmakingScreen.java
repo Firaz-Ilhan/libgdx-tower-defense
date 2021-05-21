@@ -24,6 +24,7 @@ import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.client.PacketInSearchMatch;
+import com.tower.defense.network.packet.client.PacketInStartMatch;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
 
 public class MatchmakingScreen implements Screen {
@@ -109,20 +110,29 @@ public class MatchmakingScreen implements Screen {
         connectButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	Client client = new Client();
-            	client.setCurrentScreen(instance);
-            	game.setClient(client);
-            	client.sendPacket(new PacketInSearchMatch());
-            	connectionStatus.setText("Connecting...");
+            	
+            	if(connectionStatus.getText().toString().equals("not connected")) {
+	            	Client client = new Client();
+	            	client.setCurrentScreen(instance);
+	            	game.setClient(client);
+	            	client.sendPacket(new PacketInSearchMatch());
+	            	connectionStatus.setText("Connecting...");									
+            	}
             }
         });
+        
+        
 
         startGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // start the game only when the players are connected
-                game.setScreen(new GameScreen(game));
-                log.info("set screen to {}", game.getScreen().getClass());
+
+				game.setScreen(new GameScreen(game));
+				log.info("set screen to {}", game.getScreen().getClass());
+				
+				if(connectionStatus.getText().toString().equals("Connected: Match found")) {
+            		game.getClient().sendPacket(new PacketInStartMatch());
+            	}
             }
         });
 
@@ -196,7 +206,8 @@ public class MatchmakingScreen implements Screen {
     public void handle(Packet packet) {
     	PacketType type = packet.getPacketType();
 		
-		
+    	log.info("Traffic: New {}",type.toString());
+    	
 		switch (type) {
 			case PACKETOUTSEARCHMATCH:
 				connectionStatus.setText("Connected: Waiting for Enemy");
@@ -207,6 +218,9 @@ public class MatchmakingScreen implements Screen {
 			case PACKETOUTCHATMESSAGE:
 				PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
 				addMessageToBox(false, packetOutChatMessage.getText());
+				break;
+			case PACKETOUTSTARTMATCH:
+				//TODO
 				break;
 			default:
 				break;	

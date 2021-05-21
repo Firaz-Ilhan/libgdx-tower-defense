@@ -15,6 +15,7 @@ import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
 import com.tower.defense.network.packet.server.PacketOutMatchFound;
 import com.tower.defense.network.packet.server.PacketOutSearchMatch;
+import com.tower.defense.network.packet.server.PacketOutStartMatch;
 import com.tower.defense.screen.MainMenuScreen;
 
 
@@ -100,6 +101,18 @@ public class ServerConnection extends Thread{
 				PacketOutChatMessage packetOutChatMessage = new PacketOutChatMessage(packetInChatMessage.getText());
 				
 				partnerConnection.sendPacketToClient(packetOutChatMessage);
+				
+				break;
+			case PACKETINSTARTMATCH:
+				partnerConnection = server.getGameManager().getPartnerConnection(this);
+				
+				if(partnerConnection == null) {
+					return;
+				}
+				
+				PacketOutStartMatch packetOutStartMatch = new PacketOutStartMatch();
+				sendPacketToClient(packetOutStartMatch);
+				partnerConnection.sendPacketToClient(packetOutStartMatch);
 				
 				break;
 	

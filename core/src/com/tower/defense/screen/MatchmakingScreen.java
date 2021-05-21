@@ -1,17 +1,28 @@
 package com.tower.defense.screen;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.tower.defense.network.client.Client;
+import com.tower.defense.network.packet.Packet;
+import com.tower.defense.network.packet.PacketType;
+import com.tower.defense.network.packet.client.PacketInSearchMatch;
+import com.tower.defense.network.packet.server.PacketOutChatMessage;
 
 public class MatchmakingScreen implements Screen {
 
@@ -20,11 +31,15 @@ public class MatchmakingScreen implements Screen {
     private final Stage stage;
     private final Skin skin;
     private final TowerDefense game;
+    private final MatchmakingScreen instance;
+    
+    private Label connectionStatus;
 
     public MatchmakingScreen(final TowerDefense game) {
         this.game = game;
         skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
         stage = new Stage(new ScreenViewport());
+        this.instance = this;
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -41,7 +56,7 @@ public class MatchmakingScreen implements Screen {
         final Label ownLabel = new Label("Your IP address:", skin, "default");
         final Label ownIPLabel = new Label("placeholder", skin, "default");
         // ownIPLabel.setText("192.168...");
-        final Label connectionStatus = new Label("not connected", skin, "default");
+        connectionStatus = new Label("not connected", skin, "default");
 
         final TextButton connectButton = new TextButton("Connect...", skin, "small");
         final TextButton startGameButton = new TextButton("Start Game...", skin, "small");
@@ -89,9 +104,11 @@ public class MatchmakingScreen implements Screen {
         connectButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                // final String ip = opponentIPField.getText();
-                // connect players
-                // connectionStatus.setText("new status")
+            	Client client = new Client();
+            	client.setCurrentScreen(instance);
+            	game.setClient(client);
+            	client.sendPacket(new PacketInSearchMatch());
+            	connectionStatus.setText("Connecting...");
             }
         });
 
@@ -157,4 +174,25 @@ public class MatchmakingScreen implements Screen {
         skin.dispose();
         game.dispose();
     }
+    
+    public void handle(Packet packet) {
+    	PacketType type = packet.getPacketType();
+		
+		
+		switch (type) {
+			case PACKETOUTSEARCHMATCH:
+				connectionStatus.setText("Connected: Waiting for Enemy");
+				break;
+			case PACKETOUTMATCHFOUND:
+				connectionStatus.setText("Connected: Match found");
+				break;
+			case PACKETOUTCHATMESSAGE:
+				PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
+				System.err.println(packetOutChatMessage.getName() + ": " + packetOutChatMessage.getText());
+			default:
+				break;	
+				
+		}
+    }
+    
 }

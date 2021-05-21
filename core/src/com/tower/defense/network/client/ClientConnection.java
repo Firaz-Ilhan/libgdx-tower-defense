@@ -7,9 +7,11 @@ import java.net.Socket;
 
 import org.json.JSONObject;
 
+import com.badlogic.gdx.Screen;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
+import com.tower.defense.screen.MatchmakingScreen;
 
 
 public class ClientConnection extends Thread{
@@ -68,19 +70,12 @@ public class ClientConnection extends Thread{
 	}
 
 	private void handle(Packet packet) {
-		PacketType type = packet.getPacketType();
-		
-		
-		switch (type) {
-			case PACKETOUTSEARCHMATCH:
-				System.out.println("Warten auf Match");
-				break;
-			case PACKETOUTCHATMESSAGE:
-				PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
-				System.err.println(packetOutChatMessage.getName() + ": " + packetOutChatMessage.getText());
-			default:
-				break;	
-				
+		System.out.println(1);
+		Screen screen = client.getCurrentScreen();
+		if(screen instanceof MatchmakingScreen) {
+			System.out.println(2);
+			MatchmakingScreen matchmakingScreen = (MatchmakingScreen)screen;
+			matchmakingScreen.handle(packet);
 		}
 		
 	}

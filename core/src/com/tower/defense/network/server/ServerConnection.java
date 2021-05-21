@@ -5,17 +5,23 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
+import com.tower.defense.network.packet.server.PacketOutMatchFound;
 import com.tower.defense.network.packet.server.PacketOutSearchMatch;
+import com.tower.defense.screen.MainMenuScreen;
 
 
 
 public class ServerConnection extends Thread{
+	
+	private final static Logger log = LogManager.getLogger(ServerConnection.class);
 	
 	private Socket socket;
 	private Server server;
@@ -69,15 +75,16 @@ public class ServerConnection extends Thread{
 	public void handle(Packet packet) throws IOException {
 		PacketType type = packet.getPacketType();
 		
-		System.out.println(type.toString());
+		log.info("Traffic: New {}",type.toString());
 		
 		switch (type) {
 			case PACKETINSEARCHMATCH:
 				
 				ServerConnection serverSearchConnection = server.getGameManager().searchingForGame(this);
 				if(serverSearchConnection == null) {
-					//TODO: Match found
-					System.out.println("Match");
+					PacketOutMatchFound packetOutMatchFound = new PacketOutMatchFound();
+					sendPacketToClient(packetOutMatchFound);
+					server.getGameManager().getPartnerConnection(this).sendPacketToClient(packetOutMatchFound);
 				} else {
 					sendPacketToClient(new PacketOutSearchMatch());
 				}

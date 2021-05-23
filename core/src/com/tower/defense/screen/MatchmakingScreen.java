@@ -35,7 +35,7 @@ public class MatchmakingScreen implements Screen {
     private final Skin skin;
     private final TowerDefense game;
     private final MatchmakingScreen instance;
-    
+
     private Label connectionStatus;
     private Table scrollTable;
     private ScrollPane scroller;
@@ -110,40 +110,42 @@ public class MatchmakingScreen implements Screen {
         connectButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	
-            	if(connectionStatus.getText().toString().equals("not connected")) {
-	            	Client client = new Client();
-	            	client.setCurrentScreen(instance);
-	            	game.setClient(client);
-	            	client.sendPacket(new PacketInSearchMatch());
-	            	connectionStatus.setText("Connecting...");									
-            	}
+                try {
+                    if (connectionStatus.getText().toString().equals("not connected")) {
+                        Client client = new Client();
+                        client.setCurrentScreen(instance);
+                        game.setClient(client);
+                        client.sendPacket(new PacketInSearchMatch());
+                        connectionStatus.setText("Connecting...");
+                    }
+                } catch (Exception e1) {
+            	    connectionStatus.setText("could not connect to the server");
+                }
             }
         });
-        
-        
+
 
         startGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-				game.setScreen(new GameScreen(game));
-				log.info("set screen to {}", game.getScreen().getClass());
-				
-				if(connectionStatus.getText().toString().equals("Connected: Match found")) {
-            		game.getClient().sendPacket(new PacketInStartMatch());
-            	}
+                game.setScreen(new GameScreen(game));
+                log.info("set screen to {}", game.getScreen().getClass());
+
+                if (connectionStatus.getText().toString().equals("Connected: Match found")) {
+                    game.getClient().sendPacket(new PacketInStartMatch());
+                }
             }
         });
 
         sendMessageButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	if(connectionStatus.getText().toString().equals("Connected: Match found")) {
-            		final String msg = inputArea.getText();
-                	addMessageToBox(true, msg);
+                if (connectionStatus.getText().toString().equals("Connected: Match found")) {
+                    final String msg = inputArea.getText();
+                    addMessageToBox(true, msg);
                     game.getClient().sendPacket(new PacketInChatMessage(this.toString(), msg));
-            	}
+                }
             }
         });
     }
@@ -182,50 +184,50 @@ public class MatchmakingScreen implements Screen {
         skin.dispose();
         game.dispose();
     }
-    
+
     private void addMessageToBox(boolean self, String msg) {
         if (!msg.isEmpty()) {
             scrollTable.row();
             final Label msglabel = new Label(msg, skin);
-            
-            if(self) {
-            	msglabel.setAlignment(Align.right);
-            	msglabel.setColor(Color.GREEN);
+
+            if (self) {
+                msglabel.setAlignment(Align.right);
+                msglabel.setColor(Color.GREEN);
             } else {
-            	msglabel.setAlignment(Align.left);
-            	msglabel.setColor(Color.GRAY);
+                msglabel.setAlignment(Align.left);
+                msglabel.setColor(Color.GRAY);
             }
-            
+
             msglabel.setWrap(true);
             scrollTable.add(msglabel).expandX().fillX();
         }
         inputArea.setText("");
         scroller.scrollTo(0, 0, 0, 0); // scroll to bottom
     }
-    
+
     public void handle(Packet packet) {
-    	PacketType type = packet.getPacketType();
-		
-    	log.info("Traffic: New {}",type.toString());
-    	
-		switch (type) {
-			case PACKETOUTSEARCHMATCH:
-				connectionStatus.setText("Connected: Waiting for Enemy");
-				break;
-			case PACKETOUTMATCHFOUND:
-				connectionStatus.setText("Connected: Match found");
-				break;
-			case PACKETOUTCHATMESSAGE:
-				PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
-				addMessageToBox(false, packetOutChatMessage.getText());
-				break;
-			case PACKETOUTSTARTMATCH:
-				//TODO
-				break;
-			default:
-				break;	
-				
-		}
+        PacketType type = packet.getPacketType();
+
+        log.info("Traffic: New {}", type.toString());
+
+        switch (type) {
+            case PACKETOUTSEARCHMATCH:
+                connectionStatus.setText("Connected: Waiting for Enemy");
+                break;
+            case PACKETOUTMATCHFOUND:
+                connectionStatus.setText("Connected: Match found");
+                break;
+            case PACKETOUTCHATMESSAGE:
+                PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
+                addMessageToBox(false, packetOutChatMessage.getText());
+                break;
+            case PACKETOUTSTARTMATCH:
+                //TODO
+                break;
+            default:
+                break;
+
+        }
     }
-    
+
 }

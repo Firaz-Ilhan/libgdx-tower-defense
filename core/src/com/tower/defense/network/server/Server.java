@@ -14,7 +14,6 @@ public class Server {
 	
 	private final static Logger log = LogManager.getLogger(Server.class);
 	
-	private ServerSocket serverSocket;
 	private LinkedHashMap<Integer,ServerConnection> connections = new LinkedHashMap<>();
 	private boolean running = true;
 	private GameManager gameManager;

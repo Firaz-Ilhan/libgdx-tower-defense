@@ -27,6 +27,7 @@ import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.Factory.Tower2;
 import com.tower.defense.tower.ITower;
+import jdk.javadoc.internal.doclets.formats.html.markup.Table;
 import sun.tools.jconsole.JConsole;
 
 import java.util.*;
@@ -64,17 +65,15 @@ public class GameScreen implements Screen {
     private Texture hoveredTileTexture;
     private Texture hoveredTileNotAllowed;
 
+
     private Texture turret1Texture;
     private Texture turret2Texture;
 
+    //List to store all turrets
     private LinkedList turretsPlaced = new LinkedList<ITower>();
-    private ArrayList turretsPlacedArray = new ArrayList<ITower>();
-    private ArrayList turretsPlacedPostion = new ArrayList();
-    private float currentPosX;
-    private float currentPosY;
 
-    private Array currentTurret;
-    private int turretCounter;
+    private Table deletePopup;
+
 
 
     //Booleans to avoid creating multiple turrets by clicking once
@@ -84,16 +83,15 @@ public class GameScreen implements Screen {
     private boolean rightMouseButtonDown;
 
     private Tower1 tower1;
-    private Tower1 currentTower;
 
 
-    //private boolean deleteTurret;
+
+
 
 
     private Texture enemyImage;
     private Texture towerImage;
-    //private Texture turret;
-    private Object turret1;
+
 
     private boolean playerSide;
 
@@ -246,187 +244,80 @@ public class GameScreen implements Screen {
         }
 
 
-        //set turretCounter to zero
+        /**
+         * if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
+         */
 
-        //currentTurret = new Array<>();
-
-        //if statement to avoid multiple spawning of turrets by clicking the left mousebutton once;
         if (Gdx.input.isButtonPressed(0) && !leftMouseButtonDown) {
             canDraw = true;
         }
+        /**
+         * avoid multiple rightclicking
+         */
 
-        //avoid multiple rightclicking
         if (Gdx.input.isButtonPressed(1) && !rightMouseButtonDown) {
             canDelete = true;
         }
 
+        /**
+         * drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
+         */
 
-        //drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
         if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles)) {
-            spawnTurret1();
-            System.out.println("tower placed");
-            // player1TurretsPlaced[turretCounter].draw();
-            System.out.println(turretsPlaced);
-            AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
-           // System.out.println(tower1.getX() + "," + tower1.getY());
 
+            spawnTurret1();
+            AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
+
+            //System.out.println(tower1.getX() + "," + tower1.getY());//System.out.println("tower placed");
+            //player1TurretsPlaced[turretCounter].draw();
+            //System.out.println(turretsPlaced.size());
         } else {
             canDraw = false;
         }
 
-        //iterator to draw all currently stored turrets of kind 1
-
-        //ListIterator<Tower1> tower1ListIterator = turretsPlaced.listIterator();
-
-        /*
-        Iterator<Tower1> player1TowerIterator = player1TurretsPlaced.iterator();
-
-        while (player1TowerIterator.hasNext()) {
-
-            tower1 = player1TowerIterator.next();
-            tower1.draw();
-            System.out.println("aloaa");
-        }
-
+        /**
+         * List iterator that draws all placed turrets and handles "turret removing"
          */
-
-
-        //tower1 = player1TowerIterator.next();
-
 
         ListIterator<Tower1> tower1ListIterator1 = turretsPlaced.listIterator();
 
-        //for schleife daraus machen
-
-        for (int i = 0; i < turretsPlaced.size(); i ++){
-            tower1 = tower1ListIterator1.next();
-            tower1.draw();
-
-            }
-        if (canDelete && !rightMouseButtonDown) {
-
-            //System.out.println("jo");
-            System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+            while (tower1ListIterator1.hasNext()) {
 
 
-            if(tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 ){
+                tower1 = tower1ListIterator1.next();
+                tower1.draw();
 
-               turretsPlaced.remove(turretsPlaced.indexOf(tower1));
+                //Output if player tries to delete the last turret
 
-                AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                System.out.println(turretsPlaced);
-            }else{
-                canDelete = false;
-            }
+                if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1){
+                    System.out.println("You cant own 0 turrets");
+                }
 
 
 
-
-        /*
-        while (tower1ListIterator1.hasNext()) {
-
-            tower1 = tower1ListIterator1.next();
-            tower1.draw();
-
-            if (canDelete && !rightMouseButtonDown) {
-
-                //System.out.println("jo");
-                System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+                if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
 
 
-                    if(tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 ){
-                        turretsPlaced.remove(tower1);
+
+                    //System.out.println("test");
+                    System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+
+
+                    if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
+                        tower1ListIterator1.remove();
                         AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                         System.out.println(turretsPlaced);
                     }
 
 
-
-
-            }else{
-                canDelete = false;
-            }
-
-         */
-
-        }
-
-
-
-        //removing turrets
-/*
-        int j = -1;
-
-        if (canDelete && !rightMouseButtonDown) {
-
-            //System.out.println("jo");
-            System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
-
-            currentPosX = hoveredTilePosition.x * 50;
-            currentPosY = hoveredTilePosition.y * 50;
-            currentTower = new Tower1(turret1Texture,currentPosX,currentPosY, 50, 50,spriteBatch);
-
-            /*
-            for (int i = 0; i < turretsPlaced.size(); i++) {
-                //turretCounter = turretCounter + 1;
-
-                //System.out.println("aha");
-
-
-                if (turretsPlaced.get(i).equals(currentTower)) {
-
-                    //tower1.getX() == hoveredTilePosition.x * 50 && tower1.getX() == hoveredTilePosition.y
-                   // currentTurret.add(turretsPlaced.get(i));
-
-                    System.out.println("turret removed");
-                    turretsPlaced.remove(i);
-                    //turretCounter = turretCounter - 1;
-                    AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                }
-
-            }
-
-             */
-
-
-            /*
-            if (hoveredTilePosition.x * 50 == tower1.getX() && hoveredTilePosition.y * 50 == tower1.getY()) {
-
-                
-                turretsPlaced.removeLast();
-                AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                System.out.println("tower removed");
-            }
-
-
-
-            int i = 0;
-
-            //ListIterator<Tower1> deleteListIterator1 = turretsPlaced.listIterator();
-            while (tower1ListIterator1.hasNext()){
-                tower1 = tower1ListIterator1.next();
-                if(tower1.equals(currentTower)){
-                    turretsPlaced.removeLast();
-                    System.out.println("removed");
-
-
+                } else {
+                    canDelete = false;
 
                 }
 
 
-
-
-
             }
 
-
-
-
-                    } else {
-                        canDelete = false;
-                    }
-
-             */
 
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);
         rightMouseButtonDown = Gdx.input.isButtonPressed(1);

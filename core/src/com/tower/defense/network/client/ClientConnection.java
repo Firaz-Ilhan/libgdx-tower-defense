@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.util.Objects;
 
 
-public class ClientConnection extends Thread {
+public class ClientConnection implements Runnable {
 
     private final Socket socket;
     private final Client client;
@@ -23,7 +23,6 @@ public class ClientConnection extends Thread {
 
 
     public ClientConnection(Socket socket, Client client) throws IOException {
-        super("ClientConnectionThread");
         this.client = client;
         this.socket = socket;
         this.inputStream = new DataInputStream(socket.getInputStream());
@@ -47,8 +46,8 @@ public class ClientConnection extends Thread {
 
     @Override
     public void run() {
-        while (running) {
-            try {
+        try {
+            while (running) {
                 while (inputStream.available() == 0) {
                     Thread.sleep(1);
                 }
@@ -61,11 +60,11 @@ public class ClientConnection extends Thread {
                 packet.write(object);
 
                 handle(packet);
-            } catch (Exception e) {
-                e.printStackTrace();
-                running = false;
-                closeConnection();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
         }
     }
 

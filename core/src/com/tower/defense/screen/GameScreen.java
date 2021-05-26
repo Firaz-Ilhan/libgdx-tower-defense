@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
-import com.tower.defense.enemy.IEnemy;
+import com.tower.defense.enemy.Enemy;
 import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
@@ -27,9 +27,6 @@ import org.apache.logging.log4j.Logger;
 
 import static com.tower.defense.wave.Wave.waveLeft;
 import static com.tower.defense.wave.Wave.waveRight;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameScreen implements Screen {
 
@@ -46,9 +43,6 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private SpriteBatch spriteBatch;
 
-    private Vector2 mousePosition;
-    private Vector2 hoveredTilePosition;
-
     // Help variables to show mouse position
     private BitmapFont font;
 
@@ -61,14 +55,10 @@ public class GameScreen implements Screen {
 
     private AllowedTiles allowedTiles;
 
-    private int screenHeight;
-    private int screenWidth;
     // WAVE
     private Wave wave;
     public static Player player1;
     public static Player player2;
-    private ArrayList<Vector2> wavePatternLeft;
-    private ArrayList<Vector2> wavePatternRight;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -120,10 +110,6 @@ public class GameScreen implements Screen {
         // for testing
         // player2.reduceLifepoints(40);
         wave = new Wave();
-        wavePatternLeft = new ArrayList<>(Arrays.asList(new Vector2(525, 525), new Vector2(325, 525),
-                new Vector2(325, 225), new Vector2(425, 225), new Vector2(425, -10)));
-        wavePatternRight = new ArrayList<>(Arrays.asList(new Vector2(1025, 525), new Vector2(1225, 525),
-                new Vector2(1225, 225), new Vector2(1125, 225), new Vector2(1225, -10)));
     }
 
     @Override
@@ -137,13 +123,13 @@ public class GameScreen implements Screen {
         renderer.setView(camera);
 
         // getting the current mouse position
-        mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-        screenWidth = Gdx.graphics.getWidth();
-        screenHeight = Gdx.graphics.getHeight();
+        int screenWidth = Gdx.graphics.getWidth();
+        int screenHeight = Gdx.graphics.getHeight();
 
         // position of the hovered tile
-        hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
+        Vector2 hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
 
         renderer.getBatch().begin();
 
@@ -189,10 +175,10 @@ public class GameScreen implements Screen {
             }
         }
         // WAVE: drawing the enemies
-        for (IEnemy enemy : waveRight) {
+        for (Enemy enemy : waveRight) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
         }
-        for (IEnemy enemy : waveLeft) {
+        for (Enemy enemy : waveLeft) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
         }
 
@@ -204,10 +190,11 @@ public class GameScreen implements Screen {
         // WAVE:
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
+
         if (playerSide) {
-            wave.renderWave(waveLeft, player1, wavePatternLeft);
+            wave.renderWave(waveLeft, player1, playerSide);
         }
-        wave.renderWave(waveRight, player2, wavePatternRight);
+        wave.renderWave(waveRight, player2, playerSide);
 
         // END OF GAME
         if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {

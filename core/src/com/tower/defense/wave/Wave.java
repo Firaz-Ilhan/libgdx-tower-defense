@@ -3,13 +3,14 @@ package com.tower.defense.wave;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.tower.defense.enemy.IEnemy;
+import com.tower.defense.enemy.Enemy;
 import com.tower.defense.player.Player;
 import com.tower.defense.screen.GameScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
@@ -19,8 +20,8 @@ public class Wave {
     private final static Logger log = LogManager.getLogger(Wave.class);
 
     // Arraylist of existing Enemies
-    public static Array<IEnemy> waveLeft;
-    public static Array<IEnemy> waveRight;
+    public static Array<Enemy> waveLeft;
+    public static Array<Enemy> waveRight;
     // lastSpawnTime is checked before creating an enemy
     private long lastSpawnTime;
     private int enemiesPastLeft = 0;
@@ -38,11 +39,21 @@ public class Wave {
     private boolean pausing = false;
     private final long breaktime = 10000L;
 
+    ArrayList<Vector2> wavePatternLeft;
+    ArrayList<Vector2> wavePatternRight;
+    ArrayList<Vector2> wavePattern;
+
+
+
     public Wave() {
-        waveLeft = new Array<IEnemy>();
-        waveRight = new Array<IEnemy>();
+        waveLeft = new Array<Enemy>();
+        waveRight = new Array<Enemy>();
         spawnEnemy();
         log.info("wave count: {}", waveCount);
+        wavePatternLeft = new ArrayList<>(Arrays.asList(new Vector2(525, 525), new Vector2(325, 525),
+                new Vector2(325, 225), new Vector2(425, 225), new Vector2(425, -10)));
+        wavePatternRight = new ArrayList<>(Arrays.asList(new Vector2(1025, 525), new Vector2(1225, 525),
+                new Vector2(1225, 225), new Vector2(1125, 225), new Vector2(1225, -10)));
     }
 
     public void spawnEnemy() {
@@ -52,8 +63,8 @@ public class Wave {
                     endOfWave();
                 }
             } else {
-                IEnemy enemyLeft = getEnemyInstance("easy", 525, 700);
-                IEnemy enemyRight = getEnemyInstance("easy", 1025, 700);
+                Enemy enemyLeft = getEnemyInstance("easy", 525, 700, wavePatternLeft, wavePatternRight);
+                Enemy enemyRight = getEnemyInstance("easy", 1025, 700, wavePatternLeft, wavePatternRight);
                 waveLeft.add(enemyLeft);
                 waveRight.add(enemyRight);
                 lastSpawnTime = TimeUtils.nanoTime();
@@ -75,22 +86,51 @@ public class Wave {
         }
     }
 
-    public void renderWave(Array<IEnemy> wave, Player player, ArrayList<Vector2> wavePattern) {
-        for (Iterator<IEnemy> iter = wave.iterator(); iter.hasNext();) {
-            IEnemy enemy = iter.next();
+    public void renderWave(Array<Enemy> wave, Player player, boolean playerSide) {
+        for (Iterator<Enemy> iter = wave.iterator(); iter.hasNext();) {
+            Enemy enemy = iter.next();
             float positionAddAmount = enemySpeed / 25;
-            for (int patternPosition = 0; patternPosition < wavePattern.size(); patternPosition++) {
-                Vector2 currPosition = new Vector2(enemy.getPosition());
-                Vector2 currWaypoint = new Vector2(wavePattern.get(patternPosition));
-                if (checkPosition(currPosition, currWaypoint) == false) {
-                    currPosition = changePosition(wavePattern, enemy, positionAddAmount, player, iter, currPosition,
-                            currWaypoint);
-                }
 
+            Vector2 currPosition = enemy.getPosition();
+            Vector2 currWaypoint = enemy.nextWaypoint(playerSide);
+
+            if (currPosition != currWaypoint) {
+                if (currPosition.y != currWaypoint.y) {
+                    if (currPosition.y > currWaypoint.y) {
+                        currPosition.y = enemy.getY() - positionAddAmount;
+                        enemy.setPosition(currPosition);
+                    } else {
+                        currPosition.y = enemy.getY() + positionAddAmount;
+                        enemy.setPosition(currPosition);
+                    }
+                } else if (currPosition.x != currWaypoint.x) {
+                    if (currPosition.x > currWaypoint.x) {
+                        currPosition.x = enemy.getX() - positionAddAmount;
+                        enemy.setPosition(currPosition);
+                        ;
+                    } else {
+                        currPosition.x = enemy.getX() + positionAddAmount;
+                        enemy.setPosition(currPosition);
+                    }
+                } else {
+                    enemy.advancePattern();
+                }
+                if (enemy.getY() < -10) {
+                    player.reduceLifepoints(enemy.getDamage());
+                    iter.remove();
+                    if (player.getName().equals("Player1")) {
+                        enemiesPastLeft++;
+                    } else {
+                        enemiesPastRight++;
+                    }
+                }
+                if (enemy.getLifepoints() <= 0) {
+                    iter.remove();
+                }
             }
         }
+        }
 
-    }
 
     public void endOfWave() {
         GameScreen.player1.addToWallet(waveReward, enemiesPastLeft);
@@ -112,52 +152,4 @@ public class Wave {
     public int getWaveCount() {
         return waveCount;
     }
-
-    public Vector2 changePosition(ArrayList<Vector2> wavePattern, IEnemy enemy, float positionAddAmount, Player player,
-            Iterator<IEnemy> iter, Vector2 currPosition, Vector2 currWaypoint) {
-        currPosition = new Vector2(enemy.getPosition());
-        if (!checkPosition(currPosition, currWaypoint)) {
-            if (currPosition.y != currWaypoint.y) {
-                if (currPosition.y > currWaypoint.y) {
-                    currPosition.y = enemy.getY() - positionAddAmount;
-                    enemy.setPosition(currPosition);
-                } else {
-                    currPosition.y = enemy.getY() + positionAddAmount;
-                    enemy.setPosition(currPosition);
-                }
-            }
-
-            if (currPosition.x != currWaypoint.x) {
-                if (currPosition.x > currWaypoint.x) {
-                    currPosition.x = enemy.getX() - positionAddAmount;
-                    enemy.setPosition(currPosition);
-                    ;
-                } else {
-                    currPosition.x = enemy.getX() + positionAddAmount;
-                    enemy.setPosition(currPosition);
-                }
-
-            }
-
-            if (enemy.getY() < -10) {
-                player.reduceLifepoints(enemy.getDamage());
-                iter.remove();
-                if (player.getName() == "Player1") {
-                    enemiesPastLeft++;
-                } else {
-                    enemiesPastRight++;
-                }
-            }
-            if (enemy.getLifepoints() <= 0) {
-                iter.remove();
-            }
-
-        }
-        return currPosition;
-    }
-
-    public boolean checkPosition(Vector2 currPosition, Vector2 currWaypoint) {
-        return currPosition == currWaypoint;
-    }
-
 }

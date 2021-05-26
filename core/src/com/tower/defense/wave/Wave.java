@@ -39,21 +39,11 @@ public class Wave {
     private boolean pausing = false;
     private final long breaktime = 10000L;
 
-    ArrayList<Vector2> wavePatternLeft;
-    ArrayList<Vector2> wavePatternRight;
-    ArrayList<Vector2> wavePattern;
-
-
-
     public Wave() {
         waveLeft = new Array<Enemy>();
         waveRight = new Array<Enemy>();
         spawnEnemy();
         log.info("wave count: {}", waveCount);
-        wavePatternLeft = new ArrayList<>(Arrays.asList(new Vector2(525, 525), new Vector2(325, 525),
-                new Vector2(325, 225), new Vector2(425, 225), new Vector2(425, -10)));
-        wavePatternRight = new ArrayList<>(Arrays.asList(new Vector2(1025, 525), new Vector2(1225, 525),
-                new Vector2(1225, 225), new Vector2(1125, 225), new Vector2(1225, -10)));
     }
 
     public void spawnEnemy() {
@@ -63,8 +53,8 @@ public class Wave {
                     endOfWave();
                 }
             } else {
-                Enemy enemyLeft = getEnemyInstance("easy", 525, 700, wavePatternLeft, wavePatternRight);
-                Enemy enemyRight = getEnemyInstance("easy", 1025, 700, wavePatternLeft, wavePatternRight);
+                Enemy enemyLeft = getEnemyInstance("easy", 525, 700);
+                Enemy enemyRight = getEnemyInstance("easy", 1025, 700);
                 waveLeft.add(enemyLeft);
                 waveRight.add(enemyRight);
                 lastSpawnTime = TimeUtils.nanoTime();

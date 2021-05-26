@@ -1,6 +1,7 @@
 package com.tower.defense.enemy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -13,16 +14,17 @@ public abstract class Enemy {
     private ArrayList<Vector2> wavePatternRight;
     private ArrayList<Vector2> wavePattern;
 
-    private Vector2 currentPosition;
     private int waypointPosition = 0;
 
-    public Enemy(int x, int y, int lifepoints, int damage, ArrayList<Vector2> wavePatternLeft, ArrayList<Vector2> wavePatternRight) {
+    public Enemy(int x, int y, int lifepoints, int damage) {
         this.posX = x;
         this.posY = y;
         this.lifepoints = lifepoints;
         this.damage = damage;
-        this.wavePatternLeft = wavePatternLeft;
-        this.wavePatternRight = wavePatternRight;
+        wavePatternLeft = new ArrayList<>(Arrays.asList(new Vector2(525, 525), new Vector2(325, 525),
+                new Vector2(325, 225), new Vector2(425, 225), new Vector2(425, -20)));
+        wavePatternRight = new ArrayList<>(Arrays.asList(new Vector2(1025, 525), new Vector2(1225, 525),
+                new Vector2(1225, 225), new Vector2(1125, 225), new Vector2(1225, -20)));
     }
 
     /**
@@ -43,8 +45,7 @@ public abstract class Enemy {
      * @return current location
      */
     public Vector2 getPosition() {
-        currentPosition = new Vector2(getX(), getY());
-        return currentPosition;
+        return new Vector2(getX(), getY());
     }
 
     /**
@@ -95,7 +96,7 @@ public abstract class Enemy {
     }
 
     public void advancePattern(){
-        if(waypointPosition < wavePattern.size()) {
+        if(waypointPosition < wavePattern.size() - 1) {
             waypointPosition++;
         }
     }

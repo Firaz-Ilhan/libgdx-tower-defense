@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 public class EnemyFactory {
 
-    public static Enemy getEnemyInstance(String difficulty, int posX, int posY, ArrayList<Vector2> wavePatternLeft, ArrayList<Vector2> wavePatternRight) {
+    public static Enemy getEnemyInstance(String difficulty, int posX, int posY) {
 
         switch (difficulty) {
             case "medium":
-                return new Enemy1(posX, posY, 7, 2, wavePatternLeft, wavePatternRight);
+                return new Enemy1(posX, posY, 7, 2);
             default:
-                return new Enemy1(posX, posY, 2,2,wavePatternLeft, wavePatternRight);
+                return new Enemy1(posX, posY, 2,2);
         }
     }
 }

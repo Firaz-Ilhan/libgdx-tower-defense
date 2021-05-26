@@ -1,24 +1,17 @@
 package com.tower.defense.screen;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.helper.NetworkINTF;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
@@ -26,6 +19,10 @@ import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.client.PacketInSearchMatch;
 import com.tower.defense.network.packet.client.PacketInStartMatch;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.net.UnknownHostException;
 
 public class MatchmakingScreen implements Screen {
 
@@ -61,7 +58,13 @@ public class MatchmakingScreen implements Screen {
 
         final Label ownLabel = new Label("Your IP address:", skin, "default");
         final Label ownIPLabel = new Label("placeholder", skin, "default");
-        // ownIPLabel.setText("192.168...");
+
+        try {
+            ownIPLabel.setText(NetworkINTF.getLocalIpAddress());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            ownIPLabel.setText("could not get local ip");
+        }
         connectionStatus = new Label("not connected", skin, "default");
 
         final TextButton connectButton = new TextButton("Connect...", skin, "small");
@@ -119,7 +122,7 @@ public class MatchmakingScreen implements Screen {
                         connectionStatus.setText("Connecting...");
                     }
                 } catch (Exception e1) {
-            	    connectionStatus.setText("could not connect to the server");
+                    connectionStatus.setText("could not connect to the server");
                 }
             }
         });
@@ -229,5 +232,4 @@ public class MatchmakingScreen implements Screen {
 
         }
     }
-
 }

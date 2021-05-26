@@ -9,8 +9,6 @@ import com.tower.defense.screen.GameScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;

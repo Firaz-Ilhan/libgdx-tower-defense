@@ -1,9 +1,6 @@
 package com.tower.defense.enemy.Factory;
 
-import com.badlogic.gdx.math.Vector2;
 import com.tower.defense.enemy.Enemy;
-
-import java.util.ArrayList;
 
 public class EnemyFactory {
 

@@ -9,7 +9,7 @@ public class Enemy2 extends Enemy {
     ArrayList<Vector2> wavePatternLeft;
     ArrayList<Vector2> wavePatternRight;
 
-    public Enemy2(int posX, int posY, int lifepoints, int damage, ArrayList<Vector2> wavePatternLeft, ArrayList<Vector2> wavePatternRight){
+    public Enemy2(int posX, int posY, int lifepoints, int damage){
         super(posX,  posY, lifepoints, damage);
 
     }

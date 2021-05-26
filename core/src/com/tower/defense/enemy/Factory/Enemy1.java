@@ -6,10 +6,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 
-
-/**
- *
- */
 public class Enemy1 extends Enemy {
     ArrayList<Vector2> wavePatternLeft;
     ArrayList<Vector2> wavePatternRight;

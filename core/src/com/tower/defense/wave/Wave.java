@@ -91,52 +91,51 @@ public class Wave {
 
             // only if the enemy's current position isn't the same as the desired waypoint
             // it will move towards it based on which coordinate (x and/or y) is wrong
-            if (currentEnemyPosition != nextWantedWaypoint) {
-                if (currentEnemyPosition.y != nextWantedWaypoint.y) {
-                    if (currentEnemyPosition.y > nextWantedWaypoint.y) {
-                        currentEnemyPosition.y = enemy.getY() - positionAddAmount;
-                        enemy.setPosition(currentEnemyPosition);
-                    } else {
-                        currentEnemyPosition.y = enemy.getY() + positionAddAmount;
-                        enemy.setPosition(currentEnemyPosition);
-                    }
-                } else if (currentEnemyPosition.x != nextWantedWaypoint.x) {
-                    if (currentEnemyPosition.x > nextWantedWaypoint.x) {
-                        currentEnemyPosition.x = enemy.getX() - positionAddAmount;
-                        enemy.setPosition(currentEnemyPosition);
-                        ;
-                    } else {
-                        currentEnemyPosition.x = enemy.getX() + positionAddAmount;
-                        enemy.setPosition(currentEnemyPosition);
-                    }
-
-                    // if the positions of enemy and waypoint are the same
-                    // the wavePattern will progress to the next waypoint
+            if (currentEnemyPosition.y != nextWantedWaypoint.y) {
+                if (currentEnemyPosition.y > nextWantedWaypoint.y) {
+                    currentEnemyPosition.y = enemy.getY() - positionAddAmount;
+                    enemy.setPosition(currentEnemyPosition);
                 } else {
-                    enemy.advancePattern();
+                    currentEnemyPosition.y = enemy.getY() + positionAddAmount;
+                    enemy.setPosition(currentEnemyPosition);
+                }
+            } else if (currentEnemyPosition.x != nextWantedWaypoint.x) {
+                if (currentEnemyPosition.x > nextWantedWaypoint.x) {
+                    currentEnemyPosition.x = enemy.getX() - positionAddAmount;
+                    enemy.setPosition(currentEnemyPosition);
+                    ;
+                } else {
+                    currentEnemyPosition.x = enemy.getX() + positionAddAmount;
+                    enemy.setPosition(currentEnemyPosition);
                 }
 
-                // if an enemy reaches the bottom edge of the map it gets
-                // removed and the player looses health points based
-                // on the enemy's damage
-                if (enemy.getY() < -10) {
-                    player.reduceLifepoints(enemy.getDamage());
-                    iter.remove();
-                    if (player.getName().equals("Player1")) {
-                        enemiesPastLeft++;
-                    } else {
-                        enemiesPastRight++;
-                    }
-                }
+                // if the positions of enemy and waypoint are the same
+                // the wavePattern will progress to the next waypoint
+            } else {
+                enemy.advancePattern();
+            }
 
-                // if the lifepoints of an enemy are reduced
-                // to 0 it get's removed
-                if (enemy.getLifepoints() <= 0) {
-                    iter.remove();
+            // if an enemy reaches the bottom edge of the map it gets
+            // removed and the player looses health points based
+            // on the enemy's damage
+            if (enemy.getY() < -10) {
+                player.reduceLifepoints(enemy.getDamage());
+                iter.remove();
+                if (player.getName().equals("Player1")) {
+                    enemiesPastLeft++;
+                } else {
+                    enemiesPastRight++;
                 }
+            }
+
+            // if the lifepoints of an enemy are reduced
+            // to 0 it get's removed
+            if (enemy.getLifepoints() <= 0) {
+                iter.remove();
             }
         }
     }
+
 
     // once a wave is over the players get money based on how many
     // enemies they were able to kill.

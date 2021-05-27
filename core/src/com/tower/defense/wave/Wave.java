@@ -103,7 +103,6 @@ public class Wave {
                 if (currentEnemyPosition.x > nextWantedWaypoint.x) {
                     currentEnemyPosition.x = enemy.getX() - positionAddAmount;
                     enemy.setPosition(currentEnemyPosition);
-                    ;
                 } else {
                     currentEnemyPosition.x = enemy.getX() + positionAddAmount;
                     enemy.setPosition(currentEnemyPosition);

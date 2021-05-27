@@ -75,6 +75,7 @@ public class Wave {
     }
 
     public void renderWave(Array<Enemy> wave, Player player, boolean playerSide) {
+
         for (Iterator<Enemy> iter = wave.iterator(); iter.hasNext();) {
             Enemy enemy = iter.next();
             float positionAddAmount = enemySpeed / 25;

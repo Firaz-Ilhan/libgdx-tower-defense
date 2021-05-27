@@ -191,10 +191,10 @@ public class GameScreen implements Screen {
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
 
-        if (playerSide) {
-            wave.renderWave(waveLeft, player1, playerSide);
-        }
-        wave.renderWave(waveRight, player2, playerSide);
+
+        wave.renderWave(waveLeft, player1, true);
+        wave.renderWave(waveRight, player2, false);
+
 
         // END OF GAME
         if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {

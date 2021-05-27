@@ -10,10 +10,15 @@ public abstract class Enemy {
     private int posY;
     private int lifepoints;
     private int damage;
+
+    // ArrayLists that are used to tell an Enemy what wayPoints they have
+    // to follow when navigating the map
     private ArrayList<Vector2> wavePatternLeft;
     private ArrayList<Vector2> wavePatternRight;
     private ArrayList<Vector2> wavePattern;
 
+    // the waypointPosition is the position of that waypoint in the
+    // wavePattern the enemy currently moves to
     private int waypointPosition = 0;
 
     public Enemy(int x, int y, int lifepoints, int damage) {
@@ -28,28 +33,28 @@ public abstract class Enemy {
     }
 
     /**
-     * @return
+     * @return Y position
      */
     public int getY() {
         return posY;
     }
 
     /**
-     * @return
+     * @return X position
      */
     public int getX() {
         return posX;
     }
 
     /**
-     * @return current location
+     * @return current location as a Vector2
      */
     public Vector2 getPosition() {
         return new Vector2(getX(), getY());
     }
 
     /**
-     * @return
+     * @return the damage the enemy deals
      */
     public int getDamage() {
         return damage;
@@ -57,6 +62,7 @@ public abstract class Enemy {
 
     /**
      * @param posY
+     * sets the enemy's Y position
      */
     public void setY(int posY) {
         this.posY = posY;
@@ -64,11 +70,17 @@ public abstract class Enemy {
 
     /**
      * @param posX
+     * sets the enemy's X position
      */
     public void setX(int posX) {
         this.posX = posX;
     }
 
+    /**
+     *
+     * @param newPos
+     * sets the enemy's new position (both x and y)
+     */
     public void setPosition(Vector2 newPos) {
         this.posX = (int) newPos.x;
         this.posY = (int) newPos.y;
@@ -82,10 +94,19 @@ public abstract class Enemy {
         lifepoints -= damageReceived;
     }
 
+    /**
+     *
+     * @return lifepoints of the enemy
+     */
     public int getLifepoints() {
         return lifepoints;
     }
 
+    /**
+     *
+     * @param playerSide to determine which wavePattern has to be used
+     * @return the waypoint the enemy has to move towards currently
+     */
     public Vector2 nextWaypoint(boolean playerSide){
         if(playerSide){
             wavePattern = wavePatternLeft;
@@ -95,6 +116,9 @@ public abstract class Enemy {
         return wavePattern.get(waypointPosition);
     }
 
+    /**
+     * advances the wavypointPosition by one to move to the next wayPoint
+     */
     public void advancePattern(){
         if(waypointPosition < wavePattern.size() - 1) {
             waypointPosition++;

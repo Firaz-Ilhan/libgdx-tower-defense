@@ -67,43 +67,58 @@ public class Wave {
         }
     }
 
-    // check if we need to create a new raindrop
+    // check if we need to create a new enemy
     public void newEnemySpawn() {
         if (TimeUtils.nanoTime() - lastSpawnTime > waveSpeed) {
             spawnEnemy();
         }
     }
 
+    // renders each wave of enemies based on the player side
     public void renderWave(Array<Enemy> wave, Player player, boolean playerSide) {
 
-        for (Iterator<Enemy> iter = wave.iterator(); iter.hasNext();) {
+        // with an iterator it goes through each wave step by step
+        for (Iterator<Enemy> iter = wave.iterator(); iter.hasNext(); ) {
             Enemy enemy = iter.next();
+
+            // distance added with each frame
             float positionAddAmount = enemySpeed / 25;
 
-            Vector2 currPosition = enemy.getPosition();
-            Vector2 currWaypoint = enemy.nextWaypoint(playerSide);
+            Vector2 currentEnemyPosition = enemy.getPosition();
 
-            if (currPosition != currWaypoint) {
-                if (currPosition.y != currWaypoint.y) {
-                    if (currPosition.y > currWaypoint.y) {
-                        currPosition.y = enemy.getY() - positionAddAmount;
-                        enemy.setPosition(currPosition);
+            // the next waypoint the enemy will move to
+            Vector2 nextWantedWaypoint = enemy.nextWaypoint(playerSide);
+
+            // only if the enemy's current position isn't the same as the desired waypoint
+            // it will move towards it based on which coordinate (x and/or y) is wrong
+            if (currentEnemyPosition != nextWantedWaypoint) {
+                if (currentEnemyPosition.y != nextWantedWaypoint.y) {
+                    if (currentEnemyPosition.y > nextWantedWaypoint.y) {
+                        currentEnemyPosition.y = enemy.getY() - positionAddAmount;
+                        enemy.setPosition(currentEnemyPosition);
                     } else {
-                        currPosition.y = enemy.getY() + positionAddAmount;
-                        enemy.setPosition(currPosition);
+                        currentEnemyPosition.y = enemy.getY() + positionAddAmount;
+                        enemy.setPosition(currentEnemyPosition);
                     }
-                } else if (currPosition.x != currWaypoint.x) {
-                    if (currPosition.x > currWaypoint.x) {
-                        currPosition.x = enemy.getX() - positionAddAmount;
-                        enemy.setPosition(currPosition);
+                } else if (currentEnemyPosition.x != nextWantedWaypoint.x) {
+                    if (currentEnemyPosition.x > nextWantedWaypoint.x) {
+                        currentEnemyPosition.x = enemy.getX() - positionAddAmount;
+                        enemy.setPosition(currentEnemyPosition);
                         ;
                     } else {
-                        currPosition.x = enemy.getX() + positionAddAmount;
-                        enemy.setPosition(currPosition);
+                        currentEnemyPosition.x = enemy.getX() + positionAddAmount;
+                        enemy.setPosition(currentEnemyPosition);
                     }
+
+                    // if the positions of enemy and waypoint are the same
+                    // the wavePattern will progress to the next waypoint
                 } else {
                     enemy.advancePattern();
                 }
+
+                // if an enemy reaches the bottom edge of the map it gets
+                // removed and the player looses health points based
+                // on the enemy's damage
                 if (enemy.getY() < -10) {
                     player.reduceLifepoints(enemy.getDamage());
                     iter.remove();
@@ -113,14 +128,20 @@ public class Wave {
                         enemiesPastRight++;
                     }
                 }
+
+                // if the lifepoints of an enemy are reduced
+                // to 0 it get's removed
                 if (enemy.getLifepoints() <= 0) {
                     iter.remove();
                 }
             }
         }
-        }
+    }
 
-
+    // once a wave is over the players get money based on how many
+    // enemies they were able to kill.
+    // The waveSpeed, waveSize and waveReward all increase for
+    // the next wave
     public void endOfWave() {
         GameScreen.player1.addToWallet(waveReward, enemiesPastLeft);
         GameScreen.player2.addToWallet(waveReward, enemiesPastRight);

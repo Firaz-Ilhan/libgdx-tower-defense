@@ -51,6 +51,7 @@ public class GameScreen implements Screen {
 
     private Texture enemyImage;
 
+    // this boolean determines which side of the map the player is on
     private boolean playerSide;
 
     private AllowedTiles allowedTiles;
@@ -190,11 +191,8 @@ public class GameScreen implements Screen {
         // WAVE:
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
-
-
         wave.renderWave(waveLeft, player1, true);
         wave.renderWave(waveRight, player2, false);
-
 
         // END OF GAME
         if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {

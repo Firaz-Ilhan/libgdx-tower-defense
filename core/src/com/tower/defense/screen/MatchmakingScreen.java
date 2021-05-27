@@ -54,7 +54,7 @@ public class MatchmakingScreen implements Screen {
         stage.addActor(connectionTable);
 
         final TextField opponentIPField = new TextField("", skin, "default");
-        final Label opponentIPLabel = new Label("Opponent's IP address", skin, "default");
+        final Label serverIPLabel = new Label("Server's IP address", skin, "default");
 
         final Label ownLabel = new Label("Your IP address:", skin, "default");
         final Label ownIPLabel = new Label("placeholder", skin, "default");
@@ -72,7 +72,7 @@ public class MatchmakingScreen implements Screen {
 
         connectionTable.defaults().pad(10f);
         connectionTable.align(Align.top);
-        connectionTable.add(opponentIPLabel);
+        connectionTable.add(serverIPLabel);
         connectionTable.add(opponentIPField);
         connectionTable.row();
         connectionTable.add(ownLabel);
@@ -113,9 +113,10 @@ public class MatchmakingScreen implements Screen {
         connectButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                final String ip = opponentIPField.getText();
                 try {
                     if (connectionStatus.getText().toString().equals("not connected")) {
-                        Client client = new Client();
+                        Client client = new Client(ip, 3456);
                         client.setCurrentScreen(instance);
                         game.setClient(client);
                         client.sendPacket(new PacketInSearchMatch());

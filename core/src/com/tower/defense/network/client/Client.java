@@ -11,9 +11,9 @@ public class Client {
     private ClientConnection clientConnection;
     private Screen currentScreen;
 
-    public Client() {
+    public Client(String serverIp, int serverPort) {
         try {
-            Socket socket = new Socket("localhost", 3456);
+            Socket socket = new Socket(serverIp, serverPort);
             socket.setSoTimeout(30000);
             clientConnection = new ClientConnection(socket, this);
             Thread thread = new Thread(clientConnection, "ClientConnectionThread");

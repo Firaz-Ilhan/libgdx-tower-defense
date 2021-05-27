@@ -2,42 +2,41 @@ package com.tower.defense.network.client;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 
-import com.tower.defense.network.packet.client.PacketInChatMessage;
-import com.tower.defense.network.packet.client.PacketInSearchMatch;
+import com.badlogic.gdx.Screen;
+import com.tower.defense.network.packet.Packet;
 
 public class Client {
 
 	private ClientConnection clientConnection;
+	private Screen currentScreen;
 	
 	public Client() {
 		try {
 			Socket socket = new Socket("localhost",3456);
 			clientConnection = new ClientConnection(socket, this);
 			clientConnection.start();
-
-			clientConnection.sendPacketToServer(new PacketInSearchMatch());
-			
-			listenForInput();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-
-	
-	private void listenForInput() {
-		Scanner scanner = new Scanner(System.in);
-		
-		while(scanner.hasNext()) {
-			try {
-				String text = scanner.nextLine();
-				clientConnection.sendPacketToServer(new PacketInChatMessage("Client" + hashCode(), text));
-			} catch (IOException e) {
-			}
+	public void sendPacket(Packet packet) {
+		try {
+			clientConnection.sendPacketToServer(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
+	
+	public Screen getCurrentScreen() {
+		return currentScreen;
+	}
+	
+	public void setCurrentScreen(Screen currentScreen) {
+		this.currentScreen = currentScreen;
+	}
+	
 
 
 }

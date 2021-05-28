@@ -16,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -26,16 +27,27 @@ import com.tower.defense.helper.AllowedTiles;
 
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.Factory.Tower2;
+import com.tower.defense.tower.Factory.TowerFactory;
 import com.tower.defense.tower.ITower;
 import jdk.javadoc.internal.doclets.formats.html.markup.Table;
+import jdk.javadoc.internal.doclets.toolkit.Content;
 import sun.tools.jconsole.JConsole;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
+import java.util.List;
 
 import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicListUI;
 
 import static com.tower.defense.wave.Wave.waveLeft;
 import static com.tower.defense.wave.Wave.waveRight;
@@ -72,8 +84,11 @@ public class GameScreen implements Screen {
     //List to store all turrets
     private LinkedList turretsPlaced = new LinkedList<ITower>();
 
-    private Table deletePopup;
+    //PopUP menu
 
+    private JPopupMenu sellTurretPopMenu;
+    private JMenuItem sellTurretItem;
+    private JMenuItem abortSellTurretItem;
 
 
     //Booleans to avoid creating multiple turrets by clicking once
@@ -103,6 +118,8 @@ public class GameScreen implements Screen {
     private Wave wave;
     public static Player player1;
     public static Player player2;
+    private Object GameScreen;
+
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -245,6 +262,27 @@ public class GameScreen implements Screen {
 
 
         /**
+         *Creating PopUp menu to confirm that the turret gets selled
+         */
+
+
+        sellTurretPopMenu = new JPopupMenu();
+
+        sellTurretItem = new JMenuItem("Sell turret");
+        sellTurretPopMenu.add(sellTurretItem);
+        //sellTurretItem.addActionListener();
+
+
+        abortSellTurretItem = new JMenuItem("Abort");
+        sellTurretPopMenu.add(abortSellTurretItem);
+
+
+
+        //if(tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
+
+            //sellTurretPopMenu.show((Component) GameScreen, (int) hoveredTilePosition.x * 50, (int) hoveredTilePosition.y * 50);
+        //}
+        /**
          * if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
          */
 
@@ -304,6 +342,8 @@ public class GameScreen implements Screen {
 
 
                     if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
+
+                       sellTurretPopMenu.show((Component)GameScreen,Gdx.input.getX(),Gdx.input.getY());
                         tower1ListIterator1.remove();
                         AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                         System.out.println(turretsPlaced);
@@ -380,6 +420,7 @@ public class GameScreen implements Screen {
 
             tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
              turretsPlaced.add(tower1);
+
             //turretsPlacedArray.add(tower1);
 
             //player1TurretsPlaced.add(tower1);
@@ -391,4 +432,8 @@ public class GameScreen implements Screen {
     public void spawnTurret2() {
 
     }
+
+
+
+
 }

@@ -19,7 +19,7 @@ public class Tower1 implements ITower {
     private float width, height;
     private SpriteBatch spriteBatch;
 
-    public Tower1(Texture turretTexture, float x, float y, int width, int height, SpriteBatch batch) {
+    public Tower1(Texture turretTexture,float x, float y, int width, int height, SpriteBatch batch) {
         this.x = x;
         this.y = y;
         this.is_attacking = false;

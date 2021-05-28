@@ -164,7 +164,7 @@ public class Wave {
     public void endOfWave() {
         GameScreen.player1.addToWallet(waveReward, enemiesPastLeft);
         GameScreen.player2.addToWallet(waveReward, enemiesPastRight);
-        waveSpeed = Math.round(waveSpeed * 0.95);
+        waveSpeed = Math.round(waveSpeed * 0.75);
         waveSize = Math.round(waveSize * 1.2);
         waveReward = (int) Math.round(waveReward * 1.5);
         log.info("wave reward: {}", waveReward);

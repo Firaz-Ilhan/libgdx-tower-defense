@@ -6,8 +6,8 @@ import java.util.Arrays;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Enemy {
-    private int posX;
-    private int posY;
+    private float posX;
+    private float posY;
     private int lifepoints;
     private int damage;
 
@@ -21,7 +21,7 @@ public abstract class Enemy {
     // wavePattern the enemy currently moves to
     private int waypointPosition = 0;
 
-    public Enemy(int x, int y, int lifepoints, int damage) {
+    public Enemy(float x, float y, int lifepoints, int damage) {
         this.posX = x;
         this.posY = y;
         this.lifepoints = lifepoints;
@@ -64,7 +64,7 @@ public abstract class Enemy {
      * @param posY
      * sets the enemy's Y position
      */
-    public void setY(int posY) {
+    public void setY(float posY) {
         this.posY = posY;
     }
 
@@ -72,7 +72,7 @@ public abstract class Enemy {
      * @param posX
      * sets the enemy's X position
      */
-    public void setX(int posX) {
+    public void setX(float posX) {
         this.posX = posX;
     }
 
@@ -82,8 +82,8 @@ public abstract class Enemy {
      * sets the enemy's new position (both x and y)
      */
     public void setPosition(Vector2 newPos) {
-        this.posX = (int) newPos.x;
-        this.posY = (int) newPos.y;
+        this.posX = newPos.x;
+        this.posY = newPos.y;
     }
 
     /**

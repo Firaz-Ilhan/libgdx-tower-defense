@@ -14,19 +14,18 @@ public class Server {
 	
 	private final static Logger log = LogManager.getLogger(Server.class);
 	
-	private ServerSocket serverSocket;
 	private LinkedHashMap<Integer,ServerConnection> connections = new LinkedHashMap<>();
 	private boolean running = true;
 	private GameManager gameManager;
+	private final int port = 3456;
 	
 	public Server() {
-		try {
-			log.info("Starting server on Port {}",3456);
-			this.serverSocket = new ServerSocket(3456);
+		try (ServerSocket serverSocket = new ServerSocket(port)) {
+			log.info("Starting server on Port {}",port);
 			this.gameManager = new GameManager();
 			while(running) {
 				Socket socket = serverSocket.accept();
-				log.info("New incomming Connection Port: {}", socket.getPort());
+				log.info("New incoming Connection Port: {}", socket.getPort());
 				ServerConnection serverConnection = new ServerConnection(socket,this);
 				serverConnection.start();
 				connections.put(socket.getPort(),serverConnection);

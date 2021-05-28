@@ -111,7 +111,7 @@ public class ServerConnection extends Thread{
 				}
 				
 				PacketOutStartMatch packetOutStartMatch = new PacketOutStartMatch();
-				sendPacketToClient(packetOutStartMatch);
+				//sendPacketToClient(packetOutStartMatch);
 				partnerConnection.sendPacketToClient(packetOutStartMatch);
 				
 				break;

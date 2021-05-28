@@ -34,10 +34,13 @@ public class MatchmakingScreen implements Screen {
     private final TowerDefense game;
     private final MatchmakingScreen instance;
 
+    private boolean isReady = false;
     private Label connectionStatus;
+    private Label startingStatus;
     private Table scrollTable;
     private ScrollPane scroller;
     private TextField inputArea;
+
 
     public MatchmakingScreen(final TowerDefense game) {
         this.game = game;
@@ -67,7 +70,7 @@ public class MatchmakingScreen implements Screen {
             ownIPLabel.setText("could not get local ip");
         }
         connectionStatus = new Label("not connected", skin, "default");
-
+        startingStatus = new Label("", skin, "default");
         final TextButton connectButton = new TextButton("Connect...", skin, "small");
         final TextButton startGameButton = new TextButton("Start Game...", skin, "small");
 
@@ -83,6 +86,7 @@ public class MatchmakingScreen implements Screen {
         connectionTable.add(connectionStatus);
         connectionTable.row();
         connectionTable.add(startGameButton);
+        connectionTable.add(startingStatus);
 
         scrollTable = new Table(skin);
         scrollTable.setDebug(false);
@@ -115,14 +119,14 @@ public class MatchmakingScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 final String ip = opponentIPField.getText();
-                log.info("IP from Textfield is: {}",ip);
-                if(!ip.equals("")&&ip.matches(IP_REGEX)){
+                log.info("IP from Textfield is: {}", ip);
+                if (!ip.equals("") && ip.matches(IP_REGEX)) {
                     try {
-                        if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy")&&!connectionStatus.getText().toString().equals("Connected: Match found")) {
-                            log.info("IP from Textfield is (if Block): {}",ip);
+                        if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy") && !connectionStatus.getText().toString().equals("Connected: Match found")) {
+                            log.info("IP from Textfield is (if Block): {}", ip);
                             connectionStatus.setText("Trying to connect");
                             Client client = new Client(ip, 3456);
-                            log.info("Creating Client with IP: {}",ip);
+                            log.info("Creating Client with IP: {}", ip);
                             client.setCurrentScreen(instance);
                             game.setClient(client);
                             client.sendPacket(new PacketInSearchMatch());
@@ -134,7 +138,7 @@ public class MatchmakingScreen implements Screen {
                 }//192.168.178.92
                 else {
                     connectionStatus.setText("Please enter a correct server IPv4 address,if you're running the server,type your own");
-                    log.info("IP from Textfield is: {}(else Block)",ip);
+                    log.info("IP from Textfield is: {}(else Block)", ip);
                 }
             }
         });
@@ -144,11 +148,27 @@ public class MatchmakingScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-                game.setScreen(new GameScreen(game));
+                //game.setScreen(new GameScreen(game));
                 log.info("set screen to {}", game.getScreen().getClass());
 
                 if (connectionStatus.getText().toString().equals("Connected: Match found")) {
-                    game.getClient().sendPacket(new PacketInStartMatch());
+                    if (!isReady) {
+                        log.info("before PacketInStartMatch");
+                        game.getClient().sendPacket(new PacketInStartMatch());
+                        log.info("packet send");
+                        isReady = true;
+                        log.info("isReady is : {}", isReady);
+                        startingStatus.setText("You're ready to play");
+                        log.info("text set");
+                    } else {
+                        if (startingStatus.getText().toString().equals("The other player is waiting to get started")) {
+                            game.getClient().setCurrentScreen(new GameScreen(game));
+                            game.setScreen(game.getClient().getCurrentScreen());
+                        }
+                    }
+                } else {
+                    if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy"))
+                        game.setScreen(new GameScreen(game));
                 }
             }
         });
@@ -237,7 +257,14 @@ public class MatchmakingScreen implements Screen {
                 addMessageToBox(false, packetOutChatMessage.getText());
                 break;
             case PACKETOUTSTARTMATCH:
-                //TODO
+                log.info("Paket kam rein");
+                if (isReady) {
+                    game.getClient().setCurrentScreen(new GameScreen(game));
+                    game.setScreen(game.getClient().getCurrentScreen());
+                } else {
+                    isReady = true;
+                    startingStatus.setText("The other player is waiting to get started");
+                }
                 break;
             default:
                 break;

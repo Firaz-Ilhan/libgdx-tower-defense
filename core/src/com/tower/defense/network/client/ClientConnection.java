@@ -3,6 +3,7 @@ package com.tower.defense.network.client;
 import com.badlogic.gdx.Screen;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
+import com.tower.defense.screen.GameScreen;
 import com.tower.defense.screen.MatchmakingScreen;
 import org.json.JSONObject;
 
@@ -74,7 +75,10 @@ public class ClientConnection implements Runnable {
             MatchmakingScreen matchmakingScreen = (MatchmakingScreen) screen;
             matchmakingScreen.handle(packet);
         }
-
+        if (screen instanceof GameScreen) {
+            GameScreen gameScreen = (GameScreen) screen;
+            //gameScreen.handle(packet);
+        }
     }
 
 }

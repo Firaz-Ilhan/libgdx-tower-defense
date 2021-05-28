@@ -35,14 +35,14 @@ public abstract class Enemy {
     /**
      * @return Y position
      */
-    public int getY() {
+    public float getY() {
         return posY;
     }
 
     /**
      * @return X position
      */
-    public int getX() {
+    public float getX() {
         return posX;
     }
 

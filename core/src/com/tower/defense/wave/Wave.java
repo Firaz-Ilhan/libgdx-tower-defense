@@ -93,19 +93,40 @@ public class Wave {
             // it will move towards it based on which coordinate (x and/or y) is wrong
             if (currentEnemyPosition.y != nextWantedWaypoint.y) {
                 if (currentEnemyPosition.y > nextWantedWaypoint.y) {
-                    currentEnemyPosition.y = enemy.getY() - positionAddAmount;
-                    enemy.setPosition(currentEnemyPosition);
+                    if(currentEnemyPosition.y - positionAddAmount < nextWantedWaypoint.y){
+                        currentEnemyPosition.y = nextWantedWaypoint.y;
+                        enemy.setPosition(currentEnemyPosition);
+                    }
+                    else {
+                        currentEnemyPosition.y = enemy.getY() - positionAddAmount;
+                        enemy.setPosition(currentEnemyPosition);
+                    }
                 } else {
-                    currentEnemyPosition.y = enemy.getY() + positionAddAmount;
-                    enemy.setPosition(currentEnemyPosition);
+                    if(currentEnemyPosition.y + positionAddAmount > nextWantedWaypoint.y){
+                        currentEnemyPosition.y = nextWantedWaypoint.y;
+                        enemy.setPosition(currentEnemyPosition);
+                    }else {
+                        currentEnemyPosition.y = enemy.getY() + positionAddAmount;
+                        enemy.setPosition(currentEnemyPosition);
+                    }
                 }
             } else if (currentEnemyPosition.x != nextWantedWaypoint.x) {
                 if (currentEnemyPosition.x > nextWantedWaypoint.x) {
-                    currentEnemyPosition.x = enemy.getX() - positionAddAmount;
-                    enemy.setPosition(currentEnemyPosition);
+                    if(currentEnemyPosition.x - positionAddAmount < nextWantedWaypoint.x){
+                        currentEnemyPosition.x = nextWantedWaypoint.x;
+                        enemy.setPosition(currentEnemyPosition);
+                    }else {
+                        currentEnemyPosition.x = enemy.getX() - positionAddAmount;
+                        enemy.setPosition(currentEnemyPosition);
+                    }
                 } else {
-                    currentEnemyPosition.x = enemy.getX() + positionAddAmount;
-                    enemy.setPosition(currentEnemyPosition);
+                    if(currentEnemyPosition.x + positionAddAmount > nextWantedWaypoint.x){
+                        currentEnemyPosition.x = nextWantedWaypoint.x;
+                        enemy.setPosition(currentEnemyPosition);
+                    }else {
+                        currentEnemyPosition.x = enemy.getX() + positionAddAmount;
+                        enemy.setPosition(currentEnemyPosition);
+                    }
                 }
 
                 // if the positions of enemy and waypoint are the same

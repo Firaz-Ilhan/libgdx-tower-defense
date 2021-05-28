@@ -34,10 +34,7 @@ import jdk.javadoc.internal.doclets.toolkit.Content;
 import sun.tools.jconsole.JConsole;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -86,10 +83,6 @@ public class GameScreen implements Screen {
 
     //PopUP menu
 
-    private JPopupMenu sellTurretPopMenu;
-    private JMenuItem sellTurretItem;
-    private JMenuItem abortSellTurretItem;
-
 
     //Booleans to avoid creating multiple turrets by clicking once
     private boolean canDraw;
@@ -98,10 +91,6 @@ public class GameScreen implements Screen {
     private boolean rightMouseButtonDown;
 
     private Tower1 tower1;
-
-
-
-
 
 
     private Texture enemyImage;
@@ -118,7 +107,6 @@ public class GameScreen implements Screen {
     private Wave wave;
     public static Player player1;
     public static Player player2;
-    private Object GameScreen;
 
 
     public GameScreen(TowerDefense game) {
@@ -133,6 +121,7 @@ public class GameScreen implements Screen {
         this.rightMouseButtonDown = false;
         this.canDraw = false;
         this.canDelete = false;
+
 
     }
 
@@ -266,22 +255,6 @@ public class GameScreen implements Screen {
          */
 
 
-        sellTurretPopMenu = new JPopupMenu();
-
-        sellTurretItem = new JMenuItem("Sell turret");
-        sellTurretPopMenu.add(sellTurretItem);
-        //sellTurretItem.addActionListener();
-
-
-        abortSellTurretItem = new JMenuItem("Abort");
-        sellTurretPopMenu.add(abortSellTurretItem);
-
-
-
-        //if(tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
-
-            //sellTurretPopMenu.show((Component) GameScreen, (int) hoveredTilePosition.x * 50, (int) hoveredTilePosition.y * 50);
-        //}
         /**
          * if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
          */
@@ -306,9 +279,7 @@ public class GameScreen implements Screen {
             spawnTurret1();
             AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
 
-            //System.out.println(tower1.getX() + "," + tower1.getY());//System.out.println("tower placed");
-            //player1TurretsPlaced[turretCounter].draw();
-            //System.out.println(turretsPlaced.size());
+
         } else {
             canDraw = false;
         }
@@ -319,44 +290,43 @@ public class GameScreen implements Screen {
 
         ListIterator<Tower1> tower1ListIterator1 = turretsPlaced.listIterator();
 
-            while (tower1ListIterator1.hasNext()) {
+        while (tower1ListIterator1.hasNext()) {
 
 
-                tower1 = tower1ListIterator1.next();
-                tower1.draw();
+            tower1 = tower1ListIterator1.next();
+            tower1.draw();
 
-                //Output if player tries to delete the last turret
+            //Output if player tries to delete the last turret
 
-                if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1){
-                    System.out.println("You cant own 0 turrets");
-                }
-
-
-
-                if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
+            if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1) {
+                System.out.println("You cant own 0 turrets");
+            }
 
 
-
-                    //System.out.println("test");
-                    System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+            if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
 
 
-                    if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
 
-                       sellTurretPopMenu.show((Component)GameScreen,Gdx.input.getX(),Gdx.input.getY());
-                        tower1ListIterator1.remove();
-                        AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                        System.out.println(turretsPlaced);
-                    }
+                System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
 
-                } else {
-                    canDelete = false;
+                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
+
+
+                    tower1ListIterator1.remove();
+                    AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
+                    System.out.println(turretsPlaced);
 
                 }
 
+
+            } else {
+                canDelete = false;
 
             }
+
+
+        }
 
 
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);
@@ -418,22 +388,18 @@ public class GameScreen implements Screen {
      */
     public void spawnTurret1() {
 
-            tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
-             turretsPlaced.add(tower1);
+        tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
+        turretsPlaced.add(tower1);
 
-            //turretsPlacedArray.add(tower1);
+        //turretsPlacedArray.add(tower1);
 
-            //player1TurretsPlaced.add(tower1);
+        //player1TurretsPlaced.add(tower1);
     }
-
-
 
 
     public void spawnTurret2() {
 
     }
-
-
 
 
 }

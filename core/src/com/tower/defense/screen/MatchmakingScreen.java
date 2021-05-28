@@ -19,6 +19,7 @@ import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.client.PacketInSearchMatch;
 import com.tower.defense.network.packet.client.PacketInStartMatch;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +28,7 @@ import java.net.UnknownHostException;
 public class MatchmakingScreen implements Screen {
 
     private final static Logger log = LogManager.getLogger(MainMenuScreen.class);
-
+    private final String IP_REGEX = "^(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\\.(?!$)|$)){4}$";
     private final Stage stage;
     private final Skin skin;
     private final TowerDefense game;
@@ -114,16 +115,26 @@ public class MatchmakingScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 final String ip = opponentIPField.getText();
-                try {
-                    if (connectionStatus.getText().toString().equals("not connected")) {
-                        Client client = new Client(ip, 3456);
-                        client.setCurrentScreen(instance);
-                        game.setClient(client);
-                        client.sendPacket(new PacketInSearchMatch());
-                        connectionStatus.setText("Connecting...");
+                log.info("IP from Textfield is: {}",ip);
+                if(!ip.equals("")&&ip.matches(IP_REGEX)){
+                    try {
+                        if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy")&&!connectionStatus.getText().toString().equals("Connected: Match found")) {
+                            log.info("IP from Textfield is (if Block): {}",ip);
+                            connectionStatus.setText("Trying to connect");
+                            Client client = new Client(ip, 3456);
+                            log.info("Creating Client with IP: {}",ip);
+                            client.setCurrentScreen(instance);
+                            game.setClient(client);
+                            client.sendPacket(new PacketInSearchMatch());
+                            connectionStatus.setText("Connecting...");
+                        }
+                    } catch (Exception e1) {
+                        connectionStatus.setText("could not connect to the server");
                     }
-                } catch (Exception e1) {
-                    connectionStatus.setText("could not connect to the server");
+                }//192.168.178.92
+                else {
+                    connectionStatus.setText("Please enter a correct server IPv4 address,if you're running the server,type your own");
+                    log.info("IP from Textfield is: {}(else Block)",ip);
                 }
             }
         });

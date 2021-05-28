@@ -1,42 +1,18 @@
 package com.tower.defense.enemy.Factory;
 
-import com.tower.defense.enemy.IEnemy;
+import com.badlogic.gdx.math.Vector2;
+import com.tower.defense.enemy.Enemy;
 
-public class Enemy2 implements IEnemy {
+import java.util.ArrayList;
 
-    private int posX;
-    private int posY;
-    private int lifepoints = 10;
-    private int damage = 5;
-    //private int movementspeed = movementspeed*1; //static movementspeed, die am Anfang der Runde in der Main Klasse? gesetzt wird
+public class Enemy2 extends Enemy {
 
-    public Enemy2(int posX, int posY) {
-        this.posX = posX;
-        this.posY = posY;
+    public Enemy2(int posX, int posY, int lifepoints, int damage){
+        super(posX,  posY, lifepoints, damage);
     }
 
-    public int getY() {
-        return posY;
-    }
 
-    public int getX() {
-        return posX;
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public void setY(int posY) {
-        this.posY = posY;
-    }
-
-    public void setLifepoints(int damageReceived) {
-        lifepoints -= damageReceived;
-    }
-
-    public int getLifepoints() {
-        return lifepoints;
-    }
+    // private int movementspeed = movementspeed*1; //static movementspeed, die am
+    // Anfang der Runde in der Main Klasse? gesetzt wird
 
 }

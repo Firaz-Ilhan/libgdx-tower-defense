@@ -12,15 +12,11 @@ public class Player {
 
     private String name;
     private int wallet = 100;
-    private boolean right;
-    private boolean left;
     private int lifepoints = 200;
     private List<ITower> inventory;
 
-    public Player(String name, boolean left, boolean right) {
+    public Player(String name) {
         this.name = name;
-        this.left = left;
-        this.right = right;
         log.info("player: {}", name);
     }
 

@@ -161,6 +161,7 @@ public class MatchmakingScreen implements Screen {
                         log.info("text set");
                     } else {
                         if (startingStatus.getText().toString().equals("The other player is waiting to get started")) {
+                            game.getClient().sendPacket(new PacketInStartMatch());
                             game.getClient().setCurrentScreen(new GameScreen(game));
                             game.setScreen(game.getClient().getCurrentScreen());
                         }
@@ -259,7 +260,7 @@ public class MatchmakingScreen implements Screen {
                 log.info("Paket kam rein");
                 if (isReady) {
                     game.getClient().setCurrentScreen(new GameScreen(game));
-                    game.setScreen(game.getClient().getCurrentScreen());
+                    game.setScreen(new GameScreen(game));
                 } else {
                     isReady = true;
                     startingStatus.setText("The other player is waiting to get started");

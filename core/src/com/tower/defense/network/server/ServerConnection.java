@@ -3,10 +3,8 @@ package com.tower.defense.network.server;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInChatMessage;
-import com.tower.defense.network.packet.server.PacketOutChatMessage;
-import com.tower.defense.network.packet.server.PacketOutMatchFound;
-import com.tower.defense.network.packet.server.PacketOutSearchMatch;
-import com.tower.defense.network.packet.server.PacketOutStartMatch;
+import com.tower.defense.network.packet.client.PacketInEndOfWave;
+import com.tower.defense.network.packet.server.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -111,7 +109,25 @@ public class ServerConnection extends Thread {
                 partnerConnection.sendPacketToClient(packetOutStartMatch);
 
                 break;
+            case PACKETINENDOFWAVE:
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
 
+                if (partnerConnection == null) {
+                    return;
+                }
+                PacketInEndOfWave packetInEndOfWave = (PacketInEndOfWave) packet;
+                PacketOutEndOfWave packetOutEndOfWave = new PacketOutEndOfWave(packetInEndOfWave.getReward());
+                partnerConnection.sendPacketToClient(packetOutEndOfWave);
+                break;
+            case PACKETINSTARTWAVE:
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
+
+                if (partnerConnection == null) {
+                    return;
+                }
+                PacketOutStartWave packetOutStartWave = new PacketOutStartWave();
+                partnerConnection.sendPacketToClient(packetOutStartWave);
+                break;
             default:
                 break;
         }

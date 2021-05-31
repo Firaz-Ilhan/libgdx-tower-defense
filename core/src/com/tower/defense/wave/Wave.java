@@ -3,7 +3,11 @@ package com.tower.defense.wave;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
+import com.tower.defense.network.packet.client.PacketInChatMessage;
+import com.tower.defense.network.packet.client.PacketInEndOfWave;
+import com.tower.defense.network.packet.client.PacketInStartWave;
 import com.tower.defense.player.Player;
 import com.tower.defense.screen.GameScreen;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +20,7 @@ import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
 public class Wave {
 
     private final static Logger log = LogManager.getLogger(Wave.class);
-
+    private final TowerDefense game;
     // Arraylist of existing Enemies
     public static Array<Enemy> waveLeft;
     public static Array<Enemy> waveRight;
@@ -35,9 +39,11 @@ public class Wave {
     private float enemySpeed = 25;
     private long timeSinceBreak;
     private boolean pausing = false;
+    private boolean partnerIsPausing = false;
     private final long breaktime = 10000L;
 
-    public Wave() {
+    public Wave(final TowerDefense game) {
+        this.game = game;
         waveLeft = new Array<Enemy>();
         waveRight = new Array<Enemy>();
         spawnEnemy();
@@ -58,12 +64,9 @@ public class Wave {
                 lastSpawnTime = TimeUtils.nanoTime();
                 enemiesSpawned++;
             }
-        } else {
-            if (TimeUtils.millis() - timeSinceBreak > breaktime) {
-                pausing = false;
-                waveCount++;
-                log.info("wave count: {}", waveCount);
-            }
+        }
+        else{
+            endOfWave();
         }
     }
 
@@ -162,23 +165,44 @@ public class Wave {
     // The waveSpeed, waveSize and waveReward all increase for
     // the next wave
     public void endOfWave() {
-        GameScreen.player1.addToWallet(waveReward, enemiesPastLeft);
-        GameScreen.player2.addToWallet(waveReward, enemiesPastRight);
-        waveSpeed = Math.round(waveSpeed * 0.75);
-        waveSize = Math.round(waveSize * 1.2);
-        waveReward = (int) Math.round(waveReward * 1.5);
-        log.info("wave reward: {}", waveReward);
-        enemySpeed += 5;
-        log.info("enemy speed: {}", enemySpeed);
-        enemiesSpawned = 0;
-        enemiesPastLeft = 0;
-        enemiesPastRight = 0;
-        pausing = true;
-        timeSinceBreak = TimeUtils.millis();
+        if(!pausing) {
+            int reward = calculateReward();
+            GameScreen.player1.addToWallet(reward);
+            game.getClient().sendPacket(new PacketInEndOfWave(reward));
+            pausing = true;
+        }
+        if(partnerIsPausing){
+            waveSpeed = Math.round(waveSpeed * 0.75);
+            waveSize = Math.round(waveSize * 1.2);
+            waveReward = (int) Math.round(waveReward * 1.5);
+            log.info("wave reward: {}", waveReward);
+            enemySpeed += 5;
+            log.info("enemy speed: {}", enemySpeed);
+            enemiesSpawned = 0;
+            enemiesPastLeft = 0;
+            enemiesPastRight = 0;
+            game.getClient().sendPacket(new PacketInStartWave());
+        }
+
+    }
+    public int calculateReward() {
+        waveReward = waveReward - enemiesPastLeft * 2;
+        log.info("reward: {}", waveReward);
+        return waveReward;
     }
 
     // for displaying which wave this is
     public int getWaveCount() {
         return waveCount;
     }
-}
+    public void partnerWaveEnded(int reward){
+            GameScreen.player2.addToWallet(reward);
+            partnerIsPausing = true;
+    }
+    public void startWave(){
+        partnerIsPausing =false;
+        pausing = false;
+        waveCount++;
+    }
+    }
+

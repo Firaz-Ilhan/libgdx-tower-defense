@@ -25,8 +25,7 @@ public class Player {
      * If they missed enemies, they get less money at the end of the round.
      * The final reward is added to the wallet
      */
-    public void addToWallet(int reward, int enemiesMissed) {
-        reward = reward - enemiesMissed * 2;
+    public void addToWallet(int reward) {
         log.info("reward: {}", reward);
         wallet += reward;
     }

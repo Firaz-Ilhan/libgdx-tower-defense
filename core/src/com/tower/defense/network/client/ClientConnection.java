@@ -76,7 +76,7 @@ public class ClientConnection implements Runnable {
         }
         if (screen instanceof GameScreen) {
             GameScreen gameScreen = (GameScreen) screen;
-            //gameScreen.handle(packet);
+            gameScreen.handle(packet);
         }
     }
 

@@ -25,6 +25,10 @@ import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
 import com.tower.defense.helper.AllowedTiles;
 
+import com.tower.defense.network.packet.Packet;
+import com.tower.defense.network.packet.PacketType;
+import com.tower.defense.network.packet.server.PacketOutChatMessage;
+import com.tower.defense.network.packet.server.PacketOutEndOfWave;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.Factory.Tower2;
 import com.tower.defense.tower.Factory.TowerFactory;
@@ -166,7 +170,7 @@ public class GameScreen implements Screen {
         player2 = new Player("Player2");
         // for testing
         // player2.reduceLifepoints(40);
-        wave = new Wave();
+        wave = new Wave(game);
     }
 
     @Override
@@ -403,5 +407,32 @@ public class GameScreen implements Screen {
 
     }
 
+    public void handle(Packet packet) {
+        PacketType type = packet.getPacketType();
+
+        log.info("Traffic: New {}", type.toString());
+
+        switch (type) {
+            case PACKETOUTSEARCHMATCH:
+            case PACKETOUTMATCHFOUND:
+                break;
+            case PACKETOUTCHATMESSAGE:
+//                PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
+//                addMessageToBox(false, packetOutChatMessage.getText());
+                break;
+            case PACKETOUTSTARTMATCH:
+                break;
+            case PACKETOUTENDOFWAVE:
+                PacketOutEndOfWave packetOutEndOfWave = (PacketOutEndOfWave) packet;
+                 wave.partnerWaveEnded(packetOutEndOfWave.getReward());
+                 break;
+            case PACKETOUTSTARTWAVE:
+                wave.startWave();
+                break;
+            default:
+                break;
+
+        }
+    }
 
 }

@@ -2,9 +2,9 @@ package com.tower.defense.tower;
 
 public interface ITower {
 
-    int getY();
+    float getY();
 
-    int getX();
+    float getX();
 
     void setX(int x);
 

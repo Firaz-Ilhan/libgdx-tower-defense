@@ -64,7 +64,6 @@ public class ClientConnection implements Runnable {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
             closeConnection();
         }
     }

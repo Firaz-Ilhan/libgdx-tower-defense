@@ -2,7 +2,7 @@ package com.tower.defense.tower.Factory;
 import com.tower.defense.tower.ITower;
 
 public class TowerFactory {
-    public static ITower getTowerInstance(String strength, int x, int y) {
+   /* public static ITower getTowerInstance(String strength, int x, int y) {
 
         switch (strength) {
             case "medium":
@@ -11,4 +11,8 @@ public class TowerFactory {
                 return new Tower1(x, y);
         }
     }
+
+    */
 }
+
+

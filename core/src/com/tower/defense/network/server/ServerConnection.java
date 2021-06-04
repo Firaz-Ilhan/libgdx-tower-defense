@@ -80,7 +80,6 @@ public class ServerConnection extends Thread {
                 handle(packet);
             } catch (Exception e) {
                 e.printStackTrace();
-                closeConnection();
             }
         }
 

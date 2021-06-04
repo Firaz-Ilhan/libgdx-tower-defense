@@ -26,6 +26,13 @@ public class ServerConnection extends Thread {
     private final DataOutputStream outputStream;
     private boolean running = true;
 
+    /**
+     * @param socket the connection needs to know which socket it is using
+     * @param server and which server it belongs to
+     * @throws IOException
+     * the input and output Streams are initialized, based on the socket
+     */
+
     public ServerConnection(Socket socket, Server server) throws IOException {
         this.socket = socket;
         this.server = server;
@@ -33,7 +40,9 @@ public class ServerConnection extends Thread {
         this.outputStream = new DataOutputStream(socket.getOutputStream());
     }
 
-
+    /**
+     * this method closes the Connection by closing Streams and Socket
+     */
     public void closeConnection() {
         try {
             inputStream.close();
@@ -44,6 +53,15 @@ public class ServerConnection extends Thread {
         }
     }
 
+
+    /**
+     * while the connection is running, it checks the inputStream for incoming packets.
+     * While there is no Packet the thread sleeps.
+     * Else the StreamContent is read into a Jason Object.
+     * To get the Type (Class) of a Packet it uses the Enum PacketType depending on the ID
+     * Then a new Instance of this Type of Packet is made. It contains the JasonObject
+     * it is then transferred to the handle() Method
+     */
     @Override
     public void run() {
         while (running) {
@@ -68,15 +86,24 @@ public class ServerConnection extends Thread {
 
     }
 
+    /**
+     * @param packet packet that was created in run()
+     * @throws IOException
+     * This Method decides what to do with each Type of packet
+     * Most of the time it sends an "out" Type Packet of the same context to the client
+     * Every new "IN" Packet Type should be added to this switch case
+     */
     public void handle(Packet packet) throws IOException {
         PacketType type = packet.getPacketType();
 
         log.info("Traffic: New {}", type.toString());
 
         switch (type) {
+            //calls GameManager to look for an opponent
             case PACKETINSEARCHMATCH:
 
                 ServerConnection serverSearchConnection = server.getGameManager().searchingForGame(this);
+                //if null is returned, player must have been matched, so they send a matchFound to the own and to the partners Client
                 if (serverSearchConnection == null) {
                     PacketOutMatchFound packetOutMatchFound = new PacketOutMatchFound();
                     sendPacketToClient(packetOutMatchFound);
@@ -135,6 +162,11 @@ public class ServerConnection extends Thread {
 
     }
 
+    /**
+     * @param packet "Out" Type Packet
+     * @throws IOException
+     * The packet is written to the Sockets output Stream
+     */
     private void sendPacketToClient(Packet packet) throws IOException {
         outputStream.writeUTF(packet.read().toString());
         outputStream.flush();

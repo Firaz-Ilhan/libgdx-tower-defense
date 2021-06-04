@@ -11,6 +11,14 @@ public class Client {
     private ClientConnection clientConnection;
     private Screen currentScreen;
 
+    /**
+     * @param serverIp   String
+     * @param serverPort Integer
+     *                   <p>
+     *                   When creating a client a socket based on Server IP and Port is created
+     *                   As well as a belonging clientConnection
+     *                   clientConnections also run as a separate Thread
+     */
     public Client(String serverIp, int serverPort) {
         try {
             Socket socket = new Socket(serverIp, serverPort);

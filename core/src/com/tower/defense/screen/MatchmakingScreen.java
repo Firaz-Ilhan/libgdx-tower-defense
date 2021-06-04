@@ -22,6 +22,7 @@ import com.tower.defense.network.packet.server.PacketOutChatMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 
 public class MatchmakingScreen implements Screen {
@@ -114,15 +115,22 @@ public class MatchmakingScreen implements Screen {
 
         this.stage.addActor(chatTable);
 
+        /**
+         * if the connectButton is clicked, it takes the text of TextField opponentIPField
+         * and checks its correctness. If its a correct IPv4 address, it tries
+         * to initialize a Client() and creates a connection.
+         * The client then sends a PacketInSearchMatch() packet to the server.
+         * -> compare GameManager()
+         */
+
         connectButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 final String ip = opponentIPField.getText();
-                log.info("IP from Textfield is: {}", ip);
+                log.debug("IP from Textfield is: {}", ip);
                 if (!ip.equals("") && ip.matches(IP_REGEX)) {
                     try {
                         if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy") && !connectionStatus.getText().toString().equals("Connected: Match found")) {
-                            log.info("IP from Textfield is (if Block): {}", ip);
                             connectionStatus.setText("Trying to connect");
                             Client client = new Client(ip, 3456);
                             log.info("Creating Client with IP: {}", ip);
@@ -142,7 +150,15 @@ public class MatchmakingScreen implements Screen {
             }
         });
 
-
+        /**
+         * If the startGameButton is clicked, it checks whether
+         * the boolean isReady is true or false.
+         * is it false it is set to true and a PacketInStartMatch() packet is
+         * sent to the server.
+         * If the player already got a PacketOutStartMatch() packet isReady must be true,
+         * so the game starts and sends a PacketInStartMatch() packet to the other client
+         * so they game starts too -> compare handle method
+         */
         startGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -240,6 +256,13 @@ public class MatchmakingScreen implements Screen {
         scroller.scrollTo(0, 0, 0, 0); // scroll to bottom
     }
 
+    /**
+     * @param packet packet that was created in run() by ClientConnection()
+     * @throws IOException
+     * This Method decides what to do with each Type of packet
+     * Most of the time it changes something in the GUI.
+     * It's called by the clientConnection Thread
+     */
     public void handle(Packet packet) {
         PacketType type = packet.getPacketType();
 
@@ -257,9 +280,13 @@ public class MatchmakingScreen implements Screen {
                 addMessageToBox(false, packetOutChatMessage.getText());
                 break;
             case PACKETOUTSTARTMATCH:
-                log.info("Paket kam rein");
+                //checking if player is ready to start game. If not it is set to true
+                //else the scene changes
                 if (isReady) {
-                    game.getClient().setCurrentScreen(new GameScreen(game));
+                    Client client = game.getClient();
+                    log.info("client bekommen");
+                    client.setCurrentScreen(new GameScreen(game));
+                    log.info("client.set screen");
                     game.setScreen(new GameScreen(game));
                 } else {
                     isReady = true;

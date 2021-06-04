@@ -18,7 +18,13 @@ public class Server {
 	private boolean running = true;
 	private GameManager gameManager;
 	private final int port = 3456;
-	
+
+	/**
+	 * while the server is running it always checks for new sockets.
+	 * Those sockets are used to create a ServerConnection
+	 * which then runs as a separate Thread.
+	 * All sockets and its ServerConnections are stored in a LinkedHashMap
+	 */
 	public Server() {
 		try (ServerSocket serverSocket = new ServerSocket(port)) {
 			log.info("Starting server on Port {}",port);

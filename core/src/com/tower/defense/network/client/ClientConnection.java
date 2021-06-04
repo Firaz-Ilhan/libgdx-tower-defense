@@ -22,7 +22,12 @@ public class ClientConnection implements Runnable {
     private final DataOutputStream outputStream;
     private boolean running = true;
 
-
+    /**
+     * @param socket the connection needs to know which socket it is using
+     * @param client and which client it belongs to
+     * @throws IOException
+     * the input and output Streams are initialized, based on the socket
+     */
     public ClientConnection(Socket socket, Client client) throws IOException {
         this.client = client;
         this.socket = socket;
@@ -30,11 +35,19 @@ public class ClientConnection implements Runnable {
         this.outputStream = new DataOutputStream(socket.getOutputStream());
     }
 
+    /**
+     * @param packet Packet
+     * @throws IOException
+     * writes Packet to sockets outputStream
+     */
     public void sendPacketToServer(Packet packet) throws IOException {
         outputStream.writeUTF(packet.read().toString());
         outputStream.flush();
     }
 
+    /**
+     * this method closes the Connection by closing Streams and Socket
+     */
     public void closeConnection() {
         try {
             inputStream.close();
@@ -45,6 +58,14 @@ public class ClientConnection implements Runnable {
         }
     }
 
+    /**
+     * while the connection is running, it checks the inputStream for incoming packets.
+     * While there is no Packet the thread sleeps.
+     * Else the StreamContent is read into a Jason Object.
+     * To get the Type (Class) of a Packet it uses the Enum PacketType depending on the ID
+     * Then a new Instance of this Type of Packet is made. It contains the JasonObject
+     * it is then transferred to the handle() Method
+     */
     @Override
     public void run() {
         try {
@@ -68,6 +89,12 @@ public class ClientConnection implements Runnable {
         }
     }
 
+    /**
+     * @param packet packet that was created in run()
+     * @throws IOException
+     * screens have there own handle() methods,
+     * so this method calls the handle method of those screens
+     */
     private void handle(Packet packet) {
         Screen screen = client.getCurrentScreen();
         if (screen instanceof MatchmakingScreen) {

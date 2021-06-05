@@ -142,6 +142,7 @@ public class Wave {
                 player.reduceLifepoints(enemy.getDamage());
                 iter.remove();
                 if (player.getName().equals("Player1")) {
+
                     enemiesPastLeft++;
                 } else {
                     enemiesPastRight++;
@@ -181,4 +182,5 @@ public class Wave {
     public int getWaveCount() {
         return waveCount;
     }
+    public boolean isPausing(){return pausing;}
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.badlogic.gdx.math.Vector2;
+import com.tower.defense.enemy.Factory.Enemy1;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
 
 public abstract class Enemy {
     private float posX;
@@ -20,7 +23,7 @@ public abstract class Enemy {
     // the waypointPosition is the position of that waypoint in the
     // wavePattern the enemy currently moves to
     private int waypointPosition = 0;
-
+    private final static Logger log = (Logger) LogManager.getLogger(Enemy.class);
     public Enemy(float x, float y, int lifepoints, int damage) {
         this.posX = x;
         this.posY = y;
@@ -91,7 +94,12 @@ public abstract class Enemy {
      *                       remaining LP here
      */
     public void setLifepoints(int damageReceived) {
-        lifepoints -= damageReceived;
+        if (damageReceived > 0) {
+            lifepoints -= damageReceived;
+        }else{
+            log.info("You can not make a negative damage");
+        }
+
     }
 
     /**

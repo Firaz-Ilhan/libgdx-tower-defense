@@ -140,6 +140,8 @@ public class GameScreen implements Screen {
 
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
+
+
         player1 = new Player("Player1");
         player2 = new Player("Player2");
         // for testing
@@ -311,6 +313,7 @@ public class GameScreen implements Screen {
         // WAVE:
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
+
         wave.renderWave(waveLeft, player1, true);
         wave.renderWave(waveRight, player2, false);
 

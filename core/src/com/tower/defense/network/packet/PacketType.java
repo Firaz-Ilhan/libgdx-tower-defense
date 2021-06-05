@@ -9,11 +9,14 @@ public enum PacketType {
 
 	//Clientpackets
 	PACKETINSEARCHMATCH(1, PacketInSearchMatch.class),
-	PACKETINCHATMESSAGE(2, PacketInChatMessage.class),
+	PACKETINCHATMESSAGE(3, PacketInChatMessage.class),
+	PACKETINSTARTMATCH(4, PacketInStartMatch.class),
 	
 	//Serverpackets
 	PACKETOUTSEARCHMATCH(101, PacketOutSearchMatch.class),
-	PACKETOUTCHATMESSAGE(102, PacketOutChatMessage.class);
+	PACKETOUTMATCHFOUND(102, PacketOutMatchFound.class),
+	PACKETOUTCHATMESSAGE(103, PacketOutChatMessage.class),
+	PACKETOUTSTARTMATCH(104, PacketOutStartMatch.class);
 	
 	
 	

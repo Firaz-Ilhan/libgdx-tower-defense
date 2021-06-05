@@ -8,15 +8,13 @@ import com.tower.defense.network.packet.PacketType;
 
 public class PacketOutChatMessage extends Packet {
 	
-	private String name;
 	private String text;
 	
 	public PacketOutChatMessage() {
 	}
 	
-	public PacketOutChatMessage(String name, String text) {
+	public PacketOutChatMessage(String text) {
 		this.packetType = PacketType.getPacketTypeByClass(getClass());
-		this.name = name;
 		this.text = text;
 	}
 	
@@ -24,7 +22,6 @@ public class PacketOutChatMessage extends Packet {
 	public JSONObject read() {
 		JSONObject object = new JSONObject();
 		object.put("id", packetType.getPacketID());
-		object.put("name", name);
 		object.put("text", text);
 		return object;
 	}
@@ -32,13 +29,9 @@ public class PacketOutChatMessage extends Packet {
 	@Override
 	public void write(JSONObject object) {
 		this.packetType = PacketType.getPacketTypeByID(object.getInt("id"));
-		this.name = object.getString("name");
 		this.text = object.getString("text");
 	}
 	
-	public String getName() {
-		return name;
-	}
 	
 	public String getText() {
 		return text;

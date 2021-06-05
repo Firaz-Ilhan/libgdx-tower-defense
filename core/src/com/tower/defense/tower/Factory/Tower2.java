@@ -19,11 +19,11 @@ public class Tower2 implements ITower {
     }
 
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 

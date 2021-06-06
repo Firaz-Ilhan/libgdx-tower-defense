@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.helper.NetworkINTF;
@@ -33,6 +34,7 @@ public class MatchmakingScreen implements Screen {
     private final Skin skin;
     private final TowerDefense game;
     private final MatchmakingScreen instance;
+    private final Queue<Packet> packetQueue = new Queue<>();
 
     private boolean isReady = false;
     private Label connectionStatus;
@@ -205,6 +207,7 @@ public class MatchmakingScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
+        handlePacketQueue();
         stage.draw();
     }
 
@@ -258,11 +261,12 @@ public class MatchmakingScreen implements Screen {
     /**
      * This Method decides what to do with each Type of packet
      * Most of the time it changes something in the GUI.
-     * It's called by the clientConnection Thread
-     *
-     * @param packet packet that was created in run() by ClientConnection()
      */
-    public void handle(Packet packet) {
+    public void handlePacketQueue() {
+        if(packetQueue.isEmpty()){
+            return;
+        }
+        Packet packet = packetQueue.removeFirst();
         PacketType type = packet.getPacketType();
 
         log.info("Traffic: New {}", type.toString());
@@ -296,5 +300,13 @@ public class MatchmakingScreen implements Screen {
                 break;
 
         }
+    }
+
+    /**
+     *
+     * @param packet packet that was created in run() by ClientConnection()
+     */
+    public void handle(Packet packet){
+        packetQueue.addFirst(packet);
     }
 }

@@ -7,7 +7,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.g2d.*;
+
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -18,23 +23,23 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.sun.org.apache.xalan.internal.xsltc.dom.ArrayNodeListIterator;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
 import com.tower.defense.helper.AllowedTiles;
-
+import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
-import com.tower.defense.tower.Factory.Tower2;
-import com.tower.defense.tower.Factory.TowerFactory;
 import com.tower.defense.tower.ITower;
+
 import jdk.javadoc.internal.doclets.toolkit.Content;
 import sun.tools.jconsole.JConsole;
 
@@ -44,12 +49,13 @@ import java.util.*;
 import java.util.List;
 
 import com.tower.defense.player.Player;
+
 import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicListUI;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 import static com.tower.defense.wave.Wave.waveLeft;
 import static com.tower.defense.wave.Wave.waveRight;
@@ -70,7 +76,6 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     public static SpriteBatch spriteBatch;
 
-
     private Vector2 hoveredTilePosition;
     private Vector2 mousePosition;
 
@@ -79,7 +84,6 @@ public class GameScreen implements Screen {
 
     private Texture hoveredTileTexture;
     private Texture hoveredTileNotAllowed;
-
 
     private Texture turret1Texture;
     private Texture turret2Texture;
@@ -101,14 +105,8 @@ public class GameScreen implements Screen {
     private boolean canDelete;
     private boolean leftMouseButtonDown;
     private boolean rightMouseButtonDown;
-
     private Tower1 tower1;
-
-
     private Texture enemyImage;
-    private Texture towerImage;
-
-
 
     // this boolean determines which side of the map the player is on
     private boolean playerSide;
@@ -138,8 +136,10 @@ public class GameScreen implements Screen {
         this.canDraw = false;
         this.canDelete = false;
 
+
         this.sellState = false;
         this.sellingConfirmed = false;
+
 
 
 
@@ -147,17 +147,21 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        // Loading Textures
+        // loading Textures
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
+
+        // loading the textures of the turrets
+        turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
+        turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
 
         enemyImage = new Texture(Gdx.files.internal("virus.png"));
 
         // getting the layers of the map
         MapLayers mapLayers = map.getLayers();
         groundLayer = (TiledMapTileLayer) mapLayers.get("ground");
-        decorationLayerIndices = new int[] { mapLayers.getIndex("decoration") };
+        decorationLayerIndices = new int[]{mapLayers.getIndex("decoration")};
 
         // setting up the camera
         float width = 1600;
@@ -181,6 +185,8 @@ public class GameScreen implements Screen {
 
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
+
+
         player1 = new Player("Player1");
         player2 = new Player("Player2");
         // for testing
@@ -238,7 +244,7 @@ public class GameScreen implements Screen {
         int screenHeight = Gdx.graphics.getHeight();
 
         // position of the hovered tile
-         hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
+        hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
 
         renderer.getBatch().begin();
 
@@ -260,18 +266,11 @@ public class GameScreen implements Screen {
 
         renderer.getBatch().end();
 
-        // rendering the decocation on top of the ground tiles
+        // rendering the decoration on top of the ground tiles
         renderer.render(decorationLayerIndices);
 
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-
-
-
-        //creating the textures of the turrets
-        turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
-        turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
-
 
         //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
 
@@ -406,6 +405,10 @@ public class GameScreen implements Screen {
 
 
 
+
+                System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+
+
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellingConfirmed == true) {
 
                     //sellTurretTable.setPosition(hoveredTilePosition.x * 50,hoveredTilePosition.y * 50);
@@ -445,6 +448,7 @@ public class GameScreen implements Screen {
         // WAVE:
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
+
         wave.renderWave(waveLeft, player1, true);
         wave.renderWave(waveRight, player2, false);
 
@@ -497,6 +501,14 @@ public class GameScreen implements Screen {
         map.dispose();
         game.dispose();
         stage.dispose();
+        turret1Texture.dispose();
+        turret2Texture.dispose();
+        enemyImage.dispose();
+        hoveredTileTexture.dispose();
+        hoveredTileNotAllowed.dispose();
+        spriteBatch.dispose();
+        font.dispose();
+        renderer.dispose();
     }
 
     /**

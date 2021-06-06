@@ -16,8 +16,9 @@ public class Client {
             Socket socket = new Socket(serverIp, serverPort);
             socket.setSoTimeout(30000);
             clientConnection = new ClientConnection(socket, this);
-            Thread thread = new Thread(clientConnection, "ClientConnectionThread");
-            thread.start();
+            Thread clientConnectionThread = new Thread(clientConnection, "ClientConnectionThread");
+            clientConnectionThread.setDaemon(true);
+            clientConnectionThread.start();
         } catch (Exception e) {
             e.printStackTrace();
         }

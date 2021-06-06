@@ -14,7 +14,7 @@ public class Server {
 	
 	private final static Logger log = LogManager.getLogger(Server.class);
 	
-	private LinkedHashMap<Integer,ServerConnection> connections = new LinkedHashMap<>();
+	private final LinkedHashMap<Integer,ServerConnection> connections = new LinkedHashMap<>();
 	private boolean running = true;
 	private GameManager gameManager;
 	private final int port = 3456;
@@ -27,7 +27,8 @@ public class Server {
 				Socket socket = serverSocket.accept();
 				log.info("New incoming Connection Port: {}", socket.getPort());
 				ServerConnection serverConnection = new ServerConnection(socket,this);
-				serverConnection.start();
+				Thread serverConnectionThread = new Thread(serverConnection, "ServerConnectionThread");
+				serverConnectionThread.start();
 				connections.put(socket.getPort(),serverConnection);
 			}
 		} catch (Exception e) {

@@ -1,22 +1,28 @@
 package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -29,7 +35,6 @@ import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.Factory.Tower2;
 import com.tower.defense.tower.Factory.TowerFactory;
 import com.tower.defense.tower.ITower;
-import jdk.javadoc.internal.doclets.formats.html.markup.Table;
 import jdk.javadoc.internal.doclets.toolkit.Content;
 import sun.tools.jconsole.JConsole;
 
@@ -63,7 +68,7 @@ public class GameScreen implements Screen {
     private final OrthographicCamera camera;
     private final ScalingViewport viewport;
     private OrthogonalTiledMapRenderer renderer;
-    private SpriteBatch spriteBatch;
+    public static SpriteBatch spriteBatch;
 
 
     private Vector2 hoveredTilePosition;
@@ -83,6 +88,12 @@ public class GameScreen implements Screen {
     private LinkedList turretsPlaced = new LinkedList<ITower>();
 
     //PopUP menu
+    private InputEvent event;
+    private boolean sellState;
+    private Stage buttonStage;
+    private TextButton playButton;
+    SellTurretsController sellTurretsController;
+    private boolean sellingConfirmed;
 
 
     //Booleans to avoid creating multiple turrets by clicking once
@@ -110,18 +121,26 @@ public class GameScreen implements Screen {
     public static Player player2;
 
 
+
     public GameScreen(TowerDefense game) {
         this.game = game;
         this.camera = new OrthographicCamera();
         this.viewport = new FitViewport(1600, 900);
         // create stage and set it as input processor
         this.stage = new Stage(viewport);
-        Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(stage);
+
+        this.buttonStage = new Stage(viewport);
+
 
         this.leftMouseButtonDown = false;
         this.rightMouseButtonDown = false;
         this.canDraw = false;
         this.canDelete = false;
+
+        this.sellState = false;
+        this.sellingConfirmed = false;
+
 
 
     }
@@ -167,6 +186,34 @@ public class GameScreen implements Screen {
         // for testing
         // player2.reduceLifepoints(40);
         wave = new Wave();
+
+
+        //Create buttons for PopUp Menu
+
+        sellTurretsController = new SellTurretsController();
+
+        /*
+        BitmapFont sellButtonFont = new BitmapFont();
+
+        Skin sellButtonSkin = new Skin ();
+        sellButtonSkin = game.assetManager.get("skins/glassyui/glassy-ui.json");
+        Stage buttonStage = new Stage();
+
+         playButton = new TextButton("Sell",sellButtonSkin,"default");
+         playButton.setVisible(false);
+         stage.addActor(playButton);
+         Gdx.input.setInputProcessor(stage);
+
+         if(playButton.isPressed()){
+             System.out.println("asdfasdf");
+
+         }
+
+         */
+
+    //    playButton.setBounds(hoveredTilePosition.x *50, hoveredTilePosition.y * 50,100,100);
+
+
     }
 
     @Override
@@ -175,9 +222,14 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
+
         // setting the render view to the camera
         camera.update();
         renderer.setView(camera);
+
+        //check wether a button was clicked
+        handleInput();
 
         // getting the current mouse position
         mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
@@ -226,6 +278,9 @@ public class GameScreen implements Screen {
         // drawing the hoveredTile based on what player side you are on and whether you
         // allowed to or not
 
+        stage.act();
+
+
         spriteBatch.begin();
 
         if (playerSide) {
@@ -253,6 +308,45 @@ public class GameScreen implements Screen {
         /**
          *Creating PopUp menu to confirm that the turret gets selled
          */
+        /*
+
+        Table sellTurretTable = new Table();
+
+        Texture sellButtonTexture = new Texture(Gdx.files.internal("core/assets/buttons/sellSign.png"));
+        Texture cancelButtonTexture = new Texture(Gdx.files.internal("core/assets/buttons/cancelSign.png"));
+        ImageButton sellButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(sellButtonTexture)));
+        ImageButton cancelButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(cancelButtonTexture)));
+
+
+        //Skin sellButtonSkin = new Skin(Gdx.files.internal("core/assets/buttons/sellSign.png"));
+
+
+        /*
+        sellButton.addListener(new ClickListener(){
+
+            public void clicked(InputEvent event, Actor actor){
+                sellState = true;
+                System.out.println("clicked");
+            }
+        });
+
+
+
+
+
+
+        //buttonStage = new Stage();
+
+        sellTurretTable.add(sellButton);
+        sellTurretTable.add(cancelButton);
+        sellTurretTable.setVisible(false);
+        //Gdx.input.setInputProcessor(buttonStage);
+        //buttonStage.addActor(sellTurretTable);
+        stage.addActor(sellTurretTable);
+
+*/
+        //playButton.draw(spriteBatch,1);
+
 
 
         /**
@@ -296,6 +390,7 @@ public class GameScreen implements Screen {
             tower1 = tower1ListIterator1.next();
             tower1.draw();
 
+
             //Output if player tries to delete the last turret
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1) {
@@ -304,25 +399,34 @@ public class GameScreen implements Screen {
 
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
-
-
+                sellState = true;
+                //Gdx.input.setInputProcessor(buttonStage);
 
                 System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
 
-                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
+
+                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellingConfirmed == true) {
+
+                    //sellTurretTable.setPosition(hoveredTilePosition.x * 50,hoveredTilePosition.y * 50);
+                    //sellTurretTable.setVisible(true);
+                    //playButton.setVisible(true);
 
 
-                    tower1ListIterator1.remove();
-                    AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                    System.out.println(turretsPlaced);
+                        tower1ListIterator1.remove();
+                        AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
+                        System.out.println(turretsPlaced);
+                        sellState = false;
+
+                    //}
 
                 }
 
 
             } else {
                 canDelete = false;
-
+                //sellState = false;
+                sellingConfirmed = false;
             }
 
 
@@ -352,6 +456,16 @@ public class GameScreen implements Screen {
         stage.getViewport().apply();
         stage.draw();
 
+        //draw popupMenu
+        if(sellState == true) {
+
+            sellTurretsController.draw();
+        };
+       // buttonStage.getViewport().apply();
+       // buttonStage.draw();
+
+
+
 
     }
 
@@ -359,6 +473,7 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         viewport.update(width, height);
         camera.update();
+        sellTurretsController.resize(width,height);
     }
 
     @Override
@@ -401,6 +516,12 @@ public class GameScreen implements Screen {
 
     public void spawnTurret2() {
 
+    }
+
+    public void handleInput(){
+        if (sellTurretsController.isSellPressed()){
+            sellingConfirmed = true;
+        }
     }
 
 

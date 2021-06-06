@@ -57,7 +57,7 @@ public class MatchmakingScreen implements Screen {
         connectionTable.setDebug(false);
         stage.addActor(connectionTable);
 
-        final TextField opponentIPField = new TextField("", skin, "default");
+        final TextField serverIPField = new TextField("127.0.0.1", skin, "default");
         final Label serverIPLabel = new Label("Server's IP address", skin, "default");
 
         final Label ownLabel = new Label("Your IP address:", skin, "default");
@@ -77,7 +77,7 @@ public class MatchmakingScreen implements Screen {
         connectionTable.defaults().pad(10f);
         connectionTable.align(Align.top);
         connectionTable.add(serverIPLabel);
-        connectionTable.add(opponentIPField);
+        connectionTable.add(serverIPField);
         connectionTable.row();
         connectionTable.add(ownLabel);
         connectionTable.add(ownIPLabel);
@@ -116,19 +116,18 @@ public class MatchmakingScreen implements Screen {
         this.stage.addActor(chatTable);
 
         /**
-         * if the connectButton is clicked, it takes the text of TextField opponentIPField
+         * if the connectButton is clicked, it takes the text of TextField serverIPField
          * and checks its correctness. If its a correct IPv4 address, it tries
          * to initialize a Client() and creates a connection.
          * The client then sends a PacketInSearchMatch() packet to the server.
          * -> compare GameManager()
          */
-
         connectButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                final String ip = opponentIPField.getText();
+                final String ip = serverIPField.getText();
                 log.debug("IP from Textfield is: {}", ip);
-                if (!ip.equals("") && ip.matches(IP_REGEX)) {
+                if (ip.matches(IP_REGEX)) {
                     try {
                         if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy") && !connectionStatus.getText().toString().equals("Connected: Match found")) {
                             connectionStatus.setText("Trying to connect");
@@ -257,11 +256,11 @@ public class MatchmakingScreen implements Screen {
     }
 
     /**
-     * @param packet packet that was created in run() by ClientConnection()
-     * @throws IOException
      * This Method decides what to do with each Type of packet
      * Most of the time it changes something in the GUI.
      * It's called by the clientConnection Thread
+     *
+     * @param packet packet that was created in run() by ClientConnection()
      */
     public void handle(Packet packet) {
         PacketType type = packet.getPacketType();

@@ -29,8 +29,7 @@ public class ServerConnection extends Thread {
     /**
      * @param socket the connection needs to know which socket it is using
      * @param server and which server it belongs to
-     * @throws IOException
-     * the input and output Streams are initialized, based on the socket
+     * @throws IOException the input and output Streams are initialized, based on the socket
      */
 
     public ServerConnection(Socket socket, Server server) throws IOException {
@@ -86,11 +85,12 @@ public class ServerConnection extends Thread {
     }
 
     /**
-     * @param packet packet that was created in run()
-     * @throws IOException
      * This Method decides what to do with each Type of packet
      * Most of the time it sends an "out" Type Packet of the same context to the client
      * Every new "IN" Packet Type should be added to this switch case
+     *
+     * @param packet packet that was created in run()
+     * @throws IOException
      */
     public void handle(Packet packet) throws IOException {
         PacketType type = packet.getPacketType();
@@ -163,8 +163,7 @@ public class ServerConnection extends Thread {
 
     /**
      * @param packet "Out" Type Packet
-     * @throws IOException
-     * The packet is written to the Sockets output Stream
+     * @throws IOException The packet is written to the Sockets output Stream
      */
     private void sendPacketToClient(Packet packet) throws IOException {
         outputStream.writeUTF(packet.read().toString());

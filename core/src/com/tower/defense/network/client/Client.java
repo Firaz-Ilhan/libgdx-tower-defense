@@ -12,12 +12,12 @@ public class Client {
     private Screen currentScreen;
 
     /**
+     * When creating a client a socket based on Server IP and Port is created
+     * As well as a belonging clientConnection
+     * clientConnections also run as a separate Thread
+     *
      * @param serverIp   String
      * @param serverPort Integer
-     *                   <p>
-     *                   When creating a client a socket based on Server IP and Port is created
-     *                   As well as a belonging clientConnection
-     *                   clientConnections also run as a separate Thread
      */
     public Client(String serverIp, int serverPort) {
         try {

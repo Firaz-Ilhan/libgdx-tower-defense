@@ -25,8 +25,7 @@ public class ClientConnection implements Runnable {
     /**
      * @param socket the connection needs to know which socket it is using
      * @param client and which client it belongs to
-     * @throws IOException
-     * the input and output Streams are initialized, based on the socket
+     * @throws IOException the input and output Streams are initialized, based on the socket
      */
     public ClientConnection(Socket socket, Client client) throws IOException {
         this.client = client;
@@ -36,9 +35,10 @@ public class ClientConnection implements Runnable {
     }
 
     /**
+     * writes Packet to sockets outputStream
+     *
      * @param packet Packet
      * @throws IOException
-     * writes Packet to sockets outputStream
      */
     public void sendPacketToServer(Packet packet) throws IOException {
         outputStream.writeUTF(packet.read().toString());
@@ -90,10 +90,11 @@ public class ClientConnection implements Runnable {
     }
 
     /**
-     * @param packet packet that was created in run()
-     * @throws IOException
      * screens have there own handle() methods,
      * so this method calls the handle method of those screens
+     *
+     * @param packet packet that was created in run()
+     * @throws IOException
      */
     private void handle(Packet packet) {
         Screen screen = client.getCurrentScreen();

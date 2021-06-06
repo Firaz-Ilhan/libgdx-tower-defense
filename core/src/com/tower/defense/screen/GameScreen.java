@@ -41,6 +41,7 @@ import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.ITower;
 
 import jdk.javadoc.internal.doclets.toolkit.Content;
+
 import sun.tools.jconsole.JConsole;
 
 import java.awt.*;
@@ -54,6 +55,7 @@ import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -91,13 +93,11 @@ public class GameScreen implements Screen {
     //List to store all turrets
     private LinkedList turretsPlaced = new LinkedList<ITower>();
 
+
     //PopUP menu
-    private InputEvent event;
-    private boolean sellState;
-    private Stage buttonStage;
-    private TextButton playButton;
     SellTurretsController sellTurretsController;
-    private boolean sellingConfirmed;
+    private boolean sellMode;
+    private boolean buildMode;
 
 
     //Booleans to avoid creating multiple turrets by clicking once
@@ -128,7 +128,7 @@ public class GameScreen implements Screen {
         this.stage = new Stage(viewport);
         //Gdx.input.setInputProcessor(stage);
 
-        this.buttonStage = new Stage(viewport);
+
 
 
         this.leftMouseButtonDown = false;
@@ -137,8 +137,10 @@ public class GameScreen implements Screen {
         this.canDelete = false;
 
 
-        this.sellState = false;
-        this.sellingConfirmed = false;
+
+        this.buildMode = false;
+        this.sellMode = false;
+
 
 
 
@@ -304,49 +306,6 @@ public class GameScreen implements Screen {
         }
 
 
-        /**
-         *Creating PopUp menu to confirm that the turret gets selled
-         */
-        /*
-
-        Table sellTurretTable = new Table();
-
-        Texture sellButtonTexture = new Texture(Gdx.files.internal("core/assets/buttons/sellSign.png"));
-        Texture cancelButtonTexture = new Texture(Gdx.files.internal("core/assets/buttons/cancelSign.png"));
-        ImageButton sellButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(sellButtonTexture)));
-        ImageButton cancelButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(cancelButtonTexture)));
-
-
-        //Skin sellButtonSkin = new Skin(Gdx.files.internal("core/assets/buttons/sellSign.png"));
-
-
-        /*
-        sellButton.addListener(new ClickListener(){
-
-            public void clicked(InputEvent event, Actor actor){
-                sellState = true;
-                System.out.println("clicked");
-            }
-        });
-
-
-
-
-
-
-        //buttonStage = new Stage();
-
-        sellTurretTable.add(sellButton);
-        sellTurretTable.add(cancelButton);
-        sellTurretTable.setVisible(false);
-        //Gdx.input.setInputProcessor(buttonStage);
-        //buttonStage.addActor(sellTurretTable);
-        stage.addActor(sellTurretTable);
-
-*/
-        //playButton.draw(spriteBatch,1);
-
-
 
         /**
          * if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
@@ -367,7 +326,7 @@ public class GameScreen implements Screen {
          * drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
          */
 
-        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles)) {
+        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles) && buildMode == true) {
 
             spawnTurret1();
             AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
@@ -398,7 +357,7 @@ public class GameScreen implements Screen {
 
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
-                sellState = true;
+
                 //Gdx.input.setInputProcessor(buttonStage);
 
                 System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
@@ -409,7 +368,7 @@ public class GameScreen implements Screen {
                 System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
 
-                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellingConfirmed == true) {
+                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode == true) {
 
                     //sellTurretTable.setPosition(hoveredTilePosition.x * 50,hoveredTilePosition.y * 50);
                     //sellTurretTable.setVisible(true);
@@ -419,7 +378,7 @@ public class GameScreen implements Screen {
                         tower1ListIterator1.remove();
                         AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                         System.out.println(turretsPlaced);
-                        sellState = false;
+
 
                     //}
 
@@ -429,7 +388,7 @@ public class GameScreen implements Screen {
             } else {
                 canDelete = false;
                 //sellState = false;
-                sellingConfirmed = false;
+
             }
 
 
@@ -461,10 +420,10 @@ public class GameScreen implements Screen {
         stage.draw();
 
         //draw popupMenu
-        if(sellState == true) {
+
 
             sellTurretsController.draw();
-        };
+        ;
        // buttonStage.getViewport().apply();
        // buttonStage.draw();
 
@@ -530,9 +489,24 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     *
+     *
+     */
     public void handleInput(){
-        if (sellTurretsController.isSellPressed()){
-            sellingConfirmed = true;
+        if (sellTurretsController.isSellModePressed()){
+            sellMode = true;
+            buildMode = false;
+            //System.out.println("Build mode activated");
+            //System.out.println(buildMode);
+            //System.out.println(sellMode);
+        }
+        else if(sellTurretsController.isBuildModePressed()){
+            buildMode = true;
+            sellMode = false;
+            //System.out.println("Sell mode activated");
+            //System.out.println(buildMode);
+            //System.out.println(sellMode);
         }
     }
 

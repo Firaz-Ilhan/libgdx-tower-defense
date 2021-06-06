@@ -16,7 +16,7 @@ public class SellTurretsController {
 
     Viewport buttonViewPort;
     Stage buttonStage;
-    boolean sellPressed, abortPressed;
+    boolean sellModePressed, buildModePressed;
     OrthographicCamera buttonCam;
 
     public SellTurretsController(){
@@ -28,43 +28,43 @@ public class SellTurretsController {
         Table buttonTable = new Table();
         buttonTable.left().bottom();
 
-        final Image sellImage = new Image(new Texture("core/assets/buttons/sellSign.png"));
+        final Image sellImage = new Image(new Texture("core/assets/buttons/sellMode.png"));
         sellImage.setSize(100,100);
         sellImage.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                sellPressed = true;
+                sellModePressed = true;
                 return true;
 
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                sellPressed = false;
+                sellModePressed = false;
 
             }
         });
 
-        final Image abortImage = new Image(new Texture("core/assets/buttons/abortSign.png"));
-        abortImage.setSize(100,100);
-        abortImage.addListener(new InputListener(){
+        final Image buildImage = new Image(new Texture("core/assets/buttons/buildMode.png"));
+        buildImage.setSize(100,100);
+        buildImage.addListener(new InputListener(){
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                abortPressed = true;
+                buildModePressed = true;
 
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                abortPressed = false;
+                buildModePressed = false;
             }
         });
 
         buttonTable.add(sellImage).size(sellImage.getWidth(), sellImage.getHeight());
-        buttonTable.add(abortImage).size(abortImage.getWidth(), abortImage.getHeight());
+        buttonTable.add(buildImage).size(buildImage.getWidth(), buildImage.getHeight());
 
         buttonStage.addActor(buttonTable);
 
@@ -74,12 +74,12 @@ public class SellTurretsController {
         buttonStage.draw();
     }
 
-    public boolean isSellPressed() {
-        return sellPressed;
+    public boolean isSellModePressed() {
+        return sellModePressed;
     }
 
-    public boolean isAbortPressed() {
-        return abortPressed;
+    public boolean isBuildModePressed() {
+        return buildModePressed;
     }
     public void resize(int width, int height){
         buttonViewPort.update(width,height);

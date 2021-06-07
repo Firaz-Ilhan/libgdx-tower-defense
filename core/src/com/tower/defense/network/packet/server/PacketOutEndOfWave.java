@@ -7,7 +7,8 @@ import org.json.JSONObject;
 public class PacketOutEndOfWave extends Packet {
 
         private int reward;
-
+        public PacketOutEndOfWave() {
+        }
         public PacketOutEndOfWave(int reward) {
             this.packetType = PacketType.getPacketTypeByClass(getClass());
             this.reward = reward;

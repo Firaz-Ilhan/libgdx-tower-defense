@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
@@ -29,8 +30,10 @@ import com.tower.defense.tower.ITower;
 import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.util.LinkedList;
 import java.util.ListIterator;
+
 import static com.tower.defense.wave.Wave.waveLeft;
 import static com.tower.defense.wave.Wave.waveRight;
 
@@ -40,6 +43,7 @@ public class GameScreen implements Screen {
     private final static Logger log = LogManager.getLogger(GameScreen.class);
 
     private final TowerDefense game;
+    private final Queue<Packet> packetQueue = new Queue<>();
     private final Stage stage;
     private TiledMap map;
     private TiledMapTileLayer groundLayer;
@@ -83,7 +87,6 @@ public class GameScreen implements Screen {
     private Texture towerImage;
 
 
-
     // this boolean determines which side of the map the player is on
     private boolean playerSide;
 
@@ -123,7 +126,7 @@ public class GameScreen implements Screen {
         // getting the layers of the map
         MapLayers mapLayers = map.getLayers();
         groundLayer = (TiledMapTileLayer) mapLayers.get("ground");
-        decorationLayerIndices = new int[] { mapLayers.getIndex("decoration") };
+        decorationLayerIndices = new int[]{mapLayers.getIndex("decoration")};
 
         // setting up the camera
         float width = 1600;
@@ -156,6 +159,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        handlePackets();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -171,7 +175,7 @@ public class GameScreen implements Screen {
         int screenHeight = Gdx.graphics.getHeight();
 
         // position of the hovered tile
-         hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
+        hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);
 
         renderer.getBatch().begin();
 
@@ -198,7 +202,6 @@ public class GameScreen implements Screen {
 
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-
 
 
         //creating the textures of the turrets
@@ -289,7 +292,6 @@ public class GameScreen implements Screen {
 
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
-
 
 
                 System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
@@ -388,32 +390,43 @@ public class GameScreen implements Screen {
 
     }
 
-    public void handle(Packet packet) {
-        PacketType type = packet.getPacketType();
+    public void handlePackets() {
+        if(packetQueue.isEmpty()){
+            return;
+        }
+        while(!packetQueue.isEmpty()) {
+            Packet packet = packetQueue.removeFirst();
+            PacketType type = packet.getPacketType();
 
-        log.info("Traffic: New {}", type.toString());
+            log.info("Traffic: New {}", type.toString());
 
-        switch (type) {
-            case PACKETOUTSEARCHMATCH:
-            case PACKETOUTMATCHFOUND:
-                break;
-            case PACKETOUTCHATMESSAGE:
+            switch (type) {
+                case PACKETOUTSEARCHMATCH:
+                case PACKETOUTMATCHFOUND:
+                    break;
+                case PACKETOUTCHATMESSAGE:
 //                PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
 //                addMessageToBox(false, packetOutChatMessage.getText());
-                break;
-            case PACKETOUTSTARTMATCH:
-                break;
-            case PACKETOUTENDOFWAVE:
-                PacketOutEndOfWave packetOutEndOfWave = (PacketOutEndOfWave) packet;
-                 wave.partnerWaveEnded(packetOutEndOfWave.getReward());
-                 break;
-            case PACKETOUTSTARTWAVE:
-                wave.startWave();
-                break;
-            default:
-                break;
+                    break;
+                case PACKETOUTSTARTMATCH:
+                    break;
+                case PACKETOUTENDOFWAVE:
+                    log.info("packetOutEndOfWave received");
+                    PacketOutEndOfWave packetOutEndOfWave = (PacketOutEndOfWave) packet;
+                    wave.partnerWaveEnded(packetOutEndOfWave.getReward());
+                    break;
+                case PACKETOUTSTARTWAVE:
+                    wave.startWave();
+                    break;
+                default:
+                    break;
 
+            }
         }
+    }
+    public void handle(Packet packet){
+        packetQueue.addFirst(packet);
+        log.info("packet stored in queue");
     }
 
 }

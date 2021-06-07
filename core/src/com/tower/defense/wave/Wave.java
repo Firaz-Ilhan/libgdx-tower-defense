@@ -54,6 +54,7 @@ public class Wave {
         if (!pausing) {
             if (enemiesSpawned == waveSize) {
                 if (waveRight.size == 0 && waveLeft.size == 0) {
+                    log.info("all enemies disappeared");
                     endOfWave();
                 }
             } else {
@@ -166,10 +167,12 @@ public class Wave {
     // the next wave
     public void endOfWave() {
         if(!pausing) {
+            log.info("first End Of Wave");
             int reward = calculateReward();
             GameScreen.player1.addToWallet(reward);
             game.getClient().sendPacket(new PacketInEndOfWave(reward));
             pausing = true;
+            log.info("Pausing: {}",pausing);
         }
         if(partnerIsPausing){
             waveSpeed = Math.round(waveSpeed * 0.75);
@@ -181,7 +184,7 @@ public class Wave {
             enemiesSpawned = 0;
             enemiesPastLeft = 0;
             enemiesPastRight = 0;
-            game.getClient().sendPacket(new PacketInStartWave());
+            startWave();
         }
 
     }
@@ -196,6 +199,7 @@ public class Wave {
         return waveCount;
     }
     public void partnerWaveEnded(int reward){
+            log.info("partners wave ended");
             GameScreen.player2.addToWallet(reward);
             partnerIsPausing = true;
     }

@@ -35,6 +35,7 @@ public class Client {
     public void sendPacket(Packet packet) {
         try {
             clientConnection.sendPacketToServer(packet);
+            System.out.printf("client sent Packet to clientconnection");
         } catch (IOException e) {
             e.printStackTrace();
         }

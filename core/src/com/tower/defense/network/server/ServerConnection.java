@@ -137,13 +137,14 @@ public class ServerConnection extends Thread {
                 break;
             case PACKETINENDOFWAVE:
                 partnerConnection = server.getGameManager().getPartnerConnection(this);
-
+                log.info("Server connection is: {}", partnerConnection);
                 if (partnerConnection == null) {
                     return;
                 }
                 PacketInEndOfWave packetInEndOfWave = (PacketInEndOfWave) packet;
                 PacketOutEndOfWave packetOutEndOfWave = new PacketOutEndOfWave(packetInEndOfWave.getReward());
                 partnerConnection.sendPacketToClient(packetOutEndOfWave);
+                log.info("packetOutEndOfWave sent");
                 break;
             case PACKETINSTARTWAVE:
                 partnerConnection = server.getGameManager().getPartnerConnection(this);

@@ -266,39 +266,41 @@ public class MatchmakingScreen implements Screen {
         if(packetQueue.isEmpty()){
             return;
         }
-        Packet packet = packetQueue.removeFirst();
-        PacketType type = packet.getPacketType();
+        while(!packetQueue.isEmpty()) {
+            Packet packet = packetQueue.removeFirst();
+            PacketType type = packet.getPacketType();
 
-        log.info("Traffic: New {}", type.toString());
+            log.info("Traffic: New {}", type.toString());
 
-        switch (type) {
-            case PACKETOUTSEARCHMATCH:
-                connectionStatus.setText("Connected: Waiting for Enemy");
-                break;
-            case PACKETOUTMATCHFOUND:
-                connectionStatus.setText("Connected: Match found");
-                break;
-            case PACKETOUTCHATMESSAGE:
-                PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
-                addMessageToBox(false, packetOutChatMessage.getText());
-                break;
-            case PACKETOUTSTARTMATCH:
-                //checking if player is ready to start game. If not it is set to true
-                //else the scene changes
-                if (isReady) {
-                    Client client = game.getClient();
-                    log.info("client bekommen");
-                    client.setCurrentScreen(new GameScreen(game));
-                    log.info("client.set screen");
-                    game.setScreen(new GameScreen(game));
-                } else {
-                    isReady = true;
-                    startingStatus.setText("The other player is waiting to get started");
-                }
-                break;
-            default:
-                break;
+            switch (type) {
+                case PACKETOUTSEARCHMATCH:
+                    connectionStatus.setText("Connected: Waiting for Enemy");
+                    break;
+                case PACKETOUTMATCHFOUND:
+                    connectionStatus.setText("Connected: Match found");
+                    break;
+                case PACKETOUTCHATMESSAGE:
+                    PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
+                    addMessageToBox(false, packetOutChatMessage.getText());
+                    break;
+                case PACKETOUTSTARTMATCH:
+                    //checking if player is ready to start game. If not it is set to true
+                    //else the scene changes
+                    if (isReady) {
+                        Client client = game.getClient();
+                        log.info("client bekommen");
+                        client.setCurrentScreen(new GameScreen(game));
+                        log.info("client.set screen");
+                        game.setScreen(new GameScreen(game));
+                    } else {
+                        isReady = true;
+                        startingStatus.setText("The other player is waiting to get started");
+                    }
+                    break;
+                default:
+                    break;
 
+            }
         }
     }
 

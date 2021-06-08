@@ -4,6 +4,7 @@ import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.client.PacketInEndOfWave;
+import com.tower.defense.network.packet.client.PacketInNewTower;
 import com.tower.defense.network.packet.server.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -155,6 +156,16 @@ public class ServerConnection extends Thread {
                 PacketOutStartWave packetOutStartWave = new PacketOutStartWave();
                 partnerConnection.sendPacketToClient(packetOutStartWave);
                 break;
+            case PACKETINNEWTOWER:
+                log.info("packetinnewtower sent");
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
+
+                if (partnerConnection == null) {
+                    return;
+                }
+
+                PacketOutNewTower packetOutNewTower = new PacketOutNewTower();
+                partnerConnection.sendPacketToClient(packetOutNewTower);
             default:
                 break;
         }

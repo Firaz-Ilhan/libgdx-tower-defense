@@ -1,14 +1,11 @@
 package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-
-import com.badlogic.gdx.graphics.g2d.*;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,17 +16,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -40,22 +30,10 @@ import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.ITower;
 
-import jdk.javadoc.internal.doclets.toolkit.Content;
-
-import sun.tools.jconsole.JConsole;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.util.List;
-
-import com.tower.defense.player.Player;
-
 import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -95,9 +73,11 @@ public class GameScreen implements Screen {
 
 
     //PopUP menu
-    SellTurretsController sellTurretsController;
+    IngameButtonsController sellTurretsController;
     private boolean sellMode;
     private boolean buildMode;
+    private Table sellModeActive;
+    private Table buildModeActive;
 
 
     //Booleans to avoid creating multiple turrets by clicking once
@@ -195,31 +175,34 @@ public class GameScreen implements Screen {
         // player2.reduceLifepoints(40);
         wave = new Wave();
 
+        //PopUpMenu
+        sellTurretsController = new IngameButtonsController();
 
-        //Create buttons for PopUp Menu
 
-        sellTurretsController = new SellTurretsController();
-
+        //PopUpMenu - create a border to show witch mode is currently active
         /*
-        BitmapFont sellButtonFont = new BitmapFont();
+        sellModeActive = new Table();
+        buildModeActive = new Table();
 
-        Skin sellButtonSkin = new Skin ();
-        sellButtonSkin = game.assetManager.get("skins/glassyui/glassy-ui.json");
-        Stage buttonStage = new Stage();
+        final Image selectBorder = new Image(new Texture("core/assets/buttons/selectBorder.png"));
+        final Image noBorder = new Image(new Texture("core/assets/buttons/noBorder.png"));
+        selectBorder.setSize(100,100);
 
-         playButton = new TextButton("Sell",sellButtonSkin,"default");
-         playButton.setVisible(false);
-         stage.addActor(playButton);
-         Gdx.input.setInputProcessor(stage);
+        sellModeActive.bottom().left();
+        sellModeActive.add(selectBorder);
+        sellModeActive.add(noBorder);
 
-         if(playButton.isPressed()){
-             System.out.println("asdfasdf");
+        buildModeActive.bottom().left();
+        buildModeActive.add(noBorder);
+        buildModeActive.add(selectBorder);
 
-         }
+        stage.addActor(sellModeActive);
+        stage.addActor(buildModeActive);
 
          */
 
-    //    playButton.setBounds(hoveredTilePosition.x *50, hoveredTilePosition.y * 50,100,100);
+
+
 
 
     }
@@ -358,26 +341,18 @@ public class GameScreen implements Screen {
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
 
-                //Gdx.input.setInputProcessor(buttonStage);
-
-                System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
 
-
-
-                System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+                //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+                //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
 
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode == true) {
 
-                    //sellTurretTable.setPosition(hoveredTilePosition.x * 50,hoveredTilePosition.y * 50);
-                    //sellTurretTable.setVisible(true);
-                    //playButton.setVisible(true);
-
 
                         tower1ListIterator1.remove();
                         AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                        System.out.println(turretsPlaced);
+                        //System.out.println(turretsPlaced);
 
 
                     //}
@@ -397,6 +372,17 @@ public class GameScreen implements Screen {
 
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);
         rightMouseButtonDown = Gdx.input.isButtonPressed(1);
+
+        //PopUpMenu - draw correct borderTable
+        /*
+        if(sellMode == true){
+            sellModeActive.draw(spriteBatch,1);
+        }else if(buildMode == true){
+            buildModeActive.draw(spriteBatch,1);
+        }
+
+         */
+
 
         spriteBatch.end();
 
@@ -419,13 +405,9 @@ public class GameScreen implements Screen {
         stage.getViewport().apply();
         stage.draw();
 
-        //draw popupMenu
 
-
-            sellTurretsController.draw();
-        ;
-       // buttonStage.getViewport().apply();
-       // buttonStage.draw();
+        //PopUpMenu - draw
+        sellTurretsController.draw();
 
 
 

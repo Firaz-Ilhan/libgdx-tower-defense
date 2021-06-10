@@ -23,7 +23,10 @@ import com.tower.defense.enemy.Enemy;
 import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
+import com.tower.defense.network.packet.client.PacketInNewTower;
+import com.tower.defense.network.packet.server.PacketOutChatMessage;
 import com.tower.defense.network.packet.server.PacketOutEndOfWave;
+import com.tower.defense.network.packet.server.PacketOutNewTower;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.ITower;
@@ -379,6 +382,7 @@ public class GameScreen implements Screen {
 
         tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
         turretsPlaced.add(tower1);
+        game.getClient().sendPacket(new PacketInNewTower(hoveredTilePosition.x, hoveredTilePosition.y));
 
         //turretsPlacedArray.add(tower1);
 
@@ -391,10 +395,10 @@ public class GameScreen implements Screen {
     }
 
     public void handlePackets() {
-        if(packetQueue.isEmpty()){
+        if (packetQueue.isEmpty()) {
             return;
         }
-        while(!packetQueue.isEmpty()) {
+        while (!packetQueue.isEmpty()) {
             Packet packet = packetQueue.removeFirst();
             PacketType type = packet.getPacketType();
 
@@ -418,13 +422,24 @@ public class GameScreen implements Screen {
                 case PACKETOUTSTARTWAVE:
                     wave.startWave();
                     break;
+                case PACKETOUTNEWTOWER:
+                    log.info("packetoutnewtower received");
+                    PacketOutNewTower packetOutNewTower = (PacketOutNewTower) packet;
+                    float xCord = packetOutNewTower.getX();
+                    float yCord = packetOutNewTower.getY();
+                    float mapWidth = 31f;
+
+                    tower1 = new Tower1(turret1Texture, (mapWidth - xCord) * 50,
+                            yCord * 50, 50, 50, spriteBatch);
+                    turretsPlaced.add(tower1);
                 default:
                     break;
 
             }
         }
     }
-    public void handle(Packet packet){
+
+    public void handle(Packet packet) {
         packetQueue.addFirst(packet);
         log.info("packet stored in queue");
     }

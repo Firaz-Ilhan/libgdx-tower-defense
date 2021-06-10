@@ -164,7 +164,8 @@ public class ServerConnection extends Thread {
                     return;
                 }
 
-                PacketOutNewTower packetOutNewTower = new PacketOutNewTower();
+                PacketInNewTower packetInNewTower = (PacketInNewTower) packet;
+                PacketOutNewTower packetOutNewTower = new PacketOutNewTower(packetInNewTower.getX(), packetInNewTower.getY());
                 partnerConnection.sendPacketToClient(packetOutNewTower);
             default:
                 break;

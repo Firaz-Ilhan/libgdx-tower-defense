@@ -4,7 +4,7 @@ import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.client.PacketInEndOfWave;
-import com.tower.defense.network.packet.client.PacketInNewTower;
+import com.tower.defense.network.packet.client.PacketInAddTower;
 import com.tower.defense.network.packet.server.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -156,7 +156,7 @@ public class ServerConnection extends Thread {
                 PacketOutStartWave packetOutStartWave = new PacketOutStartWave();
                 partnerConnection.sendPacketToClient(packetOutStartWave);
                 break;
-            case PACKETINNEWTOWER:
+            case PACKETINADDTOWER:
                 log.info("packetinnewtower sent");
                 partnerConnection = server.getGameManager().getPartnerConnection(this);
 
@@ -164,9 +164,9 @@ public class ServerConnection extends Thread {
                     return;
                 }
 
-                PacketInNewTower packetInNewTower = (PacketInNewTower) packet;
-                PacketOutNewTower packetOutNewTower = new PacketOutNewTower(packetInNewTower.getX(), packetInNewTower.getY());
-                partnerConnection.sendPacketToClient(packetOutNewTower);
+                PacketInAddTower packetInAddTower = (PacketInAddTower) packet;
+                PacketOutAddTower packetOutAddTower = new PacketOutAddTower(packetInAddTower.getX(), packetInAddTower.getY());
+                partnerConnection.sendPacketToClient(packetOutAddTower);
             default:
                 break;
         }

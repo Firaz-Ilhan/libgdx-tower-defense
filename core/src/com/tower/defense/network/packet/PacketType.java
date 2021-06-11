@@ -13,7 +13,7 @@ public enum PacketType {
 	PACKETINSTARTMATCH(4, PacketInStartMatch.class),
 	PACKETINENDOFWAVE(5,PacketInEndOfWave.class),
 	PACKETINSTARTWAVE(6,PacketInStartWave.class),
-	PACKETINNEWTOWER(7, PacketInNewTower.class),
+	PACKETINADDTOWER(7, PacketInAddTower.class),
 
 	//Serverpackets
 	PACKETOUTSEARCHMATCH(101, PacketOutSearchMatch.class),
@@ -22,7 +22,7 @@ public enum PacketType {
 	PACKETOUTSTARTMATCH(104, PacketOutStartMatch.class),
 	PACKETOUTENDOFWAVE(105,PacketOutEndOfWave.class),
 	PACKETOUTSTARTWAVE(106,PacketOutStartWave.class),
-	PACKETOUTNEWTOWER(107, PacketOutNewTower.class);
+	PACKETOUTADDTOWER(107, PacketOutAddTower.class);
 
 
 

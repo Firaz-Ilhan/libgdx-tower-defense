@@ -1,19 +1,19 @@
-package com.tower.defense.network.packet.client;
+package com.tower.defense.network.packet.server;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import org.json.JSONObject;
 
-public class PacketInNewTower extends Packet {
+public class PacketOutAddTower extends Packet {
 
     private float x;
     private float y;
 
-    public PacketInNewTower() {
+    public PacketOutAddTower() {
 
     }
 
-    public PacketInNewTower(float x, float y) {
+    public PacketOutAddTower(float x, float y) {
         this.packetType = PacketType.getPacketTypeByClass(getClass());
         this.x = x;
         this.y = y;

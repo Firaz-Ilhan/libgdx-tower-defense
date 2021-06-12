@@ -24,8 +24,10 @@ import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInAddTower;
+import com.tower.defense.network.packet.client.PacketInRemoveTower;
 import com.tower.defense.network.packet.server.PacketOutEndOfWave;
 import com.tower.defense.network.packet.server.PacketOutAddTower;
+import com.tower.defense.network.packet.server.PacketOutRemoveTower;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.ITower;
@@ -72,6 +74,7 @@ public class GameScreen implements Screen {
 
     //List to store all turrets
     private LinkedList turretsPlaced = new LinkedList<ITower>();
+    private ListIterator<Tower1> tower1ListIterator1;
 
     //PopUP menu
 
@@ -278,7 +281,7 @@ public class GameScreen implements Screen {
          * List iterator that draws all placed turrets and handles "turret removing"
          */
 
-        ListIterator<Tower1> tower1ListIterator1 = turretsPlaced.listIterator();
+        tower1ListIterator1 = turretsPlaced.listIterator();
 
         while (tower1ListIterator1.hasNext()) {
 
@@ -305,6 +308,8 @@ public class GameScreen implements Screen {
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                     System.out.println(turretsPlaced);
+                    game.getClient().sendPacket
+                            (new PacketInRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
 
 
                 }
@@ -403,6 +408,7 @@ public class GameScreen implements Screen {
             PacketType type = packet.getPacketType();
 
             log.info("Traffic: New {}", type.toString());
+            final float mapWidth = 31f;
 
             switch (type) {
                 case PACKETOUTSEARCHMATCH:
@@ -425,13 +431,22 @@ public class GameScreen implements Screen {
                 case PACKETOUTADDTOWER:
                     log.info("packetoutnewtower received");
                     PacketOutAddTower packetOutAddTower = (PacketOutAddTower) packet;
-                    float xCord = packetOutAddTower.getX();
-                    float yCord = packetOutAddTower.getY();
-                    float mapWidth = 31f;
+                    float xCordAdd = packetOutAddTower.getX();
+                    float yCordAdd = packetOutAddTower.getY();
 
-                    tower1 = new Tower1(turret1Texture, (mapWidth - xCord) * 50,
-                            yCord * 50, 50, 50, spriteBatch);
+                    tower1 = new Tower1(turret1Texture, (mapWidth - xCordAdd) * 50,
+                            yCordAdd * 50, 50, 50, spriteBatch);
                     turretsPlaced.add(tower1);
+                    break;
+                case PACKETOUTREMOVETOWER:
+                    log.info("packetoutremovetower received");
+                    PacketOutRemoveTower packetOutRemoveTower = (PacketOutRemoveTower) packet;
+                    float xCordRemove = packetOutRemoveTower.getX();
+                    float yCordRemove = packetOutRemoveTower.getY();
+                    if (tower1.getX() == (mapWidth - xCordRemove) * 50 && tower1.getY() == yCordRemove * 50) {
+                        tower1ListIterator1.remove();
+                    }
+                    break;
                 default:
                     break;
 

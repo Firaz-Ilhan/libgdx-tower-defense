@@ -20,4 +20,8 @@ public interface ITower {
 
     int getCost();
 
+    void updateTargetarray();
+    void findtarget();
+    void update(float time);
+
 }

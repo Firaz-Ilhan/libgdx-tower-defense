@@ -54,4 +54,19 @@ public class Tower2 implements ITower {
     public int getCost() {
         return cost;
     }
+
+    @Override
+    public void updateTargetarray() {
+
+    }
+
+    @Override
+    public void findtarget() {
+
+    }
+
+    @Override
+    public void update(float time) {
+
+    }
 }

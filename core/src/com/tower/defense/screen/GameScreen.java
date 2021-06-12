@@ -67,6 +67,9 @@ public class GameScreen implements Screen {
     //PopUP menu
 
 
+    //Firerate
+    private float time;
+
     //Booleans to avoid creating multiple turrets by clicking once
     private boolean canDraw;
     private boolean canDelete;
@@ -150,7 +153,7 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float deltaTime) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -257,10 +260,11 @@ public class GameScreen implements Screen {
             canDraw = false;
         }
 
+        time+= Gdx.graphics.getRawDeltaTime();
+
         /**
          * List iterator that draws all placed turrets and handles "turret removing"
          */
-
         ListIterator<Tower1> tower1ListIterator1 = turretsPlaced.listIterator();
 
         while (tower1ListIterator1.hasNext()) {
@@ -268,6 +272,10 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
+
+            tower1.update(time);
+
+
 
             //Output if player tries to delete the last turret
 

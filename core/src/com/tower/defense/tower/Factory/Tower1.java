@@ -1,33 +1,41 @@
 package com.tower.defense.tower.Factory;
 
-import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tower.defense.tower.ITower;
+
+import java.util.concurrent.TimeoutException;
 
 public class Tower1 implements ITower {
 
-    private int x;
-    private int y;
+    private float x;
+    private float y;
     boolean is_attacking;
     private double damage = 1;
     private double firerate = 1;
     private double range = 50;
-    private int cost  = 100;
-    private Circle boundingcircle;
+    private int cost = 100;
+    private Texture turretTexture;
+    private float width, height;
+    private SpriteBatch spriteBatch;
 
-    public Tower1(int x, int y){
+    public Tower1(Texture turretTexture,float x, float y, int width, int height, SpriteBatch batch) {
         this.x = x;
         this.y = y;
         this.is_attacking = false;
-        boundingcircle = new Circle(x,y,(float)range);
+        this.turretTexture = turretTexture;
+        this.width = width;
+        this.height = height;
+        this.spriteBatch = batch;
     }
 
 
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
@@ -59,10 +67,11 @@ public class Tower1 implements ITower {
         return cost;
     }
 
-    public boolean findenemy(float x, float y){
-        return boundingcircle.contains(x,y);
+
+    /**
+     * draw-method for Tower1
+     */
+    public void draw() {
+        spriteBatch.draw(turretTexture, x, y, width, height);
     }
-
-    
-
 }

@@ -1,13 +1,15 @@
 package com.tower.defense;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tower.defense.helper.Settings;
+import com.tower.defense.network.client.Client;
 import com.tower.defense.screen.MainMenuScreen;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class TowerDefense extends Game {
 
@@ -15,6 +17,7 @@ public class TowerDefense extends Game {
 
     public AssetManager assetManager;
     private Settings settings;
+    private Client client;
 
     @Override
     public void create() {
@@ -56,4 +59,13 @@ public class TowerDefense extends Game {
     public Settings getSettings() {
         return settings;
     }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
 }

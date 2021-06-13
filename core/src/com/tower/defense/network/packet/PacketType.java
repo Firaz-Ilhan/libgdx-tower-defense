@@ -12,7 +12,6 @@ public enum PacketType {
 	PACKETINCHATMESSAGE(3, PacketInChatMessage.class),
 	PACKETINSTARTMATCH(4, PacketInStartMatch.class),
 	PACKETINENDOFWAVE(5,PacketInEndOfWave.class),
-	PACKETINSTARTWAVE(6,PacketInStartWave.class),
 
 
 	PACKETINENDOFGAME(9,PacketInEndOfGame.class),
@@ -23,7 +22,6 @@ public enum PacketType {
 	PACKETOUTCHATMESSAGE(103, PacketOutChatMessage.class),
 	PACKETOUTSTARTMATCH(104, PacketOutStartMatch.class),
 	PACKETOUTENDOFWAVE(105,PacketOutEndOfWave.class),
-	PACKETOUTSTARTWAVE(106,PacketOutStartWave.class),
 
 
 	PACKETOUTENDOFGAME(109,PacketOutEndOfGame.class);

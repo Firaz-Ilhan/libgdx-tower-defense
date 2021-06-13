@@ -162,9 +162,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if(packetQueue.size == 1){
-            log.info("Packet Queue not empty before handle");
-        }
         handlePackets();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -422,9 +419,6 @@ public class GameScreen implements Screen {
                     PacketOutEndOfWave packetOutEndOfWave = (PacketOutEndOfWave) packet;
                     wave.partnerWaveEnded(packetOutEndOfWave.getReward());
                     break;
-                case PACKETOUTSTARTWAVE:
-                    wave.startWave();
-                    break;
                 case PACKETOUTENDOFGAME:
                     player2.lost();
                     game.setScreen(new EndScreen(game));
@@ -438,8 +432,6 @@ public class GameScreen implements Screen {
     }
     public static void handle(Packet packet){
         packetQueue.addFirst(packet);
-        log.info("packet stored in queue");
-        log.info("Queuqsize: {} ",packetQueue.size);
     }
 
 }

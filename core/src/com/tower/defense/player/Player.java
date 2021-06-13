@@ -60,11 +60,6 @@ public class Player {
         log.info("tower at index {} was sold", index);
     }
 
-     /* public void placeTower(int index, int x,int y){
-     inventory.get(index).setX(x);
-     inventory.get(index).setY(y);
-     //the command for communication with the server must be implemented here
-     }*/
 
     /**
      * This method is called when an Enemy passed the Map without dying,

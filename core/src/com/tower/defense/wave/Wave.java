@@ -5,9 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
-import com.tower.defense.network.packet.client.PacketInChatMessage;
 import com.tower.defense.network.packet.client.PacketInEndOfWave;
-import com.tower.defense.network.packet.client.PacketInStartWave;
 import com.tower.defense.player.Player;
 import com.tower.defense.screen.GameScreen;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +25,6 @@ public class Wave {
     // lastSpawnTime is checked before creating an enemy
     private long lastSpawnTime;
     private int enemiesPastLeft = 0;
-    private int enemiesPastRight = 0;
     // w
     private int waveCount = 1;
     private int enemiesSpawned = 0;
@@ -37,10 +34,8 @@ public class Wave {
     private long waveSpeed = 2000000000L;
     private int waveReward = 30;
     private float enemySpeed = 25;
-    private long timeSinceBreak;
     private boolean pausing = false;
     private boolean partnerIsPausing = false;
-    private final long breaktime = 10000L;
 
     public Wave(final TowerDefense game) {
         this.game = game;
@@ -147,8 +142,6 @@ public class Wave {
                 iter.remove();
                 if (player.getName().equals("Player1")) {
                     enemiesPastLeft++;
-                } else {
-                    enemiesPastRight++;
                 }
             }
 
@@ -167,7 +160,6 @@ public class Wave {
     // the next wave
     public void endOfWave() {
         if(!pausing) {
-            log.info("first End Of Wave");
             int reward = calculateReward();
             GameScreen.player1.addToWallet(reward);
             game.getClient().sendPacket(new PacketInEndOfWave(reward));
@@ -183,7 +175,6 @@ public class Wave {
             log.info("enemy speed: {}", enemySpeed);
             enemiesSpawned = 0;
             enemiesPastLeft = 0;
-            enemiesPastRight = 0;
             startWave();
         }
 

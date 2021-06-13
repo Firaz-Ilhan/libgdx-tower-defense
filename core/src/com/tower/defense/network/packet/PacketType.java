@@ -14,13 +14,19 @@ public enum PacketType {
 	PACKETINENDOFWAVE(5,PacketInEndOfWave.class),
 	PACKETINSTARTWAVE(6,PacketInStartWave.class),
 
+
+	PACKETINENDOFGAME(9,PacketInEndOfGame.class),
+
 	//Serverpackets
 	PACKETOUTSEARCHMATCH(101, PacketOutSearchMatch.class),
 	PACKETOUTMATCHFOUND(102, PacketOutMatchFound.class),
 	PACKETOUTCHATMESSAGE(103, PacketOutChatMessage.class),
 	PACKETOUTSTARTMATCH(104, PacketOutStartMatch.class),
 	PACKETOUTENDOFWAVE(105,PacketOutEndOfWave.class),
-	PACKETOUTSTARTWAVE(106,PacketOutStartWave.class);
+	PACKETOUTSTARTWAVE(106,PacketOutStartWave.class),
+
+
+	PACKETOUTENDOFGAME(109,PacketOutEndOfGame.class);
 	
 	
 	

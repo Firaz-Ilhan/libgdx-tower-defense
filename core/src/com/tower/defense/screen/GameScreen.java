@@ -23,6 +23,9 @@ import com.tower.defense.enemy.Enemy;
 import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
+import com.tower.defense.network.packet.client.PacketInEndOfGame;
+import com.tower.defense.network.packet.client.PacketInEndOfWave;
+import com.tower.defense.network.packet.server.PacketOutEndOfGame;
 import com.tower.defense.network.packet.server.PacketOutEndOfWave;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
@@ -43,7 +46,7 @@ public class GameScreen implements Screen {
     private final static Logger log = LogManager.getLogger(GameScreen.class);
 
     private final TowerDefense game;
-    private final Queue<Packet> packetQueue = new Queue<>();
+    private final static Queue<Packet> packetQueue = new Queue<>();
     private final Stage stage;
     private TiledMap map;
     private TiledMapTileLayer groundLayer;
@@ -159,6 +162,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if(packetQueue.size == 1){
+            log.info("Packet Queue not empty before handle");
+        }
         handlePackets();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -332,7 +338,9 @@ public class GameScreen implements Screen {
         wave.renderWave(waveRight, player2, false);
 
         // END OF GAME
-        if (player1.getLifepoints() <= 0 || player2.getLifepoints() <= 0) {
+        if (player1.getLifepoints() <= 0) {
+            player1.lost();
+            game.getClient().sendPacket(new PacketInEndOfGame());
             game.setScreen(new EndScreen(game));
             log.info("set screen to {}", game.getScreen().getClass());
         }
@@ -411,12 +419,16 @@ public class GameScreen implements Screen {
                 case PACKETOUTSTARTMATCH:
                     break;
                 case PACKETOUTENDOFWAVE:
-                    log.info("packetOutEndOfWave received");
                     PacketOutEndOfWave packetOutEndOfWave = (PacketOutEndOfWave) packet;
                     wave.partnerWaveEnded(packetOutEndOfWave.getReward());
                     break;
                 case PACKETOUTSTARTWAVE:
                     wave.startWave();
+                    break;
+                case PACKETOUTENDOFGAME:
+                    player2.lost();
+                    game.setScreen(new EndScreen(game));
+                    log.info("set screen to {}", game.getScreen().getClass());
                     break;
                 default:
                     break;
@@ -424,9 +436,10 @@ public class GameScreen implements Screen {
             }
         }
     }
-    public void handle(Packet packet){
+    public static void handle(Packet packet){
         packetQueue.addFirst(packet);
         log.info("packet stored in queue");
+        log.info("Queuqsize: {} ",packetQueue.size);
     }
 
 }

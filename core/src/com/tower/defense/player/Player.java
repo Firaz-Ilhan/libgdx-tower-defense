@@ -9,7 +9,7 @@ import java.util.List;
 public class Player {
 
     private final static Logger log = LogManager.getLogger(Player.class);
-
+    private boolean lost = false;
     private String name;
     private int wallet = 100;
     private int lifepoints = 200;
@@ -95,5 +95,11 @@ public class Player {
     public String getName() {
         return name;
     }
+    public void lost(){
+        lost = true;
+    }
 
+    public boolean hasLost() {
+        return lost;
+    }
 }

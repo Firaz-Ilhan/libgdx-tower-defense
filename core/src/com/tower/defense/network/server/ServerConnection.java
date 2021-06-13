@@ -155,6 +155,15 @@ public class ServerConnection extends Thread {
                 PacketOutStartWave packetOutStartWave = new PacketOutStartWave();
                 partnerConnection.sendPacketToClient(packetOutStartWave);
                 break;
+            case PACKETINENDOFGAME:
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
+
+                if (partnerConnection == null) {
+                    return;
+                }
+                PacketOutEndOfGame packetOutEndOfGame = new PacketOutEndOfGame();
+                partnerConnection.sendPacketToClient(packetOutEndOfGame);
+                break;
             default:
                 break;
         }

@@ -24,10 +24,10 @@ import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInAddTower;
-import com.tower.defense.network.packet.client.PacketInRemoveTower;
 import com.tower.defense.network.packet.client.PacketInEndOfGame;
-import com.tower.defense.network.packet.server.PacketOutEndOfWave;
+import com.tower.defense.network.packet.client.PacketInRemoveTower;
 import com.tower.defense.network.packet.server.PacketOutAddTower;
+import com.tower.defense.network.packet.server.PacketOutEndOfWave;
 import com.tower.defense.network.packet.server.PacketOutRemoveTower;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
@@ -71,9 +71,12 @@ public class GameScreen implements Screen {
     private Texture turret1Texture;
     private Texture turret2Texture;
 
-    //List to store all turrets
-    private LinkedList turretsPlaced = new LinkedList<ITower>();
+    // list to store own towers
+    private final LinkedList turretsPlaced = new LinkedList<ITower>();
     private ListIterator<Tower1> tower1ListIterator1;
+
+    // list to store towers of the opponent
+    private final LinkedList enemyTowersPlaced = new LinkedList<ITower>();
 
     //PopUP menu
 
@@ -321,6 +324,14 @@ public class GameScreen implements Screen {
         }
 
 
+        tower1ListIterator1 = enemyTowersPlaced.listIterator();
+
+        while (tower1ListIterator1.hasNext()) {
+
+            tower1 = tower1ListIterator1.next();
+            tower1.draw();
+        }
+
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);
         rightMouseButtonDown = Gdx.input.isButtonPressed(1);
 
@@ -445,15 +456,21 @@ public class GameScreen implements Screen {
 
                     tower1 = new Tower1(turret1Texture, (mapWidth - xCordAdd) * 50,
                             yCordAdd * 50, 50, 50, spriteBatch);
-                    turretsPlaced.add(tower1);
+                    enemyTowersPlaced.add(tower1);
                     break;
                 case PACKETOUTREMOVETOWER:
                     log.info("packetoutremovetower received");
                     PacketOutRemoveTower packetOutRemoveTower = (PacketOutRemoveTower) packet;
                     float xCordRemove = packetOutRemoveTower.getX();
                     float yCordRemove = packetOutRemoveTower.getY();
-                    if (tower1.getX() == (mapWidth - xCordRemove) * 50 && tower1.getY() == yCordRemove * 50) {
-                        tower1ListIterator1.remove();
+                    tower1ListIterator1 = enemyTowersPlaced.listIterator();
+                    while (tower1ListIterator1.hasNext()) {
+                        tower1 = tower1ListIterator1.next();
+                        if (enemyTowersPlaced.size() > 1) {
+                            if (tower1.getX() == (mapWidth - xCordRemove) * 50 && tower1.getY() == yCordRemove * 50) {
+                                tower1ListIterator1.remove();
+                            }
+                        }
                     }
                     break;
                 default:

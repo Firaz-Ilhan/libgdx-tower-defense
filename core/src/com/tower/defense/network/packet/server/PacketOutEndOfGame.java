@@ -4,9 +4,9 @@ import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import org.json.JSONObject;
 
-public class PacketOutStartWave extends Packet {
+public class PacketOutEndOfGame extends Packet {
 
-    public PacketOutStartWave() {
+    public PacketOutEndOfGame() {
         this.packetType = PacketType.getPacketTypeByClass(getClass());
     }
 

@@ -148,14 +148,14 @@ public class ServerConnection extends Thread {
                 partnerConnection.sendPacketToClient(packetOutEndOfWave);
                 log.info("packetOutEndOfWave sent");
                 break;
-            case PACKETINSTARTWAVE:
+            case PACKETINENDOFGAME:
                 partnerConnection = server.getGameManager().getPartnerConnection(this);
 
                 if (partnerConnection == null) {
                     return;
                 }
-                PacketOutStartWave packetOutStartWave = new PacketOutStartWave();
-                partnerConnection.sendPacketToClient(packetOutStartWave);
+                PacketOutEndOfGame packetOutEndOfGame = new PacketOutEndOfGame();
+                partnerConnection.sendPacketToClient(packetOutEndOfGame);
                 break;
             case PACKETINADDTOWER:
                 log.info("packetinnewtower sent");

@@ -141,6 +141,7 @@ public class Wave {
                 player.reduceLifepoints(enemy.getDamage());
                 iter.remove();
                 if (player.getName().equals("Player1")) {
+
                     enemiesPastLeft++;
                 }
             }
@@ -189,15 +190,18 @@ public class Wave {
     public int getWaveCount() {
         return waveCount;
     }
+    //is called by the handle() method if a EndOfWave packet was received
     public void partnerWaveEnded(int reward){
             log.info("partners wave ended");
             GameScreen.player2.addToWallet(reward);
             partnerIsPausing = true;
     }
+    //is called in EndOfWave()
     public void startWave(){
         partnerIsPausing =false;
         pausing = false;
         waveCount++;
     }
-    }
+    public boolean isPausing(){return pausing;}
+}
 

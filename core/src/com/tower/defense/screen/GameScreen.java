@@ -24,8 +24,6 @@ import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInEndOfGame;
-import com.tower.defense.network.packet.client.PacketInEndOfWave;
-import com.tower.defense.network.packet.server.PacketOutEndOfGame;
 import com.tower.defense.network.packet.server.PacketOutEndOfWave;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
@@ -57,7 +55,6 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private SpriteBatch spriteBatch;
 
-
     private Vector2 hoveredTilePosition;
     private Vector2 mousePosition;
 
@@ -66,7 +63,6 @@ public class GameScreen implements Screen {
 
     private Texture hoveredTileTexture;
     private Texture hoveredTileNotAllowed;
-
 
     private Texture turret1Texture;
     private Texture turret2Texture;
@@ -82,12 +78,8 @@ public class GameScreen implements Screen {
     private boolean canDelete;
     private boolean leftMouseButtonDown;
     private boolean rightMouseButtonDown;
-
     private Tower1 tower1;
-
-
     private Texture enemyImage;
-    private Texture towerImage;
 
 
     // this boolean determines which side of the map the player is on
@@ -113,16 +105,18 @@ public class GameScreen implements Screen {
         this.rightMouseButtonDown = false;
         this.canDraw = false;
         this.canDelete = false;
-
-
     }
 
     @Override
     public void show() {
-        // Loading Textures
+        // loading Textures
         map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
+
+        // loading the textures of the turrets
+        turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
+        turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
 
         enemyImage = new Texture(Gdx.files.internal("virus.png"));
 
@@ -153,6 +147,8 @@ public class GameScreen implements Screen {
 
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
+
+
         player1 = new Player("Player1");
         player2 = new Player("Player2");
         // for testing
@@ -200,17 +196,15 @@ public class GameScreen implements Screen {
 
         renderer.getBatch().end();
 
-        // rendering the decocation on top of the ground tiles
+        // rendering the decoration on top of the ground tiles
         renderer.render(decorationLayerIndices);
 
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 
-
         //creating the textures of the turrets
         turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
         turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
-
 
         //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
 
@@ -331,6 +325,7 @@ public class GameScreen implements Screen {
         // WAVE:
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
+
         wave.renderWave(waveLeft, player1, true);
         wave.renderWave(waveRight, player2, false);
 
@@ -374,6 +369,14 @@ public class GameScreen implements Screen {
         map.dispose();
         game.dispose();
         stage.dispose();
+        turret1Texture.dispose();
+        turret2Texture.dispose();
+        enemyImage.dispose();
+        hoveredTileTexture.dispose();
+        hoveredTileNotAllowed.dispose();
+        spriteBatch.dispose();
+        font.dispose();
+        renderer.dispose();
     }
 
     /**

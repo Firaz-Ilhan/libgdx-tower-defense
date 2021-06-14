@@ -1,5 +1,6 @@
 package com.tower.defense.enemy.Factory;
 
+
 import com.tower.defense.enemy.Enemy;
 
 public class Enemy1 extends Enemy {

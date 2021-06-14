@@ -12,6 +12,7 @@ public class Player {
     private boolean lost = false;
     private String name;
     private int wallet = 100;
+
     private int lifepoints = 200;
     private List<ITower> inventory;
 
@@ -23,12 +24,26 @@ public class Player {
     /**
      * At the end of a wave, a Player gets a reward for surviving.
      * If they missed enemies, they get less money at the end of the round.
+     * But they get at least 20.
      * The final reward is added to the wallet
      */
+
     public void addToWallet(int reward) {
-        log.info("reward: {}", reward);
-        wallet += reward;
-    }
+        if (reward < 0) {
+            log.info("You can not add a negative reward");
+        }
+        else{
+              if(reward>20){
+                log.info("reward: {}", reward);
+                wallet += reward;
+            }
+            else{
+                reward = 20;
+                log.info("reward: {}", reward);
+                wallet += reward;
+            }
+            }
+        }
 
     /**
      * @return inventory

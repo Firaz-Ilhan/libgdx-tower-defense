@@ -8,9 +8,9 @@ public class EnemyFactory {
 
         switch (difficulty) {
             case "medium":
-                return new Enemy1(posX, posY, 7, 2);
+                return new Enemy2(posX, posY, 7, 2);
             default:
-                return new Enemy1(posX, posY, 2,2);
+                return new Enemy1(posX, posY, 2,10);
         }
     }
 }

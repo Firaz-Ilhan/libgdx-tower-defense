@@ -46,12 +46,12 @@ public class EndScreen implements Screen {
         headerTable.setFillParent(true);
         headerTable.setDebug(false);
         stage.addActor(headerTable);
-        if (player1.getLifepoints() < 0 && player2.getLifepoints() < 0) {
+        if (player1.hasLost() && player2.hasLost() ) {
             winner = "Draw";
-        } else if (player1.getLifepoints() < 0 && player2.getLifepoints() > 0) {
-            winner = player2.getName() + " has won";
+        } else if (player1.hasLost() ) {
+            winner = "You lost";
         } else {
-            winner = player1.getName() + " has won";
+            winner = " You won";
         }
 
         log.info(winner);

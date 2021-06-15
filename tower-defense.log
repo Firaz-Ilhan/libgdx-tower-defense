@@ -6,13 +6,3 @@ main INFO  defense.TowerDefense - GPU: GeForce GTX 1050/PCIe/SSE2
 main INFO  defense.TowerDefense - Current Display: 1920x1080, bpp: 24, hz: 60
 main INFO  screen.MainMenuScreen - display was set to windowed screen mode
 main INFO  defense.TowerDefense - set screen to class com.tower.defense.screen.MainMenuScreen
-main INFO  helper.NetworkINTF - local ip address: 192.168.253.1
-main INFO  screen.MainMenuScreen - set screen to class com.tower.defense.screen.MatchmakingScreen
-main INFO  player.Player - player: Player1
-main INFO  player.Player - player: Player2
-main INFO  wave.Wave - wave count: 1
-main INFO  screen.MainMenuScreen - set screen to class com.tower.defense.screen.GameScreen
-main INFO  player.Player - reward: 30
-main INFO  player.Player - reward: 20
-main INFO  wave.Wave - wave reward: 45
-main INFO  wave.Wave - enemy speed: 30.0

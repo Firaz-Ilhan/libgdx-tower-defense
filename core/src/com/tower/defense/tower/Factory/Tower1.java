@@ -9,6 +9,8 @@ import com.tower.defense.wave.Wave;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
 public class Tower1 implements ITower {
@@ -23,9 +25,12 @@ public class Tower1 implements ITower {
     private Texture turretTexture;
     private float width, height;
     private SpriteBatch spriteBatch;
-    protected List<Enemy> Targetlist;
     protected HashMap <Enemy,Float> enemyMap;
-    private float firedelay;
+    protected float timeturret;
+
+    private float firedelay = 5;
+    Timer timer;
+    TimerTask shoot;
 
     public Tower1(Texture turretTexture,float x, float y, int width, int height, SpriteBatch batch) {
         this.x = x;
@@ -35,6 +40,17 @@ public class Tower1 implements ITower {
         this.width = width;
         this.height = height;
         this.spriteBatch = batch;
+        this.timeturret = 0;
+        timer = new Timer();
+        shoot = new TimerTask() {
+            @Override
+            public void run() {
+                enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
+            }
+        };
+
+
+
     }
 
 
@@ -76,7 +92,9 @@ public class Tower1 implements ITower {
     }
 
 
+
     public void updateTargetarray(){
+
         enemyMap = new HashMap<>();
         for (int i = 0; i < Wave.waveLeft.size; i++) {
             int PosX = (int) Wave.waveLeft.get(i).getX();
@@ -101,14 +119,19 @@ public class Tower1 implements ITower {
 
     @Override
     public void update(float time) {
+        timeturret += time;
+        //System.out.println(timeturret);
         updateTargetarray();
-        System.out.println(time);
+
         if (enemyMap.size()>0){
-            firedelay -= time;
-            if (firedelay <= 0){
+            //firedelay -= timeturret;
+            timer.schedule(shoot,1000);
+           /* if (timeturret > 4000){
+                System.out.println("shooot!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                timeturret = 0;
                 enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
-                firedelay += 10;
-            }
+
+            }*/
 
 
         }

@@ -7,6 +7,7 @@ import com.tower.defense.tower.ITower;
 import com.tower.defense.wave.Wave;
 
 import java.awt.geom.Point2D;
+import java.security.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -19,14 +20,16 @@ public class Tower1 implements ITower {
     private float y;
     boolean is_attacking;
     private double damage = 1;
-    private double firerate = 1;
-    private double range = 150;
+    private double firerate = 2;
+    private double range = 200;
     private int cost = 100;
     private Texture turretTexture;
     private float width, height;
     private SpriteBatch spriteBatch;
     protected HashMap <Enemy,Float> enemyMap;
     protected float timeturret;
+    long startTime;
+    long endTime;
 
     private float firedelay = 5;
     Timer timer;
@@ -41,13 +44,7 @@ public class Tower1 implements ITower {
         this.height = height;
         this.spriteBatch = batch;
         this.timeturret = 0;
-        timer = new Timer();
-        shoot = new TimerTask() {
-            @Override
-            public void run() {
-                enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
-            }
-        };
+        this.startTime = System.nanoTime();
 
 
 
@@ -119,20 +116,14 @@ public class Tower1 implements ITower {
 
     @Override
     public void update(float time) {
-        timeturret += time;
-        //System.out.println(timeturret);
+
         updateTargetarray();
-
-        if (enemyMap.size()>0){
-            //firedelay -= timeturret;
-            timer.schedule(shoot,1000);
-            //.
-           /* if (timeturret > 4000){
-                System.out.println("shooot!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                timeturret = 0;
-                enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
-
-            }*/
+       endTime = System.nanoTime();
+       double difference = (endTime-startTime)/1e9;
+        System.out.println(difference);
+        if (enemyMap.size()>0 && difference>firerate){
+            enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
+            startTime = System.nanoTime();
 
 
         }

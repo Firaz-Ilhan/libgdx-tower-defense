@@ -126,6 +126,7 @@ public class Tower1 implements ITower {
         if (enemyMap.size()>0){
             //firedelay -= timeturret;
             timer.schedule(shoot,1000);
+            //.
            /* if (timeturret > 4000){
                 System.out.println("shooot!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 timeturret = 0;

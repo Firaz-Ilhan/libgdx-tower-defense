@@ -28,19 +28,18 @@ import com.tower.defense.network.packet.client.PacketInEndOfGame;
 import com.tower.defense.network.packet.client.PacketInRemoveTower;
 import com.tower.defense.network.packet.server.PacketOutAddTower;
 import com.tower.defense.network.packet.server.PacketOutEndOfWave;
+import com.tower.defense.network.packet.server.PacketOutLifepoints;
 import com.tower.defense.network.packet.server.PacketOutRemoveTower;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.ITower;
+import com.tower.defense.wave.RenderWave;
 import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
-
-import static com.tower.defense.wave.Wave.waveLeft;
-import static com.tower.defense.wave.Wave.waveRight;
 
 
 public class GameScreen implements Screen {
@@ -157,8 +156,8 @@ public class GameScreen implements Screen {
         // WAVE: initiating Players and Wave
 
 
-        player1 = new Player("Player1");
-        player2 = new Player("Player2");
+        player1 = new Player("Player",playerSide);
+        player2 = new Player("Opponent",!playerSide);
         // for testing
         // player2.reduceLifepoints(40);
         wave = new Wave(game);
@@ -235,10 +234,10 @@ public class GameScreen implements Screen {
             }
         }
         // WAVE: drawing the enemies
-        for (Enemy enemy : waveRight) {
+        for (Enemy enemy : wave.waveRight) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
         }
-        for (Enemy enemy : waveLeft) {
+        for (Enemy enemy : wave.waveLeft) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
         }
 
@@ -292,14 +291,14 @@ public class GameScreen implements Screen {
             //Output if player tries to delete the last turret
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1) {
-                System.out.println("You cant own 0 turrets");
+                log.info("You cant own 0 turrets");
             }
 
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
 
 
-                System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+                log.info(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
 
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
@@ -307,7 +306,7 @@ public class GameScreen implements Screen {
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                    System.out.println(turretsPlaced);
+                    log.info(turretsPlaced);
                     game.getClient().sendPacket
                             (new PacketInRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
 
@@ -345,15 +344,12 @@ public class GameScreen implements Screen {
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
 
-        wave.renderWave(waveLeft, player1, true);
-        wave.renderWave(waveRight, player2, false);
+        RenderWave.renderWave(player1,wave);
+        RenderWave.renderWave(player2,wave);
 
         // END OF GAME
         if (player1.getLifepoints() <= 0) {
-            player1.lost();
-            game.getClient().sendPacket(new PacketInEndOfGame());
-            game.setScreen(new EndScreen(game));
-            log.info("set screen to {}", game.getScreen().getClass());
+            endOfGame();
         }
         stage.getViewport().apply();
         stage.draw();
@@ -417,7 +413,12 @@ public class GameScreen implements Screen {
     public void spawnTurret2() {
 
     }
-
+    private void endOfGame(){
+        player1.lost();
+        game.getClient().sendPacket(new PacketInEndOfGame());
+        game.setScreen(new EndScreen(game));
+        log.info("set screen to {}", game.getScreen().getClass());
+    }
     public void handlePackets() {
         if (packetQueue.isEmpty()) {
             return;
@@ -430,14 +431,13 @@ public class GameScreen implements Screen {
             final float mapWidth = 31f;
 
             switch (type) {
-                case PACKETOUTSEARCHMATCH:
-                case PACKETOUTMATCHFOUND:
-                    break;
                 case PACKETOUTCHATMESSAGE:
 //                PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
 //                addMessageToBox(false, packetOutChatMessage.getText());
                     break;
-                case PACKETOUTSTARTMATCH:
+                case PACKETOUTLIEFEPOINTS:
+                    PacketOutLifepoints packetOutLifepoints = (PacketOutLifepoints) packet;
+                    player2.setLifepoints(packetOutLifepoints.getLP());
                     break;
                 case PACKETOUTENDOFWAVE:
                     PacketOutEndOfWave packetOutEndOfWave = (PacketOutEndOfWave) packet;

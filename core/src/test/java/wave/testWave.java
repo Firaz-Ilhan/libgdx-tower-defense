@@ -1,13 +1,8 @@
 package wave;
 
 import com.tower.defense.TowerDefense;
-import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import static com.tower.defense.wave.Wave.waveLeft;
-import static com.tower.defense.wave.Wave.waveRight;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -16,11 +11,11 @@ public class testWave {
 @Test
     public void testSpawning(){
     wave = new Wave(new TowerDefense());
-    assertEquals(1,waveLeft.size);
-    assertEquals(1,waveRight.size);
+    assertEquals(1,wave.waveLeft.size);
+    assertEquals(1,wave.waveRight.size);
     wave.spawnEnemy();
-    assertEquals(2,waveLeft.size);
-    assertEquals(2,waveRight.size);
+    assertEquals(2,wave.waveLeft.size);
+    assertEquals(2,wave.waveRight.size);
 }
 //@Test
 //doesn't work rn, investigating it later

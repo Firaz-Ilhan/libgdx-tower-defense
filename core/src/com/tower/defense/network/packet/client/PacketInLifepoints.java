@@ -1,39 +1,34 @@
-package com.tower.defense.network.packet.server;
+package com.tower.defense.network.packet.client;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import org.json.JSONObject;
 
-public class PacketOutEndOfWave extends Packet {
-
-    private int reward;
-
-    public PacketOutEndOfWave() {
+public class PacketInLifepoints extends Packet {
+    private int LP;
+    public PacketInLifepoints() {
     }
-
-    public PacketOutEndOfWave(int reward) {
+    public PacketInLifepoints(int LP) {
         this.packetType = PacketType.getPacketTypeByClass(getClass());
-        this.reward = reward;
+        this.LP = LP;
     }
 
     @Override
     public JSONObject read() {
         JSONObject object = new JSONObject();
         object.put("id", packetType.getPacketID());
-        object.put("reward", reward);
+        object.put("LP", LP);
         return object;
     }
 
     @Override
     public void write(JSONObject object) {
         this.packetType = PacketType.getPacketTypeByID(object.getInt("id"));
-        this.reward = object.getInt("reward");
+        this.LP = object.getInt("LP");
     }
 
 
-    public int getReward() {
-        return reward;
+    public int getLP() {
+        return LP;
     }
-
-
 }

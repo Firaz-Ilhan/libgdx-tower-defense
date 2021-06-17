@@ -3,7 +3,9 @@ package com.tower.defense.player;
 import com.tower.defense.tower.ITower;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.awt.image.ImageWatched;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Player {
@@ -14,11 +16,13 @@ public class Player {
     private int wallet = 100;
 
     private int lifepoints = 200;
-    private List<ITower> inventory;
+    private LinkedList<ITower> inventory;
 
     public Player(String name) {
         this.name = name;
         log.info("player: {}", name);
+        inventory = new LinkedList<>();
+
     }
 
     /**

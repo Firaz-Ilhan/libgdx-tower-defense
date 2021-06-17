@@ -85,7 +85,11 @@ public class GameScreen implements Screen {
     private boolean canDelete;
     private boolean leftMouseButtonDown;
     private boolean rightMouseButtonDown;
+
     private Tower1 tower1;
+
+    private int tower1Costs;
+
     private Texture enemyImage;
 
     // this boolean determines which side of the map the player is on
@@ -137,6 +141,8 @@ public class GameScreen implements Screen {
         // loading the textures of the turrets
         turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
         turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
+        //set Costs of the turrets
+        //tower1Costs = tower1.getCost();
 
         enemyImage = new Texture(Gdx.files.internal("virus.png"));
 
@@ -309,10 +315,12 @@ public class GameScreen implements Screen {
          * drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
          */
 
-        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles) && buildMode == true) {
+        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles) && buildMode && player1.getWalletValue() >= 20) {
 
             spawnTurret1();
             AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
+
+            player1.buyTower(tower1);
 
 
         } else {
@@ -347,11 +355,14 @@ public class GameScreen implements Screen {
                 //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
 
-                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode == true) {
+                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
 
 
                         tower1ListIterator1.remove();
+                        player1.sellTower(player1.getInventory().lastIndexOf(tower1));
                         AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
+                        //player1.sellTower();
+                        //player1.sellTower();
                         //System.out.println(turretsPlaced);
 
 
@@ -456,14 +467,12 @@ public class GameScreen implements Screen {
      * Method to spawn a Turret1 and add him to the turretsPlaced list
      */
     public void spawnTurret1() {
-        Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        //Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
         tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
         turretsPlaced.add(tower1);
 
-        //turretsPlacedArray.add(tower1);
 
-        //player1TurretsPlaced.add(tower1);
     }
 
 

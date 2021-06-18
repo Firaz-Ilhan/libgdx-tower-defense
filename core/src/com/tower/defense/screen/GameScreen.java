@@ -366,8 +366,7 @@ public class GameScreen implements Screen {
 
 
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
-
-
+                    /*
                         tower1ListIterator1.remove();
                         player1.sellTower(player1.getInventory().lastIndexOf(tower1));
                         AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
@@ -375,12 +374,15 @@ public class GameScreen implements Screen {
                         //player1.sellTower();
                         //System.out.println(turretsPlaced);
 
+                     */
+
 
 
                     //}
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
+                    player1.sellTower(player1.getInventory().lastIndexOf(tower1));
                     System.out.println(turretsPlaced);
                     game.getClient().sendPacket
                             (new PacketInRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));

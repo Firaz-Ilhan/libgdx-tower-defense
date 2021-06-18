@@ -1,44 +1,42 @@
-main INFO  defense.TowerDefense - OS: Windows 10 amd64
-main INFO  defense.TowerDefense - JRE version: 14.0.1
-main INFO  defense.TowerDefense - libGDX version: 1.10.0
-main INFO  defense.TowerDefense - OpenGl version: 4.6
-main INFO  defense.TowerDefense - GPU: GeForce GTX 1060 6GB/PCIe/SSE2
-main INFO  defense.TowerDefense - Current Display: 1920x1080, bpp: 24, hz: 144
-main INFO  screen.MainMenuScreen - display was set to windowed screen mode
-main INFO  defense.TowerDefense - set screen to class com.tower.defense.screen.MainMenuScreen
-main INFO  helper.NetworkINTF - local ip address: 192.168.178.131
-main INFO  screen.MainMenuScreen - set screen to class com.tower.defense.screen.MatchmakingScreen
-main INFO  player.Player - player: Player1
-main INFO  player.Player - player: Player2
-main INFO  wave.Wave - wave count: 1
-main INFO  screen.MainMenuScreen - set screen to class com.tower.defense.screen.GameScreen
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@5bfa8cc5 was added to the inventory
-main INFO  player.Player - wallet: 80
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@666b83a4 was added to the inventory
-main INFO  player.Player - wallet: 60
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@749c877b was added to the inventory
-main INFO  player.Player - wallet: 40
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@efde75f was added to the inventory
-main INFO  player.Player - wallet: 20
+main INFO  server.Server - Starting server on Port 3456
+main INFO  server.Server - New incoming Connection Port: 57412
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSEARCHMATCH
+main INFO  server.Server - New incoming Connection Port: 57413
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSEARCHMATCH
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSTARTMATCH
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSTARTMATCH
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
+ServerConnectionThread INFO  server.Servemain INFO  screen.GameScreen - Traffic: New PACKETOUTADDTOWER
+main INFO  screen.GameScreen - packetoutnewtower received
+ower com.tower.defense.tower.Factory.Tower1@56ace400 was added to the inventory
 main INFO  player.Player - wallet: 36
-main INFO  player.Player - tower at index 2 was sold
-main INFO  player.Player - wallet: 52
-main INFO  player.Player - tower at index 1 was sold
-main INFO  player.Player - wallet: 68
-main INFO  player.Player - tower at index 1 was sold
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@16ecee1 was added to the inventory
-main INFO  player.Player - wallet: 48
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@3b220bcb was added to the inventory
-main INFO  player.Player - wallet: 28
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@2b95e48b was added to the inventory
-main INFO  player.Player - wallet: 8
-main INFO  player.Player - wallet: 24
-main INFO  player.Player - tower at index 0 was sold
-main INFO  player.Player - wallet: 40
-main INFO  player.Player - tower at index 0 was sold
-main INFO  player.Player - wallet: 56
-main INFO  player.Player - tower at index 1 was sold
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@4a3329b9 was added to the inventory
-main INFO  player.Player - wallet: 36
-main INFO  player.Player - wallet: 52
-main INFO  player.Player - tower at index 1 was sold
+main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@47404bea was added to the inventory
+main INFO  player.Player - wallet: 16

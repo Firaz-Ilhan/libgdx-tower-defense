@@ -1,5 +1,6 @@
 package wave;
 
+import com.tower.defense.TowerDefense;
 import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,7 +15,7 @@ public class testWave {
     Wave wave;
 @Test
     public void testSpawning(){
-    wave = new Wave();
+    wave = new Wave(new TowerDefense());
     assertEquals(1,waveLeft.size);
     assertEquals(1,waveRight.size);
     wave.spawnEnemy();

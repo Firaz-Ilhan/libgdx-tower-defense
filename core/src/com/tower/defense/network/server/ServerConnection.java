@@ -3,10 +3,10 @@ package com.tower.defense.network.server;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInChatMessage;
-import com.tower.defense.network.packet.server.PacketOutChatMessage;
-import com.tower.defense.network.packet.server.PacketOutMatchFound;
-import com.tower.defense.network.packet.server.PacketOutSearchMatch;
-import com.tower.defense.network.packet.server.PacketOutStartMatch;
+import com.tower.defense.network.packet.client.PacketInEndOfWave;
+import com.tower.defense.network.packet.client.PacketInAddTower;
+import com.tower.defense.network.packet.client.PacketInRemoveTower;
+import com.tower.defense.network.packet.server.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -18,7 +18,7 @@ import java.net.Socket;
 import java.util.Objects;
 
 
-public class ServerConnection implements Runnable {
+public class ServerConnection extends Thread {
 
     private final static Logger log = LogManager.getLogger(ServerConnection.class);
 
@@ -28,6 +28,12 @@ public class ServerConnection implements Runnable {
     private final DataOutputStream outputStream;
     private boolean running = true;
 
+    /**
+     * @param socket the connection needs to know which socket it is using
+     * @param server and which server it belongs to
+     * @throws IOException the input and output Streams are initialized, based on the socket
+     */
+
     public ServerConnection(Socket socket, Server server) throws IOException {
         this.socket = socket;
         this.server = server;
@@ -35,6 +41,9 @@ public class ServerConnection implements Runnable {
         this.outputStream = new DataOutputStream(socket.getOutputStream());
     }
 
+    /**
+     * this method closes the Connection by closing Streams and Socket
+     */
     public void closeConnection() {
         try {
             inputStream.close();
@@ -45,6 +54,15 @@ public class ServerConnection implements Runnable {
         }
     }
 
+
+    /**
+     * while the connection is running, it checks the inputStream for incoming packets.
+     * While there is no Packet the thread sleeps.
+     * Else the StreamContent is read into a Jason Object.
+     * To get the Type (Class) of a Packet it uses the Enum PacketType depending on the ID
+     * Then a new Instance of this Type of Packet is made. It contains the JasonObject
+     * it is then transferred to the handle() Method
+     */
     @Override
     public void run() {
         while (running) {
@@ -63,20 +81,30 @@ public class ServerConnection implements Runnable {
                 handle(packet);
             } catch (Exception e) {
                 e.printStackTrace();
-                closeConnection();
             }
         }
+
     }
 
+    /**
+     * This Method decides what to do with each Type of packet
+     * Most of the time it sends an "out" Type Packet of the same context to the client
+     * Every new "IN" Packet Type should be added to this switch case
+     *
+     * @param packet packet that was created in run()
+     * @throws IOException
+     */
     public void handle(Packet packet) throws IOException {
         PacketType type = packet.getPacketType();
 
         log.info("Traffic: New {}", type.toString());
 
         switch (type) {
+            //calls GameManager to look for an opponent
             case PACKETINSEARCHMATCH:
 
                 ServerConnection serverSearchConnection = server.getGameManager().searchingForGame(this);
+                //if null is returned, player must have been matched, so they send a matchFound to the own and to the partners Client
                 if (serverSearchConnection == null) {
                     PacketOutMatchFound packetOutMatchFound = new PacketOutMatchFound();
                     sendPacketToClient(packetOutMatchFound);
@@ -106,11 +134,55 @@ public class ServerConnection implements Runnable {
                 }
 
                 PacketOutStartMatch packetOutStartMatch = new PacketOutStartMatch();
-                sendPacketToClient(packetOutStartMatch);
                 partnerConnection.sendPacketToClient(packetOutStartMatch);
 
                 break;
+            case PACKETINENDOFWAVE:
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
+                log.info("Server connection is: {}", partnerConnection);
+                if (partnerConnection == null) {
+                    return;
+                }
+                PacketInEndOfWave packetInEndOfWave = (PacketInEndOfWave) packet;
+                PacketOutEndOfWave packetOutEndOfWave = new PacketOutEndOfWave(packetInEndOfWave.getReward());
+                partnerConnection.sendPacketToClient(packetOutEndOfWave);
+                log.info("packetOutEndOfWave sent");
+                break;
+            case PACKETINENDOFGAME:
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
 
+                if (partnerConnection == null) {
+                    return;
+                }
+                PacketOutEndOfGame packetOutEndOfGame = new PacketOutEndOfGame();
+                partnerConnection.sendPacketToClient(packetOutEndOfGame);
+                break;
+            case PACKETINADDTOWER:
+                log.info("packetinnewtower sent");
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
+
+                if (partnerConnection == null) {
+                    return;
+                }
+
+                PacketInAddTower packetInAddTower = (PacketInAddTower) packet;
+                PacketOutAddTower packetOutAddTower =
+                        new PacketOutAddTower(packetInAddTower.getX(), packetInAddTower.getY());
+                partnerConnection.sendPacketToClient(packetOutAddTower);
+                break;
+            case PACKETINREMOVETOWER:
+                log.info("packetinremovetower sent");
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
+
+                if (partnerConnection == null) {
+                    return;
+                }
+
+                PacketInRemoveTower packetInRemoveTower = (PacketInRemoveTower) packet;
+                PacketOutRemoveTower packetOutRemoveTower =
+                        new PacketOutRemoveTower(packetInRemoveTower.getX(), packetInRemoveTower.getY());
+                partnerConnection.sendPacketToClient(packetOutRemoveTower);
+                break;
             default:
                 break;
         }
@@ -118,6 +190,10 @@ public class ServerConnection implements Runnable {
 
     }
 
+    /**
+     * @param packet "Out" Type Packet
+     * @throws IOException The packet is written to the Sockets output Stream
+     */
     private void sendPacketToClient(Packet packet) throws IOException {
         outputStream.writeUTF(packet.read().toString());
         outputStream.flush();

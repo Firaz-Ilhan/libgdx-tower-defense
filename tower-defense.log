@@ -1,7 +1,7 @@
 main INFO  server.Server - Starting server on Port 3456
-main INFO  server.Server - New incoming Connection Port: 57412
+main INFO  server.Server - New incoming Connection Port: 55313
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSEARCHMATCH
-main INFO  server.Server - New incoming Connection Port: 57413
+main INFO  server.Server - New incoming Connection Port: 55314
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSEARCHMATCH
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSTARTMATCH
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSTARTMATCH
@@ -11,10 +11,6 @@ ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDT
 ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
 ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
-ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
-ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
-ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
-ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
 ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
@@ -31,12 +27,12 @@ ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMO
 ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINREMOVETOWER
 ServerConnectionThread INFO  server.ServerConnection - packetinremovetower sent
-ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
-ServerConnectionThread INFO  server.ServerConnection - packetinnewtower sent
-ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
-ServerConnectionThread INFO  server.Servemain INFO  screen.GameScreen - Traffic: New PACKETOUTADDTOWER
-main INFO  screen.GameScreen - packetoutnewtower received
-ower com.tower.defense.tower.Factory.Tower1@56ace400 was added to the inventory
-main INFO  player.Player - wallet: 36
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@47404bea was added to the inventory
-main INFO  player.Player - wallet: 16
+n INFO  screen.GameScreen - Traffic: New PACKETOUTREMOVETOWER
+main INFO  screen.GameScreen - packetoutremovetower received
+main INFO  screen.GameScreen - Traffic: New PACKETOUTREMOVETOWER
+main INFO  screen.GameScreen - packetoutremovetower received
+yer.Player - tower at index 3 was sold
+main INFO  player.Player - wallet: 44
+main INFO  player.Player - tower at index 2 was sold
+main INFO  player.Player - wallet: 60
+main INFO  player.Player - tower at index 1 was sold

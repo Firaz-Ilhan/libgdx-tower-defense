@@ -79,6 +79,9 @@ public class GameScreen implements Screen {
     private Table sellModeActive;
     private Table buildModeActive;
 
+    //Alert that it is not allowed to delete the last owning turret
+    private boolean zeroTowerAlert;
+
 
     //Booleans to avoid creating multiple turrets by clicking once
     private boolean canDraw;
@@ -119,7 +122,7 @@ public class GameScreen implements Screen {
         this.rightMouseButtonDown = false;
         this.canDraw = false;
         this.canDelete = false;
-
+        this.zeroTowerAlert = false;
 
 
         this.buildMode = false;
@@ -185,32 +188,6 @@ public class GameScreen implements Screen {
         sellTurretsController = new IngameButtonsController();
 
 
-        //PopUpMenu - create a border to show witch mode is currently active
-        /*
-        sellModeActive = new Table();
-        buildModeActive = new Table();
-
-        final Image selectBorder = new Image(new Texture("core/assets/buttons/selectBorder.png"));
-        final Image noBorder = new Image(new Texture("core/assets/buttons/noBorder.png"));
-        selectBorder.setSize(100,100);
-
-        sellModeActive.bottom().left();
-        sellModeActive.add(selectBorder);
-        sellModeActive.add(noBorder);
-
-        buildModeActive.bottom().left();
-        buildModeActive.add(noBorder);
-        buildModeActive.add(selectBorder);
-
-        stage.addActor(sellModeActive);
-        stage.addActor(buildModeActive);
-
-         */
-
-
-
-
-
     }
 
     @Override
@@ -254,6 +231,11 @@ public class GameScreen implements Screen {
         font.draw(renderer.getBatch(), "Money: " + player1.getWalletValue(), 0, 850);
         font.draw(renderer.getBatch(), "Money: " + player2.getWalletValue(), 1400, 850);
         font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 800, 900);
+
+        if(zeroTowerAlert){
+            font.draw(renderer.getBatch(), "You can't own 0 turrets !" , hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+        }
+
 
         renderer.getBatch().end();
 
@@ -343,13 +325,14 @@ public class GameScreen implements Screen {
             //Output if player tries to delete the last turret
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1) {
-                System.out.println("You cant own 0 turrets");
+                //System.out.println("You cant own 0 turrets");
+               // zeroTowerAlert = true;
             }
 
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
 
-
+                //-zeroTowerAllert = false;
 
                 //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
                 //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
@@ -384,16 +367,6 @@ public class GameScreen implements Screen {
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);
         rightMouseButtonDown = Gdx.input.isButtonPressed(1);
 
-        //PopUpMenu - draw correct borderTable
-        /*
-        if(sellMode == true){
-            sellModeActive.draw(spriteBatch,1);
-        }else if(buildMode == true){
-            buildModeActive.draw(spriteBatch,1);
-        }
-
-         */
-
 
         spriteBatch.end();
 
@@ -417,7 +390,7 @@ public class GameScreen implements Screen {
         stage.draw();
 
 
-        //PopUpMenu - draw
+        //Draw Build-/SellMode Menu
         sellTurretsController.draw();
 
 
@@ -495,6 +468,7 @@ public class GameScreen implements Screen {
         else if(sellTurretsController.isBuildModePressed()){
             buildMode = true;
             sellMode = false;
+            zeroTowerAlert = false;
             //System.out.println("Sell mode activated");
             //System.out.println(buildMode);
             //System.out.println(sellMode);

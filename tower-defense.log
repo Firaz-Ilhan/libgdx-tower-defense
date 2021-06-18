@@ -18,23 +18,27 @@ main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@666b83a4
 main INFO  player.Player - wallet: 60
 main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@749c877b was added to the inventory
 main INFO  player.Player - wallet: 40
-main INFO  player.Player - wallet: 56
-main INFO  player.Player - tower at index 1 was sold
-main INFO  player.Player - wallet: 72
-main INFO  player.Player - tower at index 0 was sold
 main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@efde75f was added to the inventory
-main INFO  player.Player - wallet: 52
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@16ecee1 was added to the inventory
-main INFO  player.Player - wallet: 32
-main INFO  player.Player - wallet: 48
-main INFO  player.Player - tower at index 1 was sold
-main INFO  player.Player - wallet: 64
-main INFO  player.Player - tower at index 1 was sold
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@3b220bcb was added to the inventory
-main INFO  player.Player - wallet: 44
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@2b95e48b was added to the inventory
-main INFO  player.Player - wallet: 24
-main INFO  player.Player - wallet: 40
+main INFO  player.Player - wallet: 20
+main INFO  player.Player - wallet: 36
 main INFO  player.Player - tower at index 2 was sold
+main INFO  player.Player - wallet: 52
+main INFO  player.Player - tower at index 1 was sold
+main INFO  player.Player - wallet: 68
+main INFO  player.Player - tower at index 1 was sold
+main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@16ecee1 was added to the inventory
+main INFO  player.Player - wallet: 48
+main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@3b220bcb was added to the inventory
+main INFO  player.Player - wallet: 28
+main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@2b95e48b was added to the inventory
+main INFO  player.Player - wallet: 8
+main INFO  player.Player - wallet: 24
+main INFO  player.Player - tower at index 0 was sold
+main INFO  player.Player - wallet: 40
+main INFO  player.Player - tower at index 0 was sold
 main INFO  player.Player - wallet: 56
+main INFO  player.Player - tower at index 1 was sold
+main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@4a3329b9 was added to the inventory
+main INFO  player.Player - wallet: 36
+main INFO  player.Player - wallet: 52
 main INFO  player.Player - tower at index 1 was sold

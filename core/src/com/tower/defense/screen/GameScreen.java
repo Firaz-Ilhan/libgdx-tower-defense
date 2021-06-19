@@ -1,8 +1,6 @@
 package com.tower.defense.screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,9 +13,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -81,9 +80,7 @@ public class GameScreen implements Screen {
     // list to store towers of the opponent
     private final LinkedList enemyTowersPlaced = new LinkedList<ITower>();
 
-
-    //PopUP menu
-    IngameButtonsController sellTurretsController;
+    private final IngameButtonsController sellTurretsController;
     private boolean sellMode;
     private boolean buildMode;
     private Table sellModeActive;
@@ -118,20 +115,33 @@ public class GameScreen implements Screen {
 
     private Skin skin;
 
-
     public GameScreen(TowerDefense game) {
         this.game = game;
         this.camera = new OrthographicCamera();
         this.viewport = new FitViewport(1600, 900);
         // create stage and set it as input processor
         this.stage = new Stage(viewport);
+        this.skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
 
         // sell and buy towers
         sellTurretsController = new IngameButtonsController();
 
+        InputProcessor backProcessor = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+
+                if ((keycode == Input.Keys.ESCAPE)) {
+                    quitGameConfirm();
+                }
+
+                return false;
+            }
+        };
+
         // allows multiple input processors
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(backProcessor);
         multiplexer.addProcessor(sellTurretsController.getButtonStage());
         Gdx.input.setInputProcessor(multiplexer);
 
@@ -169,9 +179,6 @@ public class GameScreen implements Screen {
         //creating the textures of the turrets
         turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
         turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
-
-        // loading skin
-        skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
 
         // setting up the camera
         float width = 1600;
@@ -213,7 +220,7 @@ public class GameScreen implements Screen {
         camera.update();
         renderer.setView(camera);
 
-        //check wether a button was clicked
+        // Check if a button was clicked
         handleInput();
 
         // getting the current mouse position
@@ -575,6 +582,60 @@ public class GameScreen implements Screen {
 
     public static void handle(Packet packet) {
         packetQueue.addFirst(packet);
+    }
+
+    public void quitGameConfirm() {
+
+        Label label = new Label("Do you want to quit the game?", skin, "black");
+        TextButton btnYes = new TextButton("Quit", skin, "small");
+        TextButton btnNo = new TextButton("Cancel", skin, "small");
+
+        final Dialog dialog = new Dialog("Quit the Game?", skin) {
+            {
+                text(label);
+                button(btnYes);
+                button(btnNo);
+            }
+        }.show(stage);
+
+        dialog.setModal(true);
+        dialog.setMovable(true);
+        dialog.setResizable(false);
+
+        btnYes.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                // remove dialog from the stage
+                dialog.hide();
+                dialog.cancel();
+                dialog.remove();
+
+                // switch to EndScreen
+                game.setScreen(new EndScreen(game));
+                log.info("set screen to {}", game.getScreen().getClass());
+
+                if (game.getClient() != null) {
+                    // close connection and stop ClientConnectionThread
+                    game.getClient().getClientConnection().closeConnection();
+                }
+                return true;
+            }
+
+        });
+
+        btnNo.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                // return to the game and remove dialog from the stage
+                dialog.cancel();
+                dialog.hide();
+                dialog.remove();
+
+                return true;
+            }
+
+        });
     }
 
 }

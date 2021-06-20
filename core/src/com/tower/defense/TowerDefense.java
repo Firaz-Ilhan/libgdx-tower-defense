@@ -54,6 +54,7 @@ public class TowerDefense extends Game {
     @Override
     public void dispose() {
         assetManager.dispose();
+        screen.dispose();
     }
 
     public Settings getSettings() {

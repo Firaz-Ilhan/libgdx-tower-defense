@@ -204,8 +204,8 @@ public class GameScreen implements Screen {
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 2;
         parameter.size = 30;
-        parameter.shadowOffsetX = 1;
-        parameter.shadowOffsetY = -2;
+        parameter.shadowOffsetX = 2;
+        parameter.shadowOffsetY = -3;
         parameter.magFilter = Texture.TextureFilter.Linear;
         parameter.minFilter = Texture.TextureFilter.Linear;
         font = generator.generateFont(parameter);

@@ -60,8 +60,7 @@ public class Wave {
                 lastSpawnTime = TimeUtils.nanoTime();
                 enemiesSpawned++;
             }
-        }
-        else{
+        } else {
             endOfWave();
         }
     }
@@ -92,37 +91,36 @@ public class Wave {
             // it will move towards it based on which coordinate (x and/or y) is wrong
             if (currentEnemyPosition.y != nextWantedWaypoint.y) {
                 if (currentEnemyPosition.y > nextWantedWaypoint.y) {
-                    if(currentEnemyPosition.y - positionAddAmount < nextWantedWaypoint.y){
+                    if (currentEnemyPosition.y - positionAddAmount < nextWantedWaypoint.y) {
                         currentEnemyPosition.y = nextWantedWaypoint.y;
                         enemy.setPosition(currentEnemyPosition);
-                    }
-                    else {
+                    } else {
                         currentEnemyPosition.y = enemy.getY() - positionAddAmount;
                         enemy.setPosition(currentEnemyPosition);
                     }
                 } else {
-                    if(currentEnemyPosition.y + positionAddAmount > nextWantedWaypoint.y){
+                    if (currentEnemyPosition.y + positionAddAmount > nextWantedWaypoint.y) {
                         currentEnemyPosition.y = nextWantedWaypoint.y;
                         enemy.setPosition(currentEnemyPosition);
-                    }else {
+                    } else {
                         currentEnemyPosition.y = enemy.getY() + positionAddAmount;
                         enemy.setPosition(currentEnemyPosition);
                     }
                 }
             } else if (currentEnemyPosition.x != nextWantedWaypoint.x) {
                 if (currentEnemyPosition.x > nextWantedWaypoint.x) {
-                    if(currentEnemyPosition.x - positionAddAmount < nextWantedWaypoint.x){
+                    if (currentEnemyPosition.x - positionAddAmount < nextWantedWaypoint.x) {
                         currentEnemyPosition.x = nextWantedWaypoint.x;
                         enemy.setPosition(currentEnemyPosition);
-                    }else {
+                    } else {
                         currentEnemyPosition.x = enemy.getX() - positionAddAmount;
                         enemy.setPosition(currentEnemyPosition);
                     }
                 } else {
-                    if(currentEnemyPosition.x + positionAddAmount > nextWantedWaypoint.x){
+                    if (currentEnemyPosition.x + positionAddAmount > nextWantedWaypoint.x) {
                         currentEnemyPosition.x = nextWantedWaypoint.x;
                         enemy.setPosition(currentEnemyPosition);
-                    }else {
+                    } else {
                         currentEnemyPosition.x = enemy.getX() + positionAddAmount;
                         enemy.setPosition(currentEnemyPosition);
                     }
@@ -160,14 +158,16 @@ public class Wave {
     // The waveSpeed, waveSize and waveReward all increase for
     // the next wave
     public void endOfWave() {
-        if(!pausing) {
+        if (!pausing) {
             int reward = calculateReward();
             GameScreen.player1.addToWallet(reward);
-            game.getClient().sendPacket(new PacketInEndOfWave(reward));
+            if (game.getClient() != null) {
+                game.getClient().sendPacket(new PacketInEndOfWave(reward));
+            }
             pausing = true;
-            log.info("Pausing: {}",pausing);
+            log.info("Pausing: {}", pausing);
         }
-        if(partnerIsPausing){
+        if (partnerIsPausing) {
             waveSpeed = Math.round(waveSpeed * 0.75);
             waveSize = Math.round(waveSize * 1.1);
             waveReward = (int) Math.round(waveReward * 1.5);
@@ -180,6 +180,7 @@ public class Wave {
         }
 
     }
+
     public int calculateReward() {
         waveReward = waveReward - enemiesPastLeft * 2;
         log.info("reward: {}", waveReward);
@@ -190,18 +191,23 @@ public class Wave {
     public int getWaveCount() {
         return waveCount;
     }
+
     //is called by the handle() method if a EndOfWave packet was received
-    public void partnerWaveEnded(int reward){
-            log.info("partners wave ended");
-            GameScreen.player2.addToWallet(reward);
-            partnerIsPausing = true;
+    public void partnerWaveEnded(int reward) {
+        log.info("partners wave ended");
+        GameScreen.player2.addToWallet(reward);
+        partnerIsPausing = true;
     }
+
     //is called in EndOfWave()
-    public void startWave(){
-        partnerIsPausing =false;
+    public void startWave() {
+        partnerIsPausing = false;
         pausing = false;
         waveCount++;
     }
-    public boolean isPausing(){return pausing;}
+
+    public boolean isPausing() {
+        return pausing;
+    }
 }
 

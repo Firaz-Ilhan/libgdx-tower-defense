@@ -12,11 +12,13 @@ import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
 
 public class Wave {
 
-    private final static Logger log = LogManager.getLogger(Wave.class);
-    private final TowerDefense game;
     // Arraylist of existing Enemies
     public Array<Enemy> waveLeft;
     public Array<Enemy> waveRight;
+    private final static Logger log = LogManager.getLogger(Wave.class);
+    private final TowerDefense game;
+
+
     // lastSpawnTime is checked before creating an enemy
     private long lastSpawnTime;
     private int enemiesPastLeft = 0;

@@ -17,6 +17,7 @@ import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInChatMessage;
+import com.tower.defense.network.packet.client.PacketInEndOfGame;
 import com.tower.defense.network.packet.client.PacketInSearchMatch;
 import com.tower.defense.network.packet.client.PacketInStartMatch;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
@@ -234,6 +235,7 @@ public class MatchmakingScreen implements Screen {
 
     @Override
     public void dispose() {
+        game.getClient().sendPacket(new PacketInEndOfGame());
         stage.dispose();
         skin.dispose();
         game.dispose();
@@ -274,6 +276,11 @@ public class MatchmakingScreen implements Screen {
             log.info("Traffic: New {}", type.toString());
 
             switch (type) {
+                case PACKETOUTENDOFGAME:
+                    if(game.getClient()!=null){
+                        connectionStatus.setText("Partner lost connection");
+                    }
+                    break;
                 case PACKETOUTSEARCHMATCH:
                     connectionStatus.setText("Connected: Waiting for Enemy");
                     break;

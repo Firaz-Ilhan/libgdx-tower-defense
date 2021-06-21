@@ -84,6 +84,7 @@ public class GameScreen implements Screen {
     private final IngameButtonsController sellTurretsController;
     private boolean sellMode;
     private boolean buildMode;
+    private boolean quit;
     private Table sellModeActive;
     private Table buildModeActive;
 
@@ -139,14 +140,12 @@ public class GameScreen implements Screen {
                 return false;
             }
         };
-
         // allows multiple input processors
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(backProcessor);
         multiplexer.addProcessor(sellTurretsController.getButtonStage());
         Gdx.input.setInputProcessor(multiplexer);
-
 
         this.leftMouseButtonDown = false;
         this.rightMouseButtonDown = false;
@@ -634,6 +633,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        if(!quit){
+            game.getClient().sendPacket(new PacketInEndOfGame());
+            quit= true;
+        }
+
         enemyImage.dispose();
         map.dispose();
         game.dispose();

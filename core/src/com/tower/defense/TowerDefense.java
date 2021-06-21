@@ -1,5 +1,6 @@
 package com.tower.defense;
 
+import com.tower.defense.network.packet.client.PacketInEndOfGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,8 +54,8 @@ public class TowerDefense extends Game {
 
     @Override
     public void dispose() {
+        client.sendPacket(new PacketInEndOfGame());
         assetManager.dispose();
-        screen.dispose();
     }
 
     public Settings getSettings() {

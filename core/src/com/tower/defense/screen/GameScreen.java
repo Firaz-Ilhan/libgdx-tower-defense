@@ -140,14 +140,12 @@ public class GameScreen implements Screen {
                 return false;
             }
         };
-
         // allows multiple input processors
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(backProcessor);
         multiplexer.addProcessor(sellTurretsController.getButtonStage());
         Gdx.input.setInputProcessor(multiplexer);
-
 
         this.leftMouseButtonDown = false;
         this.rightMouseButtonDown = false;

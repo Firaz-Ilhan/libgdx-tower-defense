@@ -612,9 +612,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        if(!quit){
+        if (!quit && game.getClient() != null) {
             game.getClient().sendPacket(new PacketInEndOfGame());
-            quit= true;
+            quit = true;
         }
 
         enemyImage.dispose();

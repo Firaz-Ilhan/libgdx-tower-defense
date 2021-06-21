@@ -43,6 +43,8 @@ public class MatchmakingScreen implements Screen {
     private ScrollPane scroller;
     private TextField inputArea;
 
+    private Client client;
+
 
     public MatchmakingScreen(final TowerDefense game) {
         this.game = game;
@@ -133,7 +135,7 @@ public class MatchmakingScreen implements Screen {
                     try {
                         if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy") && !connectionStatus.getText().toString().equals("Connected: Match found")) {
                             connectionStatus.setText("Trying to connect");
-                            Client client = new Client(ip, 3456);
+                            client = new Client(ip, 3456);
                             log.info("Creating Client with IP: {}", ip);
                             client.setCurrentScreen(instance);
                             game.setClient(client);
@@ -142,9 +144,12 @@ public class MatchmakingScreen implements Screen {
                         }
                     } catch (Exception e1) {
                         connectionStatus.setText("could not connect to the server");
+                        client = null; // set client to null after failed connection attempt
                     }
-                }
-                else {
+
+                    game.setClient(client);
+
+                } else {
                     connectionStatus.setText("Please enter a correct server IPv4 address,if you're running the server,type your own");
                     log.info("IP from Textfield is: {}(else Block)", ip);
                 }
@@ -260,10 +265,10 @@ public class MatchmakingScreen implements Screen {
      * Most of the time it changes something in the GUI.
      */
     public void handlePacketQueue() {
-        if(packetQueue.isEmpty()){
+        if (packetQueue.isEmpty()) {
             return;
         }
-        while(!packetQueue.isEmpty()) {
+        while (!packetQueue.isEmpty()) {
             Packet packet = packetQueue.removeFirst();
             PacketType type = packet.getPacketType();
 
@@ -271,7 +276,7 @@ public class MatchmakingScreen implements Screen {
 
             switch (type) {
                 case PACKETOUTENDOFGAME:
-                    if(game.getClient()!=null){
+                    if (game.getClient() != null) {
                         connectionStatus.setText("Partner lost connection");
                     }
                     break;
@@ -305,10 +310,9 @@ public class MatchmakingScreen implements Screen {
     }
 
     /**
-     *
      * @param packet packet that was created in run() by ClientConnection()
      */
-    public void handle(Packet packet){
+    public void handle(Packet packet) {
         packetQueue.addFirst(packet);
     }
 }

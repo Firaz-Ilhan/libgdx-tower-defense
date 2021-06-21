@@ -54,7 +54,9 @@ public class TowerDefense extends Game {
 
     @Override
     public void dispose() {
-        client.sendPacket(new PacketInEndOfGame());
+        if (client != null) {
+            client.sendPacket(new PacketInEndOfGame());
+        }
         assetManager.dispose();
     }
 

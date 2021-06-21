@@ -1,20 +1,23 @@
 package com.tower.defense.wave;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
 import com.tower.defense.network.packet.client.PacketInLifepoints;
 import com.tower.defense.player.Player;
+
 import java.util.Iterator;
 
-public class RenderWave{
-    public static void renderWave(Player player,Wave waveClass) {
+public class RenderWave {
+
+    public static void renderWave(Player player, Wave waveClass) {
 
         Array<Enemy> wave;
 
-        if(player.getPlayerSide()){
+        if (player.getPlayerSide()) {
             wave = waveClass.waveLeft;
-        }
-        else{
+        } else {
             wave = waveClass.waveRight;
         }
         // with an iterator it goes through each wave step by step
@@ -33,37 +36,36 @@ public class RenderWave{
             // it will move towards it based on which coordinate (x and/or y) is wrong
             if (currentEnemyPosition.y != nextWantedWaypoint.y) {
                 if (currentEnemyPosition.y > nextWantedWaypoint.y) {
-                    if(currentEnemyPosition.y - positionAddAmount < nextWantedWaypoint.y){
+                    if (currentEnemyPosition.y - positionAddAmount < nextWantedWaypoint.y) {
                         currentEnemyPosition.y = nextWantedWaypoint.y;
                         enemy.setPosition(currentEnemyPosition);
-                    }
-                    else {
+                    } else {
                         currentEnemyPosition.y = enemy.getY() - positionAddAmount;
                         enemy.setPosition(currentEnemyPosition);
                     }
                 } else {
-                    if(currentEnemyPosition.y + positionAddAmount > nextWantedWaypoint.y){
+                    if (currentEnemyPosition.y + positionAddAmount > nextWantedWaypoint.y) {
                         currentEnemyPosition.y = nextWantedWaypoint.y;
                         enemy.setPosition(currentEnemyPosition);
-                    }else {
+                    } else {
                         currentEnemyPosition.y = enemy.getY() + positionAddAmount;
                         enemy.setPosition(currentEnemyPosition);
                     }
                 }
             } else if (currentEnemyPosition.x != nextWantedWaypoint.x) {
                 if (currentEnemyPosition.x > nextWantedWaypoint.x) {
-                    if(currentEnemyPosition.x - positionAddAmount < nextWantedWaypoint.x){
+                    if (currentEnemyPosition.x - positionAddAmount < nextWantedWaypoint.x) {
                         currentEnemyPosition.x = nextWantedWaypoint.x;
                         enemy.setPosition(currentEnemyPosition);
-                    }else {
+                    } else {
                         currentEnemyPosition.x = enemy.getX() - positionAddAmount;
                         enemy.setPosition(currentEnemyPosition);
                     }
                 } else {
-                    if(currentEnemyPosition.x + positionAddAmount > nextWantedWaypoint.x){
+                    if (currentEnemyPosition.x + positionAddAmount > nextWantedWaypoint.x) {
                         currentEnemyPosition.x = nextWantedWaypoint.x;
                         enemy.setPosition(currentEnemyPosition);
-                    }else {
+                    } else {
                         currentEnemyPosition.x = enemy.getX() + positionAddAmount;
                         enemy.setPosition(currentEnemyPosition);
                     }
@@ -79,14 +81,16 @@ public class RenderWave{
             // removed and the player looses health points based
             // on the enemy's damage
             if (enemy.getY() < -10) {
-                if(player.getPlayerSide()) {
+                if (player.getPlayerSide()) {
                     player.reduceLifepoints(enemy.getDamage());
                     //NETWORKING
-                    waveClass.getGame().getClient().sendPacket(new PacketInLifepoints(player.getLifepoints()));
+                    if (waveClass.getGame().getClient() != null) {
+                        waveClass.getGame().getClient().sendPacket(new PacketInLifepoints(player.getLifepoints()));
+                    }
                     //
                     waveClass.enemyPassed();
                 }
-                    iter.remove();
+                iter.remove();
             }
 
             // if the lifepoints of an enemy are reduced

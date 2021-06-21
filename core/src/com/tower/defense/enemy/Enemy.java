@@ -96,7 +96,7 @@ public abstract class Enemy {
         if (damageReceived > 0) {
             lifepoints -= damageReceived;
         } else {
-            log.info("You can not make a negative damage");
+            log.info("You can not deal negative damage");
         }
 
     }

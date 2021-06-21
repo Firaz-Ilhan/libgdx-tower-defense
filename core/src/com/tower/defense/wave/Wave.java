@@ -39,7 +39,6 @@ public class Wave {
         waveLeft = new Array<Enemy>();
         waveRight = new Array<Enemy>();
         spawnEnemy();
-        log.info("wave count: {}", waveCount);
     }
 
     public void spawnEnemy() {

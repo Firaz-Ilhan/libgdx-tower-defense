@@ -47,7 +47,7 @@ public class ClientConnection implements Runnable {
     public void sendPacketToServer(Packet packet) throws IOException {
         outputStream.writeUTF(packet.read().toString());
         outputStream.flush();
-        System.out.println("clientConnection sent packet");
+        log.debug("clientConnection sent packet");
     }
 
     /**

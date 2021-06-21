@@ -155,7 +155,6 @@ public class ServerConnection extends Thread {
                 partnerConnection.sendPacketToClient(packetOutEndOfGame);
                 break;
             case PACKETINADDTOWER:
-                log.info("packetinnewtower sent");
                 partnerConnection = server.getGameManager().getPartnerConnection(this);
 
                 if (partnerConnection == null) {
@@ -168,7 +167,6 @@ public class ServerConnection extends Thread {
                 partnerConnection.sendPacketToClient(packetOutAddTower);
                 break;
             case PACKETINREMOVETOWER:
-                log.info("packetinremovetower sent");
                 partnerConnection = server.getGameManager().getPartnerConnection(this);
 
                 if (partnerConnection == null) {

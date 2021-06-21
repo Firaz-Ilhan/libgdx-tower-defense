@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
@@ -361,25 +360,9 @@ public class GameScreen implements Screen {
 
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
-
                 //-zeroTowerAllert = false;
-                //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
-                //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
-
 
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
-                    /*
-                        tower1ListIterator1.remove();
-                        player1.sellTower(player1.getInventory().lastIndexOf(tower1));
-                        AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                        //player1.sellTower();
-                        //player1.sellTower();
-                        //System.out.println(turretsPlaced);
-
-                     */
-
-
-                    //}
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
@@ -533,16 +516,10 @@ public class GameScreen implements Screen {
         if (sellTurretsController.isSellModePressed()) {
             sellMode = true;
             buildMode = false;
-            //System.out.println("Build mode activated");
-            //System.out.println(buildMode);
-            //System.out.println(sellMode);
         } else if (sellTurretsController.isBuildModePressed()) {
             buildMode = true;
             sellMode = false;
             zeroTowerAlert = false;
-            //System.out.println("Sell mode activated");
-            //System.out.println(buildMode);
-            //System.out.println(sellMode);
         }
     }
 

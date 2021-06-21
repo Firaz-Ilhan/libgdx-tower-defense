@@ -14,12 +14,14 @@ public class Player {
     private boolean lost = false;
     private String name;
     private int wallet = 100;
+    private boolean playerSide;
 
     private int lifepoints = 200;
     private LinkedList<ITower> inventory;
 
-    public Player(String name) {
+    public Player(String name, boolean playerSide) {
         this.name = name;
+        this.playerSide = playerSide;
         log.info("player: {}", name);
         inventory = new LinkedList<>();
 
@@ -90,6 +92,20 @@ public class Player {
     }
 
     /**
+     * can be called to update opponents lifepoints
+     * @param lifepoints
+     */
+    public void setLifepoints(int lifepoints) {
+        this.lifepoints = lifepoints;
+    }
+
+    /**
+     * sets boolean lost to true
+     */
+    public void lost(){
+        lost = true;
+    }
+    /**
      * @return wallet
      */
     public int getWalletValue() {
@@ -109,11 +125,14 @@ public class Player {
     public String getName() {
         return name;
     }
-    public void lost(){
-        lost = true;
-    }
+
 
     public boolean hasLost() {
         return lost;
     }
+
+    public boolean getPlayerSide() {
+        return playerSide;
+    }
+
 }

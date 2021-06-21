@@ -5,14 +5,17 @@ import com.tower.defense.network.packet.PacketType;
 import org.json.JSONObject;
 
 public class PacketInEndOfWave extends Packet {
-private int reward;
+
+    private int reward;
 
     public PacketInEndOfWave() {
     }
+
     public PacketInEndOfWave(int walletValue) {
         this.packetType = PacketType.getPacketTypeByClass(getClass());
         this.reward = walletValue;
     }
+
     @Override
     public JSONObject read() {
         JSONObject object = new JSONObject();

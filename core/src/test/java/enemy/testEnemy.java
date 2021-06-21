@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class testEnemy {
     @Test
     public void testDamageReceiving(){
-        Enemy1 enemy = new Enemy1(0,0,100,5);
+        Enemy1 enemy = new Enemy1(0,0,100,5,25);
         int lifepointsFull = enemy.getLifepoints();
         enemy.setLifepoints(2);
 
@@ -16,7 +16,7 @@ public class testEnemy {
     }
     @Test
     public void testNegativeDamageReceiving(){
-        Enemy1 enemy = new Enemy1(0,0,100,5);
+        Enemy1 enemy = new Enemy1(0,0,100,5,25);
         int lifepointsFull = enemy.getLifepoints();
         enemy.setLifepoints(-2);
 

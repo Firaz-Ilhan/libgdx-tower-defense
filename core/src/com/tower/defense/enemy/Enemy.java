@@ -12,6 +12,7 @@ public abstract class Enemy {
     private float posX;
     private float posY;
     private int lifepoints;
+    private float speed;
     private int damage;
 
     // ArrayLists that are used to tell an Enemy what wayPoints they have
@@ -24,11 +25,13 @@ public abstract class Enemy {
     // wavePattern the enemy currently moves to
     private int waypointPosition = 0;
     private final static Logger log = (Logger) LogManager.getLogger(Enemy.class);
-    public Enemy(float x, float y, int lifepoints, int damage) {
+
+    public Enemy(float x, float y, int lifepoints, int damage, float speed) {
         this.posX = x;
         this.posY = y;
         this.lifepoints = lifepoints;
         this.damage = damage;
+        this.speed = speed;
         wavePatternLeft = new ArrayList<>(Arrays.asList(new Vector2(525, 525), new Vector2(325, 525),
                 new Vector2(325, 225), new Vector2(425, 225), new Vector2(425, -20)));
         wavePatternRight = new ArrayList<>(Arrays.asList(new Vector2(1025, 525), new Vector2(1225, 525),
@@ -64,25 +67,21 @@ public abstract class Enemy {
     }
 
     /**
-     * @param posY
-     * sets the enemy's Y position
+     * @param posY sets the enemy's Y position
      */
     public void setY(float posY) {
         this.posY = posY;
     }
 
     /**
-     * @param posX
-     * sets the enemy's X position
+     * @param posX sets the enemy's X position
      */
     public void setX(float posX) {
         this.posX = posX;
     }
 
     /**
-     *
-     * @param newPos
-     * sets the enemy's new position (both x and y)
+     * @param newPos sets the enemy's new position (both x and y)
      */
     public void setPosition(Vector2 newPos) {
         this.posX = newPos.x;
@@ -96,14 +95,13 @@ public abstract class Enemy {
     public void setLifepoints(int damageReceived) {
         if (damageReceived > 0) {
             lifepoints -= damageReceived;
-        }else{
-            log.info("You can not make a negative damage");
+        } else {
+            log.info("You can not deal negative damage");
         }
 
     }
 
     /**
-     *
      * @return lifepoints of the enemy
      */
     public int getLifepoints() {
@@ -112,13 +110,21 @@ public abstract class Enemy {
 
     /**
      *
-     * @param playerSide to determine which wavePattern has to be used
-     * @return the waypoint the enemy has to move towards currently
+     * @return this.speed
      */
-    public Vector2 nextWaypoint(boolean playerSide){
-        if(playerSide){
+    public float getSpeed(){
+        return speed;
+    }
+
+    /**
+     * @param playerSide to determine which wavePattern has to be used
+     * @return
+     * the waypoint the enemy has to move towards currently
+     */
+    public Vector2 nextWaypoint(boolean playerSide) {
+        if (playerSide) {
             wavePattern = wavePatternLeft;
-        }else{
+        } else {
             wavePattern = wavePatternRight;
         }
         return wavePattern.get(waypointPosition);
@@ -127,8 +133,8 @@ public abstract class Enemy {
     /**
      * advances the wavypointPosition by one to move to the next wayPoint
      */
-    public void advancePattern(){
-        if(waypointPosition < wavePattern.size() - 1) {
+    public void advancePattern() {
+        if (waypointPosition < wavePattern.size() - 1) {
             waypointPosition++;
         }
     }

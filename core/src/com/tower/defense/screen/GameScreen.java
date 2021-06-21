@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
@@ -31,10 +30,12 @@ import com.tower.defense.network.packet.client.PacketInEndOfGame;
 import com.tower.defense.network.packet.client.PacketInRemoveTower;
 import com.tower.defense.network.packet.server.PacketOutAddTower;
 import com.tower.defense.network.packet.server.PacketOutEndOfWave;
+import com.tower.defense.network.packet.server.PacketOutLifepoints;
 import com.tower.defense.network.packet.server.PacketOutRemoveTower;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.ITower;
+import com.tower.defense.wave.RenderWave;
 import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,8 +43,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import static com.tower.defense.wave.Wave.waveLeft;
-import static com.tower.defense.wave.Wave.waveRight;
+import static com.tower.defense.helper.PacketQueue.packetQueue;
 
 
 public class GameScreen implements Screen {
@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
     private final static Logger log = LogManager.getLogger(GameScreen.class);
 
     private final TowerDefense game;
-    private final static Queue<Packet> packetQueue = new Queue<>();
+
     private final Stage stage;
     private TiledMap map;
     private TiledMapTileLayer groundLayer;
@@ -212,8 +212,11 @@ public class GameScreen implements Screen {
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
 
-        player1 = new Player("Player1");
-        player2 = new Player("Player2");
+        player1 = new Player("Player",playerSide);
+        player2 = new Player("Opponent",!playerSide);
+        // for testing
+        // player2.reduceLifepoints(40);
+
         wave = new Wave(game);
     }
 
@@ -296,10 +299,10 @@ public class GameScreen implements Screen {
             }
         }
         // WAVE: drawing the enemies
-        for (Enemy enemy : waveRight) {
+        for (Enemy enemy : wave.waveRight) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
         }
-        for (Enemy enemy : waveLeft) {
+        for (Enemy enemy : wave.waveLeft) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
         }
 
@@ -357,26 +360,9 @@ public class GameScreen implements Screen {
 
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
-
                 //-zeroTowerAllert = false;
 
-                //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
-                //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
-
-
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
-                    /*
-                        tower1ListIterator1.remove();
-                        player1.sellTower(player1.getInventory().lastIndexOf(tower1));
-                        AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                        //player1.sellTower();
-                        //player1.sellTower();
-                        //System.out.println(turretsPlaced);
-
-                     */
-
-
-                    //}
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
@@ -422,8 +408,8 @@ public class GameScreen implements Screen {
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
 
-        wave.renderWave(waveLeft, player1, true);
-        wave.renderWave(waveRight, player2, false);
+        RenderWave.renderWave(player1,wave);
+        RenderWave.renderWave(player2,wave);
 
         // END OF GAME
         if (player1.getLifepoints() <= 0) {
@@ -435,6 +421,7 @@ public class GameScreen implements Screen {
 
             game.setScreen(new EndScreen(game));
             log.info("set screen to {}", game.getScreen().getClass());
+
         }
         stage.getViewport().apply();
         stage.draw();
@@ -529,19 +516,12 @@ public class GameScreen implements Screen {
         if (sellTurretsController.isSellModePressed()) {
             sellMode = true;
             buildMode = false;
-            //System.out.println("Build mode activated");
-            //System.out.println(buildMode);
-            //System.out.println(sellMode);
         } else if (sellTurretsController.isBuildModePressed()) {
             buildMode = true;
             sellMode = false;
             zeroTowerAlert = false;
-            //System.out.println("Sell mode activated");
-            //System.out.println(buildMode);
-            //System.out.println(sellMode);
         }
     }
-
 
     public void handlePackets() {
         if (packetQueue.isEmpty()) {
@@ -555,14 +535,13 @@ public class GameScreen implements Screen {
             final float mapWidth = 31f;
 
             switch (type) {
-                case PACKETOUTSEARCHMATCH:
-                case PACKETOUTMATCHFOUND:
-                    break;
                 case PACKETOUTCHATMESSAGE:
 //                PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
 //                addMessageToBox(false, packetOutChatMessage.getText());
                     break;
-                case PACKETOUTSTARTMATCH:
+                case PACKETOUTLIEFEPOINTS:
+                    PacketOutLifepoints packetOutLifepoints = (PacketOutLifepoints) packet;
+                    player2.setLifepoints(packetOutLifepoints.getLP());
                     break;
                 case PACKETOUTENDOFWAVE:
                     PacketOutEndOfWave packetOutEndOfWave = (PacketOutEndOfWave) packet;

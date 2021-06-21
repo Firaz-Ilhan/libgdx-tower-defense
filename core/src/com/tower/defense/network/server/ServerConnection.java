@@ -2,10 +2,7 @@ package com.tower.defense.network.server;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
-import com.tower.defense.network.packet.client.PacketInChatMessage;
-import com.tower.defense.network.packet.client.PacketInEndOfWave;
-import com.tower.defense.network.packet.client.PacketInAddTower;
-import com.tower.defense.network.packet.client.PacketInRemoveTower;
+import com.tower.defense.network.packet.client.*;
 import com.tower.defense.network.packet.server.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -158,7 +155,6 @@ public class ServerConnection extends Thread {
                 partnerConnection.sendPacketToClient(packetOutEndOfGame);
                 break;
             case PACKETINADDTOWER:
-                log.info("packetinnewtower sent");
                 partnerConnection = server.getGameManager().getPartnerConnection(this);
 
                 if (partnerConnection == null) {
@@ -171,7 +167,6 @@ public class ServerConnection extends Thread {
                 partnerConnection.sendPacketToClient(packetOutAddTower);
                 break;
             case PACKETINREMOVETOWER:
-                log.info("packetinremovetower sent");
                 partnerConnection = server.getGameManager().getPartnerConnection(this);
 
                 if (partnerConnection == null) {
@@ -182,6 +177,18 @@ public class ServerConnection extends Thread {
                 PacketOutRemoveTower packetOutRemoveTower =
                         new PacketOutRemoveTower(packetInRemoveTower.getX(), packetInRemoveTower.getY());
                 partnerConnection.sendPacketToClient(packetOutRemoveTower);
+                break;
+            case PACKETINLIFEPOINTS:
+                partnerConnection = server.getGameManager().getPartnerConnection(this);
+
+                if (partnerConnection == null) {
+                    return;
+                }
+
+                PacketInLifepoints packetInLifepoints = (PacketInLifepoints) packet;
+                PacketOutLifepoints packetOutLifepoints =
+                        new PacketOutLifepoints(packetInLifepoints.getLP());
+                partnerConnection.sendPacketToClient(packetOutLifepoints);
                 break;
             default:
                 break;

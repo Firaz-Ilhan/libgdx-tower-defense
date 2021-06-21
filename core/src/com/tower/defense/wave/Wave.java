@@ -1,27 +1,24 @@
 package com.tower.defense.wave;
-
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
 import com.tower.defense.network.packet.client.PacketInEndOfWave;
-import com.tower.defense.player.Player;
 import com.tower.defense.screen.GameScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Iterator;
 
 import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
 
 public class Wave {
 
+    // Arraylist of existing Enemies
+    public Array<Enemy> waveLeft;
+    public Array<Enemy> waveRight;
     private final static Logger log = LogManager.getLogger(Wave.class);
     private final TowerDefense game;
-    // Arraylist of existing Enemies
-    public static Array<Enemy> waveLeft;
-    public static Array<Enemy> waveRight;
+
+
     // lastSpawnTime is checked before creating an enemy
     private long lastSpawnTime;
     private int enemiesPastLeft = 0;
@@ -42,7 +39,6 @@ public class Wave {
         waveLeft = new Array<Enemy>();
         waveRight = new Array<Enemy>();
         spawnEnemy();
-        log.info("wave count: {}", waveCount);
     }
 
     public void spawnEnemy() {
@@ -53,8 +49,8 @@ public class Wave {
                     endOfWave();
                 }
             } else {
-                Enemy enemyLeft = getEnemyInstance("easy", 525, 700);
-                Enemy enemyRight = getEnemyInstance("easy", 1025, 700);
+                Enemy enemyLeft = getEnemyInstance("easy", 525, 700,enemySpeed);
+                Enemy enemyRight = getEnemyInstance("easy", 1025, 700,enemySpeed);
                 waveLeft.add(enemyLeft);
                 waveRight.add(enemyRight);
                 lastSpawnTime = TimeUtils.nanoTime();
@@ -71,87 +67,6 @@ public class Wave {
             spawnEnemy();
         }
     }
-
-    // renders each wave of enemies based on the player side
-    public void renderWave(Array<Enemy> wave, Player player, boolean playerSide) {
-
-        // with an iterator it goes through each wave step by step
-        for (Iterator<Enemy> iter = wave.iterator(); iter.hasNext(); ) {
-            Enemy enemy = iter.next();
-
-            // distance added with each frame
-            float positionAddAmount = enemySpeed / 25;
-
-            Vector2 currentEnemyPosition = enemy.getPosition();
-
-            // the next waypoint the enemy will move to
-            Vector2 nextWantedWaypoint = enemy.nextWaypoint(playerSide);
-
-            // only if the enemy's current position isn't the same as the desired waypoint
-            // it will move towards it based on which coordinate (x and/or y) is wrong
-            if (currentEnemyPosition.y != nextWantedWaypoint.y) {
-                if (currentEnemyPosition.y > nextWantedWaypoint.y) {
-                    if (currentEnemyPosition.y - positionAddAmount < nextWantedWaypoint.y) {
-                        currentEnemyPosition.y = nextWantedWaypoint.y;
-                        enemy.setPosition(currentEnemyPosition);
-                    } else {
-                        currentEnemyPosition.y = enemy.getY() - positionAddAmount;
-                        enemy.setPosition(currentEnemyPosition);
-                    }
-                } else {
-                    if (currentEnemyPosition.y + positionAddAmount > nextWantedWaypoint.y) {
-                        currentEnemyPosition.y = nextWantedWaypoint.y;
-                        enemy.setPosition(currentEnemyPosition);
-                    } else {
-                        currentEnemyPosition.y = enemy.getY() + positionAddAmount;
-                        enemy.setPosition(currentEnemyPosition);
-                    }
-                }
-            } else if (currentEnemyPosition.x != nextWantedWaypoint.x) {
-                if (currentEnemyPosition.x > nextWantedWaypoint.x) {
-                    if (currentEnemyPosition.x - positionAddAmount < nextWantedWaypoint.x) {
-                        currentEnemyPosition.x = nextWantedWaypoint.x;
-                        enemy.setPosition(currentEnemyPosition);
-                    } else {
-                        currentEnemyPosition.x = enemy.getX() - positionAddAmount;
-                        enemy.setPosition(currentEnemyPosition);
-                    }
-                } else {
-                    if (currentEnemyPosition.x + positionAddAmount > nextWantedWaypoint.x) {
-                        currentEnemyPosition.x = nextWantedWaypoint.x;
-                        enemy.setPosition(currentEnemyPosition);
-                    } else {
-                        currentEnemyPosition.x = enemy.getX() + positionAddAmount;
-                        enemy.setPosition(currentEnemyPosition);
-                    }
-                }
-
-                // if the positions of enemy and waypoint are the same
-                // the wavePattern will progress to the next waypoint
-            } else {
-                enemy.advancePattern();
-            }
-
-            // if an enemy reaches the bottom edge of the map it gets
-            // removed and the player looses health points based
-            // on the enemy's damage
-            if (enemy.getY() < -10) {
-                player.reduceLifepoints(enemy.getDamage());
-                iter.remove();
-                if (player.getName().equals("Player1")) {
-
-                    enemiesPastLeft++;
-                }
-            }
-
-            // if the lifepoints of an enemy are reduced
-            // to 0 it get's removed
-            if (enemy.getLifepoints() <= 0) {
-                iter.remove();
-            }
-        }
-    }
-
 
     // once a wave is over the players get money based on how many
     // enemies they were able to kill.
@@ -205,9 +120,11 @@ public class Wave {
         pausing = false;
         waveCount++;
     }
-
-    public boolean isPausing() {
-        return pausing;
+    public void enemyPassed(){
+        enemiesPastLeft++;
+    }
+    public TowerDefense getGame() {
+        return game;
     }
 }
 

@@ -26,6 +26,8 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import static com.tower.defense.helper.PacketQueue.packetQueue;
+
 public class MatchmakingScreen implements Screen {
 
     private final static Logger log = LogManager.getLogger(MainMenuScreen.class);
@@ -34,7 +36,6 @@ public class MatchmakingScreen implements Screen {
     private final Skin skin;
     private final TowerDefense game;
     private final MatchmakingScreen instance;
-    private final Queue<Packet> packetQueue = new Queue<>();
 
     private boolean isReady = false;
     private Label connectionStatus;

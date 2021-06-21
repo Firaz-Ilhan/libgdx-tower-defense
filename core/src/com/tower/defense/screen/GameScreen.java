@@ -1,20 +1,23 @@
 package com.tower.defense.screen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -41,13 +44,15 @@ import org.apache.logging.log4j.Logger;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import static com.tower.defense.helper.PacketQueue.packetQueue;
+
 
 public class GameScreen implements Screen {
 
     private final static Logger log = LogManager.getLogger(GameScreen.class);
 
     private final TowerDefense game;
-    private final static Queue<Packet> packetQueue = new Queue<>();
+
     private final Stage stage;
     private TiledMap map;
     private TiledMapTileLayer groundLayer;
@@ -77,7 +82,14 @@ public class GameScreen implements Screen {
     // list to store towers of the opponent
     private final LinkedList enemyTowersPlaced = new LinkedList<ITower>();
 
-    //PopUP menu
+    private final IngameButtonsController sellTurretsController;
+    private boolean sellMode;
+    private boolean buildMode;
+    private Table sellModeActive;
+    private Table buildModeActive;
+
+    //Alert that it is not allowed to delete the last owning turret
+    private boolean zeroTowerAlert;
 
 
     //Booleans to avoid creating multiple turrets by clicking once
@@ -85,7 +97,11 @@ public class GameScreen implements Screen {
     private boolean canDelete;
     private boolean leftMouseButtonDown;
     private boolean rightMouseButtonDown;
+
     private Tower1 tower1;
+
+    private int tower1Costs;
+
     private Texture enemyImage;
 
 
@@ -99,6 +115,8 @@ public class GameScreen implements Screen {
     public static Player player1;
     public static Player player2;
 
+    private final Skin skin;
+    private FreeTypeFontGenerator generator;
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -106,12 +124,39 @@ public class GameScreen implements Screen {
         this.viewport = new FitViewport(1600, 900);
         // create stage and set it as input processor
         this.stage = new Stage(viewport);
-        Gdx.input.setInputProcessor(stage);
+        this.skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
+
+        // sell and buy towers
+        sellTurretsController = new IngameButtonsController();
+
+        InputProcessor backProcessor = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+
+                if ((keycode == Input.Keys.ESCAPE)) {
+                    quitGameConfirm();
+                }
+
+                return false;
+            }
+        };
+
+        // allows multiple input processors
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(backProcessor);
+        multiplexer.addProcessor(sellTurretsController.getButtonStage());
+        Gdx.input.setInputProcessor(multiplexer);
+
 
         this.leftMouseButtonDown = false;
         this.rightMouseButtonDown = false;
         this.canDraw = false;
         this.canDelete = false;
+        this.zeroTowerAlert = false;
+        this.buildMode = false;
+        this.sellMode = false;
+
     }
 
     @Override
@@ -124,6 +169,8 @@ public class GameScreen implements Screen {
         // loading the textures of the turrets
         turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
         turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
+        //set Costs of the turrets
+        //tower1Costs = tower1.getCost();
 
         enemyImage = new Texture(Gdx.files.internal("virus.png"));
 
@@ -131,6 +178,10 @@ public class GameScreen implements Screen {
         MapLayers mapLayers = map.getLayers();
         groundLayer = (TiledMapTileLayer) mapLayers.get("ground");
         decorationLayerIndices = new int[]{mapLayers.getIndex("decoration")};
+
+        //creating the textures of the turrets
+        turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
+        turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
 
         // setting up the camera
         float width = 1600;
@@ -148,18 +199,26 @@ public class GameScreen implements Screen {
         playerSide = true;
 
         // setting up the font for the helper variables that show the mouse position
-        font = new BitmapFont();
-        font.setColor(Color.WHITE);
-        font.getData().setScale(2, 2);
+
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/FiraCode-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 2;
+        parameter.size = 30;
+        parameter.shadowOffsetX = 2;
+        parameter.shadowOffsetY = -3;
+        parameter.magFilter = Texture.TextureFilter.Linear;
+        parameter.minFilter = Texture.TextureFilter.Linear;
+        font = generator.generateFont(parameter);
 
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
-
 
         player1 = new Player("Player",playerSide);
         player2 = new Player("Opponent",!playerSide);
         // for testing
         // player2.reduceLifepoints(40);
+
         wave = new Wave(game);
     }
 
@@ -170,9 +229,13 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
         // setting the render view to the camera
         camera.update();
         renderer.setView(camera);
+
+        // Check if a button was clicked
+        handleInput();
 
         // getting the current mouse position
         mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
@@ -189,17 +252,22 @@ public class GameScreen implements Screen {
         renderer.renderTileLayer(groundLayer);
 
         // temporary help
-        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 0, 40);
-        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 100, 40);
-        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 0, 100);
-        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 100, 100);
-        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 0, 160);
-        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 100, 160);
-        font.draw(renderer.getBatch(), "LP: " + player1.getLifepoints(), 0, 900);
-        font.draw(renderer.getBatch(), "LP: " + player2.getLifepoints(), 1400, 900);
-        font.draw(renderer.getBatch(), "Money: " + player1.getWalletValue(), 0, 850);
-        font.draw(renderer.getBatch(), "Money: " + player2.getWalletValue(), 1400, 850);
-        font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 800, 900);
+        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 1375, 40);
+        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 1475, 40);
+        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
+        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
+        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 25, 160);
+        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 125, 160);
+        font.draw(renderer.getBatch(), "LP: " + player1.getLifepoints(), 25, 890);
+        font.draw(renderer.getBatch(), "LP: " + player2.getLifepoints(), 1375, 890);
+        font.draw(renderer.getBatch(), "Money: " + player1.getWalletValue(), 25, 840);
+        font.draw(renderer.getBatch(), "Money: " + player2.getWalletValue(), 1375, 840);
+        font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 725, 890);
+
+        if (zeroTowerAlert) {
+            font.draw(renderer.getBatch(), "You can't own 0 turrets !", hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+        }
+
 
         renderer.getBatch().end();
 
@@ -209,14 +277,13 @@ public class GameScreen implements Screen {
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 
-        //creating the textures of the turrets
-        turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
-        turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
-
         //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
 
         // drawing the hoveredTile based on what player side you are on and whether you
         // allowed to or not
+
+        stage.act();
+
 
         spriteBatch.begin();
 
@@ -243,11 +310,6 @@ public class GameScreen implements Screen {
 
 
         /**
-         *Creating PopUp menu to confirm that the turret gets selled
-         */
-
-
-        /**
          * if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
          */
 
@@ -266,10 +328,12 @@ public class GameScreen implements Screen {
          * drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
          */
 
-        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles)) {
+        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles) && buildMode && player1.getWalletValue() >= 20) {
 
             spawnTurret1();
             AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
+
+            player1.buyTower(tower1);
 
 
         } else {
@@ -288,34 +352,51 @@ public class GameScreen implements Screen {
             tower1 = tower1ListIterator1.next();
             tower1.draw();
 
+
             //Output if player tries to delete the last turret
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1) {
-                log.info("You cant own 0 turrets");
+                //System.out.println("You cant own 0 turrets");
+                // zeroTowerAlert = true;
             }
 
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
 
+                //-zeroTowerAllert = false;
+                //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+                //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
 
-                log.info(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
+
+                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
+                    /*
+                        tower1ListIterator1.remove();
+                        player1.sellTower(player1.getInventory().lastIndexOf(tower1));
+                        AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
+                        //player1.sellTower();
+                        //player1.sellTower();
+                        //System.out.println(turretsPlaced);
+
+                     */
 
 
-                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50) {
-
+                    //}
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                    log.info(turretsPlaced);
-                    game.getClient().sendPacket
-                            (new PacketInRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
+                    player1.sellTower(player1.getInventory().lastIndexOf(tower1));
+                    System.out.println(turretsPlaced);
 
-
+                    if (game.getClient() != null) {
+                        game.getClient().sendPacket(
+                                new PacketInRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
+                    }
                 }
 
 
             } else {
                 canDelete = false;
+                //sellState = false;
 
             }
 
@@ -334,6 +415,7 @@ public class GameScreen implements Screen {
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);
         rightMouseButtonDown = Gdx.input.isButtonPressed(1);
 
+
         spriteBatch.end();
 
 
@@ -349,76 +431,122 @@ public class GameScreen implements Screen {
 
         // END OF GAME
         if (player1.getLifepoints() <= 0) {
-            endOfGame();
+            player1.lost();
+
+            if (game.getClient() != null) {
+                game.getClient().sendPacket(new PacketInEndOfGame());
+            }
+
+            game.setScreen(new EndScreen(game));
+            log.info("set screen to {}", game.getScreen().getClass());
+
         }
         stage.getViewport().apply();
         stage.draw();
 
 
-    }
+        //Draw Build-/SellMode Menu
+        sellTurretsController.draw();
 
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
-        camera.update();
-    }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        enemyImage.dispose();
-        map.dispose();
-        game.dispose();
-        stage.dispose();
-        turret1Texture.dispose();
-        turret2Texture.dispose();
-        enemyImage.dispose();
-        hoveredTileTexture.dispose();
-        hoveredTileNotAllowed.dispose();
-        spriteBatch.dispose();
-        font.dispose();
-        renderer.dispose();
     }
 
     /**
      * Method to spawn a Turret1 and add him to the turretsPlaced list
      */
     public void spawnTurret1() {
-        Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        //Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
         tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
         turretsPlaced.add(tower1);
-        game.getClient().sendPacket(new PacketInAddTower(hoveredTilePosition.x, hoveredTilePosition.y));
 
-        //turretsPlacedArray.add(tower1);
+        if (game.getClient() != null) {
+            game.getClient().sendPacket(new PacketInAddTower(hoveredTilePosition.x, hoveredTilePosition.y));
+        }
 
-        //player1TurretsPlaced.add(tower1);
+
     }
 
 
     public void spawnTurret2() {
 
     }
-    private void endOfGame(){
-        player1.lost();
-        game.getClient().sendPacket(new PacketInEndOfGame());
-        game.setScreen(new EndScreen(game));
-        log.info("set screen to {}", game.getScreen().getClass());
+
+    public void quitGameConfirm() {
+
+        Label label = new Label("Do you want to surrender and quit the game?", skin, "black");
+        TextButton btnYes = new TextButton("Quit", skin, "small");
+        TextButton btnNo = new TextButton("Cancel", skin, "small");
+
+        final Dialog dialog = new Dialog("Quit the Game?", skin) {
+            {
+                text(label);
+                button(btnYes);
+                button(btnNo);
+            }
+        }.show(stage);
+
+        dialog.setModal(true);
+        dialog.setMovable(true);
+        dialog.setResizable(false);
+
+        btnYes.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                // remove dialog from the stage
+                dialog.hide();
+                dialog.cancel();
+                dialog.remove();
+
+                // switch to EndScreen
+                game.setScreen(new EndScreen(game));
+                log.info("set screen to {}", game.getScreen().getClass());
+
+                if (game.getClient() != null) {
+                    // close connection and stop ClientConnectionThread
+                    game.getClient().getClientConnection().closeConnection();
+                }
+                return true;
+            }
+
+        });
+
+        btnNo.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                // return to the game and remove dialog from the stage
+                dialog.cancel();
+                dialog.hide();
+                dialog.remove();
+
+                return true;
+            }
+
+        });
     }
+
+
+    /**
+     *
+     */
+    public void handleInput() {
+        if (sellTurretsController.isSellModePressed()) {
+            sellMode = true;
+            buildMode = false;
+            //System.out.println("Build mode activated");
+            //System.out.println(buildMode);
+            //System.out.println(sellMode);
+        } else if (sellTurretsController.isBuildModePressed()) {
+            buildMode = true;
+            sellMode = false;
+            zeroTowerAlert = false;
+            //System.out.println("Sell mode activated");
+            //System.out.println(buildMode);
+            //System.out.println(sellMode);
+        }
+    }
+
     public void handlePackets() {
         if (packetQueue.isEmpty()) {
             return;
@@ -484,4 +612,43 @@ public class GameScreen implements Screen {
         packetQueue.addFirst(packet);
     }
 
+    @Override
+    public void resize(int width, int height) {
+        viewport.update(width, height);
+        camera.update();
+        sellTurretsController.resize(width, height);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        enemyImage.dispose();
+        map.dispose();
+        game.dispose();
+        stage.dispose();
+        turret1Texture.dispose();
+        turret2Texture.dispose();
+        enemyImage.dispose();
+        hoveredTileTexture.dispose();
+        hoveredTileNotAllowed.dispose();
+        spriteBatch.dispose();
+        font.dispose();
+        generator.dispose();
+        renderer.dispose();
+        skin.dispose();
+    }
 }

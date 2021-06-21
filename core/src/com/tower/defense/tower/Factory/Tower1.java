@@ -14,7 +14,7 @@ public class Tower1 implements ITower {
     private double damage = 1;
     private double firerate = 1;
     private double range = 50;
-    private int cost = 100;
+    private int cost = 20;
     private Texture turretTexture;
     private float width, height;
     private SpriteBatch spriteBatch;

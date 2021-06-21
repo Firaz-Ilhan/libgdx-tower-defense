@@ -57,8 +57,7 @@ public class Wave {
                 lastSpawnTime = TimeUtils.nanoTime();
                 enemiesSpawned++;
             }
-        }
-        else{
+        } else {
             endOfWave();
         }
     }
@@ -70,20 +69,21 @@ public class Wave {
         }
     }
 
-
     // once a wave is over the players get money based on how many
     // enemies they were able to kill.
     // The waveSpeed, waveSize and waveReward all increase for
     // the next wave
     public void endOfWave() {
-        if(!pausing) {
+        if (!pausing) {
             int reward = calculateReward();
             GameScreen.player1.addToWallet(reward);
-            game.getClient().sendPacket(new PacketInEndOfWave(reward));
+            if (game.getClient() != null) {
+                game.getClient().sendPacket(new PacketInEndOfWave(reward));
+            }
             pausing = true;
-            log.info("Pausing: {}",pausing);
+            log.info("Pausing: {}", pausing);
         }
-        if(partnerIsPausing){
+        if (partnerIsPausing) {
             waveSpeed = Math.round(waveSpeed * 0.75);
             waveSize = Math.round(waveSize * 1.1);
             waveReward = (int) Math.round(waveReward * 1.5);
@@ -96,6 +96,7 @@ public class Wave {
         }
 
     }
+
     public int calculateReward() {
         waveReward = waveReward - enemiesPastLeft * 2;
         log.info("reward: {}", waveReward);
@@ -108,21 +109,22 @@ public class Wave {
     }
 
     //is called by the handle() method if a EndOfWave packet was received
-    public void partnerWaveEnded(int reward){
-            log.info("partners wave ended");
-            GameScreen.player2.addToWallet(reward);
-            partnerIsPausing = true;
+    public void partnerWaveEnded(int reward) {
+        log.info("partners wave ended");
+        GameScreen.player2.addToWallet(reward);
+        partnerIsPausing = true;
     }
+
     //is called in EndOfWave()
-    public void startWave(){
-        partnerIsPausing =false;
+    public void startWave() {
+        partnerIsPausing = false;
         pausing = false;
         waveCount++;
     }
     public void enemyPassed(){
         enemiesPastLeft++;
     }
-    public TowerDefense getGame(){
+    public TowerDefense getGame() {
         return game;
     }
 }

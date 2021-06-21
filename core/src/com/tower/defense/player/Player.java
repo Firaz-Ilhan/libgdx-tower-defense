@@ -3,7 +3,9 @@ package com.tower.defense.player;
 import com.tower.defense.tower.ITower;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.awt.image.ImageWatched;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Player {
@@ -15,12 +17,14 @@ public class Player {
     private boolean playerSide;
 
     private int lifepoints = 200;
-    private List<ITower> inventory;
+    private LinkedList<ITower> inventory;
 
     public Player(String name, boolean playerSide) {
         this.name = name;
         this.playerSide = playerSide;
         log.info("player: {}", name);
+        inventory = new LinkedList<>();
+
     }
 
     /**

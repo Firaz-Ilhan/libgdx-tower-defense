@@ -84,9 +84,6 @@ public class GameScreen implements Screen {
     private final IngameButtonsController sellTurretsController;
     private boolean sellMode;
     private boolean buildMode;
-    private boolean quit;
-    private Table sellModeActive;
-    private Table buildModeActive;
 
     //Alert that it is not allowed to delete the last owning turret
     private boolean zeroTowerAlert;
@@ -250,12 +247,12 @@ public class GameScreen implements Screen {
         renderer.renderTileLayer(groundLayer);
 
         // temporary help
-        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 1375, 40);
-        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 1475, 40);
-        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
-        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
-        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 25, 160);
-        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 125, 160);
+//        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 1375, 40);
+//        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 1475, 40);
+//        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
+//        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
+//        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 25, 160);
+//        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 125, 160);
         font.draw(renderer.getBatch(), "LP: " + player1.getLifepoints(), 25, 890);
         font.draw(renderer.getBatch(), "LP: " + player2.getLifepoints(), 1375, 890);
         font.draw(renderer.getBatch(), "Money: " + player1.getWalletValue(), 25, 840);
@@ -612,11 +609,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        if (!quit && game.getClient() != null) {
-            game.getClient().sendPacket(new PacketInEndOfGame());
-            quit = true;
-        }
-
         enemyImage.dispose();
         map.dispose();
         game.dispose();

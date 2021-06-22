@@ -88,13 +88,14 @@ public class GameScreen implements Screen {
     // list to store towers of the opponent
     private final LinkedList enemyTowersPlaced = new LinkedList<ITower>();
 
+    private boolean turretIsHovered;
+    private Texture turret1RangeIndicator;
 
     //PopUP menu
     IngameButtonsController sellTurretsController;
     private boolean sellMode;
     private boolean buildMode;
-    private Table sellModeActive;
-    private Table buildModeActive;
+
 
     //Alert that it is not allowed to delete the last owning turret
     private boolean zeroTowerAlert;
@@ -146,6 +147,7 @@ public class GameScreen implements Screen {
         this.buildMode = false;
         this.sellMode = false;
 
+        this.turretIsHovered = false;
 
 
 
@@ -305,24 +307,24 @@ public class GameScreen implements Screen {
 
 
 
-        /**
-         * if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
-         */
+
+        //if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
+
 
         if (Gdx.input.isButtonPressed(0) && !leftMouseButtonDown) {
             canDraw = true;
         }
-        /**
-         * avoid multiple rightclicking
-         */
+
+        //avoid multiple rightclicking
+
 
         if (Gdx.input.isButtonPressed(1) && !rightMouseButtonDown) {
             canDelete = true;
         }
 
-        /**
-         * drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
-         */
+
+         //drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
+
 
         if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles) && buildMode && player1.getWalletValue() >= 20) {
 
@@ -336,9 +338,9 @@ public class GameScreen implements Screen {
             canDraw = false;
         }
 
-        /**
-         * List iterator that draws all placed turrets and handles "turret removing"
-         */
+
+        //List iterator that draws all placed turrets and handles "turret removing"
+
 
         tower1ListIterator1 = turretsPlaced.listIterator();
 
@@ -366,19 +368,6 @@ public class GameScreen implements Screen {
 
 
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
-                    /*
-                        tower1ListIterator1.remove();
-                        player1.sellTower(player1.getInventory().lastIndexOf(tower1));
-                        AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                        //player1.sellTower();
-                        //player1.sellTower();
-                        //System.out.println(turretsPlaced);
-
-                     */
-
-
-
-                    //}
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
@@ -386,9 +375,6 @@ public class GameScreen implements Screen {
                     System.out.println(turretsPlaced);
                     game.getClient().sendPacket
                             (new PacketInRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
-
-
-
                 }
 
 
@@ -400,9 +386,25 @@ public class GameScreen implements Screen {
 
 
         }
+       //draw indicator for Turretrange while mouse is hoverd over turret
+        turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
+
+
+        if(Gdx.input.isKeyPressed(57)){
+            turretIsHovered = true;
+        }else{
+            turretIsHovered = false;
+        }
+
+        if (turretIsHovered) {
+
+            //spriteBatch.draw(turret1RangeIndicator, tower1.getX() - 75 , tower1.getY() - 75);
+            spriteBatch.draw(turret1RangeIndicator, hoveredTilePosition.x * 50 - 175 , hoveredTilePosition.y * 50 - 175);      //zur not auf Mausposition
+        }
 
 
         tower1ListIterator1 = enemyTowersPlaced.listIterator();
+
 
         while (tower1ListIterator1.hasNext()) {
 
@@ -504,24 +506,20 @@ public class GameScreen implements Screen {
 
 
     /**
-     *
+     *Switch between build and sell mode
      *
      */
     public void handleInput(){
         if (sellTurretsController.isSellModePressed()){
             sellMode = true;
             buildMode = false;
-            //System.out.println("Build mode activated");
-            //System.out.println(buildMode);
-            //System.out.println(sellMode);
+
         }
         else if(sellTurretsController.isBuildModePressed()){
             buildMode = true;
             sellMode = false;
             zeroTowerAlert = false;
-            //System.out.println("Sell mode activated");
-            //System.out.println(buildMode);
-            //System.out.println(sellMode);
+
         }
     }
 

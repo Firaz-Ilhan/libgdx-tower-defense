@@ -346,6 +346,8 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
+            tower1.updateTargetarray(wave);
+            tower1.update();
 
 
             //Output if player tries to delete the last turret
@@ -389,6 +391,8 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
+
+
         }
 
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);

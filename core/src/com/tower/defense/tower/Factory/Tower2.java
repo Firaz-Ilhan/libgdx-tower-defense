@@ -1,6 +1,7 @@
 package com.tower.defense.tower.Factory;
 
 import com.tower.defense.tower.ITower;
+import com.tower.defense.wave.Wave;
 
 public class Tower2 implements ITower {
 
@@ -53,5 +54,15 @@ public class Tower2 implements ITower {
 
     public int getCost() {
         return cost;
+    }
+
+    @Override
+    public void updateTargetarray(Wave wave) {
+
+    }
+
+    @Override
+    public void update() {
+
     }
 }

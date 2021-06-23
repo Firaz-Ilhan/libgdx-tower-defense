@@ -14,8 +14,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -125,23 +123,14 @@ public class GameScreen implements Screen {
         this.skin = game.assetManager.get(Constant.SKIN_PATH);
 
         // sell and buy towers
-        sellTurretsController = new IngameButtonsController();
+        this.sellTurretsController = new IngameButtonsController();
 
-        InputProcessor backProcessor = new InputAdapter() {
-            @Override
-            public boolean keyDown(int keycode) {
+        QuitDialog quitDialog = new QuitDialog(game, skin, stage);
 
-                if ((keycode == Input.Keys.ESCAPE)) {
-                    quitGameConfirm();
-                }
-
-                return false;
-            }
-        };
         // allows multiple input processors
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(backProcessor);
+        multiplexer.addProcessor(quitDialog.getInputProcessor());
         multiplexer.addProcessor(sellTurretsController.getButtonStage());
         Gdx.input.setInputProcessor(multiplexer);
 
@@ -392,8 +381,8 @@ public class GameScreen implements Screen {
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
 
-        RenderWave.renderWave(player1,wave);
-        RenderWave.renderWave(player2,wave);
+        RenderWave.renderWave(player1, wave);
+        RenderWave.renderWave(player2, wave);
 
         // END OF GAME
         if (player1.getLifepoints() <= 0) {
@@ -436,60 +425,6 @@ public class GameScreen implements Screen {
 
     public void spawnTurret2() {
 
-    }
-
-    public void quitGameConfirm() {
-
-        Label label = new Label("Do you want to surrender and quit the game?", skin, "black");
-        TextButton btnYes = new TextButton("Quit", skin, "small");
-        TextButton btnNo = new TextButton("Cancel", skin, "small");
-
-        final Dialog dialog = new Dialog("Quit the Game?", skin) {
-            {
-                text(label);
-                button(btnYes);
-                button(btnNo);
-            }
-        }.show(stage);
-
-        dialog.setModal(true);
-        dialog.setMovable(true);
-        dialog.setResizable(false);
-
-        btnYes.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-                // remove dialog from the stage
-                dialog.hide();
-                dialog.cancel();
-                dialog.remove();
-
-                // switch to EndScreen
-                game.setScreen(new EndScreen(game));
-                log.info("set screen to {}", game.getScreen().getClass());
-
-                if (game.getClient() != null) {
-                    // close connection and stop ClientConnectionThread
-                    game.getClient().getClientConnection().closeConnection();
-                }
-                return true;
-            }
-
-        });
-
-        btnNo.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // return to the game and remove dialog from the stage
-                dialog.cancel();
-                dialog.hide();
-                dialog.remove();
-
-                return true;
-            }
-
-        });
     }
 
 

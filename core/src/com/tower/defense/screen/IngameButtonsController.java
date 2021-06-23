@@ -14,6 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import static com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
+import static com.badlogic.gdx.graphics.Texture.TextureFilter.MipMapLinearLinear;
+
 
 public class IngameButtonsController {
 
@@ -32,8 +35,14 @@ public class IngameButtonsController {
         buttonTable.left().bottom();
 
 
-        Texture sellTexture = new Texture("core/assets/buttons/sellMode.png");
-        Texture sellDownTexture = new Texture("core/assets/buttons/sellModeDown.png");
+        //Texture sellTexture = new Texture("core/assets/buttons/sellMode.png");
+        Texture sellTexture = new Texture(Gdx.files.internal("core/assets/buttons/sellMode.png"), true);
+        Texture sellDownTexture = new Texture(Gdx.files.internal("core/assets/buttons/sellModeDown.png"), true);
+
+        // improves texture scaling for low resolution
+        sellDownTexture.setFilter(MipMapLinearLinear, Linear);
+        sellTexture.setFilter(MipMapLinearLinear, Linear);
+
         Drawable sellImage = new TextureRegionDrawable(new TextureRegion(sellTexture));
         Drawable sellDownImage = new TextureRegionDrawable(new TextureRegion(sellDownTexture));
 
@@ -56,9 +65,13 @@ public class IngameButtonsController {
             }
         });
 
+        Texture buildTexture = new Texture(Gdx.files.internal("buttons/buildMode.png"), true);
+        Texture buildDownTexture = new Texture(Gdx.files.internal("buttons/buildModeDown.png"), true);
 
-        Texture buildTexture = new Texture("core/assets/buttons/buildMode.png");
-        Texture buildDownTexture = new Texture("core/assets/buttons/buildModeDown.png");
+        // improves texture scaling for low resolution
+        buildTexture.setFilter(MipMapLinearLinear, Linear);
+        buildDownTexture.setFilter(MipMapLinearLinear, Linear);
+
         Drawable buildDownImage = new TextureRegionDrawable(new TextureRegion(buildDownTexture));
         Drawable buildImage = new TextureRegionDrawable(new TextureRegion(buildTexture));
 

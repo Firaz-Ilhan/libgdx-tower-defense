@@ -1,6 +1,8 @@
 package com.tower.defense.screen;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,7 +17,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
@@ -39,9 +41,11 @@ import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.sound.sampled.Line;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+import static com.badlogic.gdx.graphics.Texture.TextureFilter.*;
 import static com.tower.defense.helper.PacketQueue.packetQueue;
 
 
@@ -159,8 +163,10 @@ public class GameScreen implements Screen {
         decorationLayerIndices = new int[]{mapLayers.getIndex("decoration")};
 
         //creating the textures of the turrets
-        turret1Texture = new Texture(Gdx.files.internal(Constant.TOWER1_PATH));
-        turret2Texture = new Texture(Gdx.files.internal(Constant.TOWER2_PATH));
+        turret1Texture = new Texture(Gdx.files.internal(Constant.TOWER1_PATH), true);
+        turret2Texture = new Texture(Gdx.files.internal(Constant.TOWER2_PATH), true);
+
+        turret1Texture.setFilter(MipMapLinearLinear, Linear);
 
         camera.setToOrtho(false, Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT);
         camera.update();
@@ -182,8 +188,8 @@ public class GameScreen implements Screen {
         parameter.size = 30;
         parameter.shadowOffsetX = 2;
         parameter.shadowOffsetY = -3;
-        parameter.magFilter = Texture.TextureFilter.Linear;
-        parameter.minFilter = Texture.TextureFilter.Linear;
+        parameter.magFilter = Linear;
+        parameter.minFilter = Linear;
         font = generator.generateFont(parameter);
 
         allowedTiles = new AllowedTiles();

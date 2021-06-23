@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
 import com.tower.defense.helper.AllowedTiles;
+import com.tower.defense.helper.Constant;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInAddTower;
@@ -118,10 +119,10 @@ public class GameScreen implements Screen {
     public GameScreen(TowerDefense game) {
         this.game = game;
         this.camera = new OrthographicCamera();
-        this.viewport = new FitViewport(1600, 900);
+        this.viewport = new FitViewport(Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT);
         // create stage and set it as input processor
         this.stage = new Stage(viewport);
-        this.skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
+        this.skin = game.assetManager.get(Constant.SKIN_PATH);
 
         // sell and buy towers
         sellTurretsController = new IngameButtonsController();
@@ -161,13 +162,7 @@ public class GameScreen implements Screen {
         hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
 
-        // loading the textures of the turrets
-        turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
-        turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
-        //set Costs of the turrets
-        //tower1Costs = tower1.getCost();
-
-        enemyImage = new Texture(Gdx.files.internal("virus.png"));
+        enemyImage = new Texture(Gdx.files.internal(Constant.VIRUS_ENEMY_PATH));
 
         // getting the layers of the map
         MapLayers mapLayers = map.getLayers();
@@ -175,14 +170,10 @@ public class GameScreen implements Screen {
         decorationLayerIndices = new int[]{mapLayers.getIndex("decoration")};
 
         //creating the textures of the turrets
-        turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
-        turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
+        turret1Texture = new Texture(Gdx.files.internal(Constant.TOWER1_PATH));
+        turret2Texture = new Texture(Gdx.files.internal(Constant.TOWER2_PATH));
 
-        // setting up the camera
-        float width = 1600;
-        float height = 900;
-
-        camera.setToOrtho(false, width, height);
+        camera.setToOrtho(false, Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT);
         camera.update();
 
         // creating the renderer
@@ -195,7 +186,7 @@ public class GameScreen implements Screen {
 
         // setting up the font for the helper variables that show the mouse position
 
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/FiraCode-Regular.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal(Constant.FONT_PATH));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.borderColor = Color.BLACK;
         parameter.borderWidth = 2;
@@ -209,8 +200,8 @@ public class GameScreen implements Screen {
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
 
-        player1 = new Player("Player",playerSide);
-        player2 = new Player("Opponent",!playerSide);
+        player1 = new Player("Player", playerSide);
+        player2 = new Player("Opponent", !playerSide);
         // for testing
         // player2.reduceLifepoints(40);
 
@@ -224,7 +215,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         // setting the render view to the camera
         camera.update();
         renderer.setView(camera);
@@ -234,9 +224,6 @@ public class GameScreen implements Screen {
 
         // getting the current mouse position
         mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
 
         // position of the hovered tile
         hoveredTilePosition = new Vector2((int) mousePosition.x / 50, (int) mousePosition.y / 50);

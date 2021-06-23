@@ -11,12 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.helper.Constant;
 import com.tower.defense.helper.NetworkINTF;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketInChatMessage;
-import com.tower.defense.network.packet.client.PacketInEndOfGame;
 import com.tower.defense.network.packet.client.PacketInSearchMatch;
 import com.tower.defense.network.packet.client.PacketInStartMatch;
 import com.tower.defense.network.packet.server.PacketOutChatMessage;
@@ -48,7 +48,7 @@ public class MatchmakingScreen implements Screen {
 
     public MatchmakingScreen(final TowerDefense game) {
         this.game = game;
-        skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
+        skin = game.assetManager.get(Constant.SKIN_PATH);
         stage = new Stage(new ScreenViewport());
         this.instance = this;
         Gdx.input.setInputProcessor(stage);
@@ -135,7 +135,7 @@ public class MatchmakingScreen implements Screen {
                     try {
                         if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy") && !connectionStatus.getText().toString().equals("Connected: Match found")) {
                             connectionStatus.setText("Trying to connect");
-                            client = new Client(ip, 3456);
+                            client = new Client(ip, Constant.SERVER_PORT);
                             log.info("Creating Client with IP: {}", ip);
                             client.setCurrentScreen(instance);
                             game.setClient(client);

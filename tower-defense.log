@@ -1,27 +1,24 @@
 main INFO  defense.TowerDefense - OS: Windows 10 amd64
-main INFO  defense.TowerDefense - JRE version: 14.0.1
-main INFO  defense.TowerDefense - libGDX version: 1.10.0
-main INFO  defense.TowerDefense - OpenGl main INFO  server.Server - New incoming Connection Port: 49721
+mmain INFO  server.Server - New incoming Connection Port: 57968
+ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSEARCHMATCH
+main INFO  server.Server - New incoming Connection Port: 57969
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSEARCHMATCH
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSTARTMATCH
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSTARTMATCH
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINADDTOWER
-ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINLIFEPOINTS
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINENDOFGAME
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINENDOFGAME
-KETOUTSTARTMATCH
+- set screen to class com.tower.defenmain INFO  screen.MainMenuScreen - Traffic: New PACKETOUTSTARTMATCH
 main INFO  scrmain INFO  screen.MainMenuScreen - Traffic: New PACKETOUTSTARTMATCH
 main INFO  player.Player - player: Player
 main INFO  player.Player - player: Opponent
 main INFO  screen.GameScreen - Traffic: New PACKETOUTADDTOWER
 main INFO  screen.GameScreen - packetoutnewtower received
-main INFO  player.Player - tower com.towermain INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@2c3dec30 was added to the inventormain INFO  screen.GameScreen - Traffic: Nemain INFO  screen.GameScreen - Traffic: New PACKETOUTLIEFEPOINTS
-wer received
-main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@4275c20c was added to the inventory
+main INFO  player.Player - tower com.towermain INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@2c3dec30 was added to the inventormain INFO  screen.GameScreen - Traffic: New PACKETOUTADDTOWER
+main INFO  screen.GameScreen - packetoutnewtower received
+main INFO  player.Player - tower com.tower.defense.tower.Factory.Tower1@e260766 was added to the inventory
 main INFO  player.Player - wallet: 10
 main INFO  screen.GameScreen - Traffic: New PACKETOUTENDOFGAME
 main INFO  screen.EndScreen -  You won
 main INFO  screen.GameScreen - set screen to class com.tower.defense.screen.EndScreen
-main INFO  screen.EndScreen - switched to com.tower.defense.screen.MainMenuScreen@58bf8650
-main INFO  screen.MainMenuScreen - user has closed the program with the exit button

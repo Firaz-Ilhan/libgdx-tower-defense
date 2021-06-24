@@ -2,7 +2,6 @@ package com.tower.defense.network.server;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
-import com.tower.defense.network.packet.client.*;
 import com.tower.defense.network.packet.server.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -98,30 +97,19 @@ public class ServerConnection extends Thread {
 
         switch (type) {
             //calls GameManager to look for an opponent
-            case PACKETINSEARCHMATCH:
+            case PACKETSEARCHMATCH:
 
                 ServerConnection serverSearchConnection = server.getGameManager().searchingForGame(this);
                 //if null is returned, player must have been matched, so they send a matchFound to the own and to the partners Client
                 if (serverSearchConnection == null) {
-                    PacketOutMatchFound packetOutMatchFound = new PacketOutMatchFound();
-                    sendPacketToClient(packetOutMatchFound);
-                    server.getGameManager().getPartnerConnection(this).sendPacketToClient(packetOutMatchFound);
+                    PacketMatchFound packetMatchFound = new PacketMatchFound();
+                    sendPacketToClient(packetMatchFound);
+                    server.getGameManager().getPartnerConnection(this).sendPacketToClient(packetMatchFound);
                 } else {
-                    sendPacketToClient(new PacketOutSearchMatch());
+                    sendPacketToClient(new PacketSearchMatch());
                 }
                 break;
 
-            case PACKETINSTARTMATCH:
-                partnerConnection = server.getGameManager().getPartnerConnection(this);
-
-                if (partnerConnection == null) {
-                    return;
-                }
-
-                PacketOutStartMatch packetOutStartMatch = new PacketOutStartMatch();
-                partnerConnection.sendPacketToClient(packetOutStartMatch);
-
-                break;
             default:
                 partnerConnection = server.getGameManager().getPartnerConnection(this);
 

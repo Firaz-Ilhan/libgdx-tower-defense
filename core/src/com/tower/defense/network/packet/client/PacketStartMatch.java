@@ -1,13 +1,15 @@
-package com.tower.defense.network.packet.server;
+package com.tower.defense.network.packet.client;
 
 import org.json.JSONObject;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 
-public class PacketOutMatchFound extends Packet{
 
-	public PacketOutMatchFound() {
+public class PacketStartMatch extends Packet {
+	
+	
+	public PacketStartMatch() {
 		this.packetType = PacketType.getPacketTypeByClass(getClass());
 	}
 	
@@ -21,4 +23,6 @@ public class PacketOutMatchFound extends Packet{
 		super.write(object);
 	}
 	
+	
+
 }

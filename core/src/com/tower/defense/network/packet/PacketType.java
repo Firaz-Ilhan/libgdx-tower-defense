@@ -8,9 +8,8 @@ import com.tower.defense.network.packet.server.*;
 public enum PacketType {
 
 	//Clientpackets
-	PACKETINSEARCHMATCH(1, PacketInSearchMatch.class),
 	PACKETCHATMESSAGE(3, PacketChatMessage.class),
-	PACKETINSTARTMATCH(4, PacketInStartMatch.class),
+	PACKETSTARTMATCH(4, PacketStartMatch.class),
 	PACKETENDOFWAVE(5, PacketEndOfWave.class),
 	PACKETLIFEPOINTS(6, PacketLifepoints.class),
 	PACKETADDTOWER(7, PacketAddTower.class),
@@ -18,9 +17,8 @@ public enum PacketType {
 	PACKETENDOFGAME(9, PacketEndOfGame.class),
 
 	//Serverpackets
-	PACKETOUTSEARCHMATCH(101, PacketOutSearchMatch.class),
-	PACKETOUTMATCHFOUND(102, PacketOutMatchFound.class),
-	PACKETOUTSTARTMATCH(104, PacketOutStartMatch.class);
+	PACKETSEARCHMATCH(101, PacketSearchMatch.class),
+	PACKETMATCHFOUND(102, PacketMatchFound.class);
 
 
 	private int packetID;

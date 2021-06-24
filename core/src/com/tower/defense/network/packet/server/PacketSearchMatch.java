@@ -5,9 +5,9 @@ import org.json.JSONObject;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 
-public class PacketOutStartMatch extends Packet{
+public class PacketSearchMatch extends Packet{
 
-	public PacketOutStartMatch() {
+	public PacketSearchMatch() {
 		this.packetType = PacketType.getPacketTypeByClass(getClass());
 	}
 	

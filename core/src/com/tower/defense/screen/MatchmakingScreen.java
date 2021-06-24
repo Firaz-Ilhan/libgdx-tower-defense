@@ -14,13 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.helper.Constant;
 import com.tower.defense.helper.NetworkINTF;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketChatMessage;
-import com.tower.defense.network.packet.client.PacketInSearchMatch;
-import com.tower.defense.network.packet.client.PacketInStartMatch;
+import com.tower.defense.network.packet.client.PacketStartMatch;
+import com.tower.defense.network.packet.server.PacketSearchMatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +50,7 @@ public class MatchmakingScreen implements Screen {
 
     public MatchmakingScreen(final TowerDefense game) {
         this.game = game;
-        skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
+        skin = game.assetManager.get(Constant.SKIN_PATH);
         stage = new Stage(new ScreenViewport());
         this.instance = this;
         Gdx.input.setInputProcessor(stage);
@@ -138,11 +139,11 @@ public class MatchmakingScreen implements Screen {
                     try {
                         if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy") && !connectionStatus.getText().toString().equals("Connected: Match found")) {
                             connectionStatus.setText("Trying to connect");
-                            client = new Client(ip, 3456);
+                            client = new Client(ip, Constant.SERVER_PORT);
                             log.info("Creating Client with IP: {}", ip);
                             client.setCurrentScreen(instance);
                             game.setClient(client);
-                            client.sendPacket(new PacketInSearchMatch());
+                            client.sendPacket(new PacketSearchMatch());
                             connectionStatus.setText("Connecting...");
                         }
                     } catch (Exception e1) {
@@ -177,13 +178,13 @@ public class MatchmakingScreen implements Screen {
 
                 if (connectionStatus.getText().toString().equals("Connected: Match found")) {
                     if (!isReady) {
-                        game.getClient().sendPacket(new PacketInStartMatch());
+                        game.getClient().sendPacket(new PacketStartMatch());
                         isReady = true;
                         log.info("isReady is : {}", isReady);
                         startingStatus.setText("You're ready to play");
                     } else {
                         if (startingStatus.getText().toString().equals("The other player is waiting to get started")) {
-                            game.getClient().sendPacket(new PacketInStartMatch());
+                            game.getClient().sendPacket(new PacketStartMatch());
                             game.getClient().setCurrentScreen(new GameScreen(game));
                             game.setScreen(game.getClient().getCurrentScreen());
                         }
@@ -283,17 +284,17 @@ public class MatchmakingScreen implements Screen {
                         connectionStatus.setText("Partner lost connection");
                     }
                     break;
-                case PACKETOUTSEARCHMATCH:
+                case PACKETSEARCHMATCH:
                     connectionStatus.setText("Connected: Waiting for Enemy");
                     break;
-                case PACKETOUTMATCHFOUND:
+                case PACKETMATCHFOUND:
                     connectionStatus.setText("Connected: Match found");
                     break;
                 case PACKETCHATMESSAGE:
                     PacketChatMessage packetChatMessage = (PacketChatMessage) packet;
                     addMessageToBox(false, packetChatMessage.getText());
                     break;
-                case PACKETOUTSTARTMATCH:
+                case PACKETSTARTMATCH:
                     //checking if player is ready to start game. If not it is set to true
                     //else the scene changes
                     if (isReady) {

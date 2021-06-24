@@ -85,9 +85,9 @@ public class Wave {
         if (partnerIsPausing) {
             waveSpeed = Math.round(waveSpeed * 0.75);
             waveSize = Math.round(waveSize * 1.1);
-            waveReward = (int) Math.round(waveReward * 1.5);
+            waveReward = (int) Math.round(waveReward * 1.1);
             log.info("wave reward: {}", waveReward);
-            enemySpeed += 5;
+            enemySpeed += 4;
             log.info("enemy speed: {}", enemySpeed);
             enemiesSpawned = 0;
             enemiesPastLeft = 0;

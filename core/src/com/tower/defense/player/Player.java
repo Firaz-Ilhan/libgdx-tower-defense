@@ -13,7 +13,7 @@ public class Player {
     private final static Logger log = LogManager.getLogger(Player.class);
     private boolean lost = false;
     private final String name;
-    private int wallet = 100;
+    private int wallet = 50;
     private final boolean playerSide;
 
     private int lifepoints = 200;

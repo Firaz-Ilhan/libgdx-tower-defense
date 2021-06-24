@@ -4,10 +4,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedHashMap;
 
+import com.tower.defense.helper.Constant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.tower.defense.screen.MainMenuScreen;
 
 
 public class Server {
@@ -17,7 +16,6 @@ public class Server {
     private final LinkedHashMap<Integer, ServerConnection> connections = new LinkedHashMap<>();
     private volatile boolean running = true;
     private GameManager gameManager;
-    private final int port = 3456;
 
     /**
      * while the server is running it always checks for new sockets.
@@ -26,8 +24,8 @@ public class Server {
      * All sockets and its ServerConnections are stored in a LinkedHashMap
      */
     public Server() {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            log.info("Starting server on Port {}", port);
+        try (ServerSocket serverSocket = new ServerSocket(Constant.SERVER_PORT)) {
+            log.info("Starting server on Port {}", Constant.SERVER_PORT);
             this.gameManager = new GameManager();
             while (running) {
                 Socket socket = serverSocket.accept();

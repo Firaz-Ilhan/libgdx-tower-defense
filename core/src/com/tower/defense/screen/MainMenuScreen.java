@@ -1,15 +1,17 @@
 package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +24,7 @@ public class MainMenuScreen implements Screen {
     private final Stage stage;
     private final Skin skin;
     private final TowerDefense game;
-
+    private Texture background;
     public MainMenuScreen(TowerDefense game) {
         this.game = game;
         skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
@@ -38,6 +40,9 @@ public class MainMenuScreen implements Screen {
         menuTable.setDebug(false);
         stage.addActor(menuTable);
         //create buttons
+        background = new Texture(Gdx.files.internal("backgroundTitle.png"));
+        TextureRegionDrawable backgroundRegion =
+                new TextureRegionDrawable(new TextureRegion(background));
         final TextButton multiplayerButton = new TextButton("Multiplayer", skin, "default");
         final TextButton settingsButton = new TextButton("Settings", skin, "default");
         final TextButton aboutButton = new TextButton("About", skin, "default");
@@ -52,7 +57,7 @@ public class MainMenuScreen implements Screen {
         menuTable.add(aboutButton);
         menuTable.row();
         menuTable.add(exitButton);
-
+        menuTable.background(backgroundRegion);
         //create button listeners
         exitButton.addListener(new ChangeListener() {
             @Override
@@ -81,7 +86,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+        Gdx.gl.glClearColor(0.45f,0.63f,0.76f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }

@@ -4,10 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
@@ -42,7 +45,7 @@ public class MatchmakingScreen implements Screen {
     private Table scrollTable;
     private ScrollPane scroller;
     private TextField inputArea;
-
+    private Texture background;
     private Client client;
 
 
@@ -60,7 +63,9 @@ public class MatchmakingScreen implements Screen {
         connectionTable.setFillParent(true);
         connectionTable.setDebug(false);
         stage.addActor(connectionTable);
-
+        background = new Texture(Gdx.files.internal("background.png"));
+        TextureRegionDrawable region =
+                new TextureRegionDrawable(new TextureRegion(background));
         final TextField serverIPField = new TextField("127.0.0.1", skin, "default");
         final Label serverIPLabel = new Label("Server's IP address", skin, "default");
 
@@ -91,7 +96,7 @@ public class MatchmakingScreen implements Screen {
         connectionTable.row();
         connectionTable.add(startGameButton);
         connectionTable.add(startingStatus);
-
+        connectionTable.background(region);
         scrollTable = new Table(skin);
         scrollTable.setDebug(false);
         scrollTable.setFillParent(false);
@@ -206,7 +211,7 @@ public class MatchmakingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+        Gdx.gl.glClearColor(0.45f,0.63f,0.76f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         handlePacketQueue();

@@ -560,7 +560,7 @@ public class GameScreen implements Screen {
                     float xCordAdd = packetOutAddTower.getX();
                     float yCordAdd = packetOutAddTower.getY();
 
-                    tower1 = new Tower1(turret1Texture, (mapWidth - xCordAdd) * 50,
+                    tower1 = new Tower1(turret2Texture, (mapWidth - xCordAdd) * 50,
                             yCordAdd * 50, 50, 50, spriteBatch);
                     enemyTowersPlaced.add(tower1);
                     player2.buyTower(tower1);

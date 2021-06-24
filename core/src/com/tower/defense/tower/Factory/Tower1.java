@@ -2,7 +2,9 @@ package com.tower.defense.tower.Factory;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.tower.defense.enemy.Enemy;
+import com.tower.defense.player.Player;
 import com.tower.defense.tower.ITower;
 import com.tower.defense.wave.Wave;
 
@@ -75,17 +77,22 @@ public class Tower1 implements ITower {
         return cost;
     }
 
-    public void updateTargetarray(Wave wave){
+    public void updateTargetarray(Wave waveClass, Player player){
             enemyMap = new HashMap<>();
-
-        for (int i = 0; i < wave.waveLeft.size; i++) {
-            int PosX = (int) wave.waveLeft.get(i).getX();
-            int PosY = (int) wave.waveLeft.get(i).getY();
+            Array<Enemy> wave;
+        if (player.getPlayerSide()) {
+            wave = waveClass.waveLeft;
+        } else {
+            wave = waveClass.waveRight;
+        }
+        for (int i = 0; i < wave.size; i++) {
+            int PosX = (int) wave.get(i).getX();
+            int PosY = (int) wave.get(i).getY();
             float distance = (float) Point2D.distance(getX(),getY(),PosX,PosY);
             if (distance < range){
-                enemyMap.put(wave.waveLeft.get(i),distance);
+                enemyMap.put(wave.get(i),distance);
             }else {
-                enemyMap.remove(wave.waveLeft.get(i));
+                enemyMap.remove(wave.get(i));
             }
 
         }

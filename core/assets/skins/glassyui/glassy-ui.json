@@ -14,6 +14,18 @@
       b: 0
       a: 1
     }
+    red: {
+      r: 0.70
+      g: 0
+      b: 0
+      a: 1
+    }
+    green: {
+      r: 0
+      g: 0.9
+      b: 0
+      a: 1
+    }
     cyan: {
       r: 0
       g: 1
@@ -100,6 +112,14 @@
     black: {
       font: font
       fontColor: black
+    }
+    main: {
+      font: font-big
+      fontColor: red
+    }
+    won: {
+      font: font-big
+      fontColor: green
     }
   }
   com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {

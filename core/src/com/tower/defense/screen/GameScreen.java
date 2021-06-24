@@ -26,13 +26,7 @@ import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.helper.Constant;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
-import com.tower.defense.network.packet.client.PacketInAddTower;
-import com.tower.defense.network.packet.client.PacketInEndOfGame;
-import com.tower.defense.network.packet.client.PacketInRemoveTower;
-import com.tower.defense.network.packet.server.PacketOutAddTower;
-import com.tower.defense.network.packet.server.PacketOutEndOfWave;
-import com.tower.defense.network.packet.server.PacketOutLifepoints;
-import com.tower.defense.network.packet.server.PacketOutRemoveTower;
+import com.tower.defense.network.packet.client.*;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.ITower;
@@ -349,7 +343,7 @@ public class GameScreen implements Screen {
 
                     if (game.getClient() != null) {
                         game.getClient().sendPacket(
-                                new PacketInRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
+                                new PacketRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
                     }
 
                 }
@@ -414,7 +408,7 @@ public class GameScreen implements Screen {
             player1.lost();
 
             if (game.getClient() != null) {
-                game.getClient().sendPacket(new PacketInEndOfGame());
+                game.getClient().sendPacket(new PacketEndOfGame());
             }
 
             game.setScreen(new EndScreen(game));
@@ -441,7 +435,7 @@ public class GameScreen implements Screen {
         turretsPlaced.add(tower1);
 
         if (game.getClient() != null) {
-            game.getClient().sendPacket(new PacketInAddTower(hoveredTilePosition.x, hoveredTilePosition.y));
+            game.getClient().sendPacket(new PacketAddTower(hoveredTilePosition.x, hoveredTilePosition.y));
         }
 
 
@@ -488,37 +482,33 @@ public class GameScreen implements Screen {
             final float mapWidth = 31f;
 
             switch (type) {
-                case PACKETOUTCHATMESSAGE:
-//                PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
-//                addMessageToBox(false, packetOutChatMessage.getText());
+                case PACKETLIFEPOINTS:
+                    PacketLifepoints packetLifepoints = (PacketLifepoints) packet;
+                    player2.setLifepoints(packetLifepoints.getLP());
                     break;
-                case PACKETOUTLIEFEPOINTS:
-                    PacketOutLifepoints packetOutLifepoints = (PacketOutLifepoints) packet;
-                    player2.setLifepoints(packetOutLifepoints.getLP());
+                case PACKETENDOFWAVE:
+                    PacketEndOfWave packetEndOfWave = (PacketEndOfWave) packet;
+                    wave.partnerWaveEnded(packetEndOfWave.getReward());
                     break;
-                case PACKETOUTENDOFWAVE:
-                    PacketOutEndOfWave packetOutEndOfWave = (PacketOutEndOfWave) packet;
-                    wave.partnerWaveEnded(packetOutEndOfWave.getReward());
-                    break;
-                case PACKETOUTENDOFGAME:
+                case PACKETENDOFGAME:
                     player2.lost();
                     game.setScreen(new EndScreen(game));
                     log.info("set screen to {}", game.getScreen().getClass());
                     break;
-                case PACKETOUTADDTOWER:
+                case PACKETADDTOWER:
                     log.info("packetoutnewtower received");
-                    PacketOutAddTower packetOutAddTower = (PacketOutAddTower) packet;
-                    float xCordAdd = packetOutAddTower.getX();
-                    float yCordAdd = packetOutAddTower.getY();
+                    PacketAddTower packetAddTower = (PacketAddTower) packet;
+                    float xCordAdd = packetAddTower.getX();
+                    float yCordAdd = packetAddTower.getY();
 
-                    tower1 = new Tower1(turret1Texture, (mapWidth - xCordAdd) * 50,
+                    tower1 = new Tower1(turret2Texture, (mapWidth - xCordAdd) * 50,
                             yCordAdd * 50, 50, 50, spriteBatch);
                     enemyTowersPlaced.add(tower1);
                     player2.buyTower(tower1);
                     break;
-                case PACKETOUTREMOVETOWER:
+                case PACKETREMOVETOWER:
                     log.info("packetoutremovetower received");
-                    PacketOutRemoveTower packetOutRemoveTower = (PacketOutRemoveTower) packet;
+                    PacketRemoveTower packetOutRemoveTower = (PacketRemoveTower) packet;
                     float xCordRemove = packetOutRemoveTower.getX();
                     float yCordRemove = packetOutRemoveTower.getY();
                     tower1ListIterator1 = enemyTowersPlaced.listIterator();

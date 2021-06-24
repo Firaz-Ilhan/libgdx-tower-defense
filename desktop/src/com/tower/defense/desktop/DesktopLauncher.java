@@ -12,6 +12,7 @@ public class DesktopLauncher {
         config.useVsync(true);
         config.setForegroundFPS(60);
         config.setIdleFPS(30);
+        config.setWindowIcon("virus.png");
         new Lwjgl3Application(new TowerDefense(), config);
     }
 }

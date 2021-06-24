@@ -1,11 +1,11 @@
 package com.tower.defense.network.client;
 
 import com.badlogic.gdx.Screen;
+import com.tower.defense.helper.PacketQueue;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
-import com.tower.defense.network.packet.client.PacketInEndOfGame;
+import com.tower.defense.network.packet.client.PacketEndOfGame;
 import com.tower.defense.screen.GameScreen;
-import com.tower.defense.screen.MainMenuScreen;
 import com.tower.defense.screen.MatchmakingScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +55,7 @@ public class ClientConnection implements Runnable {
      */
     public void closeConnection() {
         try {
-            sendPacketToServer(new PacketInEndOfGame());
+            sendPacketToServer(new PacketEndOfGame());
             inputStream.close();
             outputStream.close();
             socket.close();
@@ -88,31 +88,12 @@ public class ClientConnection implements Runnable {
                 Packet packet = packetClass.getDeclaredConstructor().newInstance();
                 packet.write(object);
 
-                handle(packet);
+                PacketQueue.packetQueue.addFirst(packet);
             }
         } catch (Exception e) {
             e.printStackTrace();
             closeConnection();
         }
     }
-
-    /**
-     * screens have there own handle() methods,
-     * so this method calls the handle method of those screens
-     *
-     * @param packet packet that was created in run()
-     * @throws IOException
-     */
-    private void handle(Packet packet) {
-        Screen screen = client.getCurrentScreen();
-        if (screen instanceof MatchmakingScreen) {
-            MatchmakingScreen matchmakingScreen = (MatchmakingScreen) screen;
-            matchmakingScreen.handle(packet);
-        }
-        if (screen instanceof GameScreen) {
-            GameScreen gameScreen = (GameScreen) screen;
-            gameScreen.handle(packet);
-        }
-    }
-
+    
 }

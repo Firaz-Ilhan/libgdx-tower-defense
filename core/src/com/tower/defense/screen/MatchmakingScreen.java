@@ -4,10 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
@@ -16,10 +19,9 @@ import com.tower.defense.helper.NetworkINTF;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
-import com.tower.defense.network.packet.client.PacketInChatMessage;
-import com.tower.defense.network.packet.client.PacketInSearchMatch;
-import com.tower.defense.network.packet.client.PacketInStartMatch;
-import com.tower.defense.network.packet.server.PacketOutChatMessage;
+import com.tower.defense.network.packet.client.PacketChatMessage;
+import com.tower.defense.network.packet.client.PacketStartMatch;
+import com.tower.defense.network.packet.server.PacketSearchMatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,7 +44,7 @@ public class MatchmakingScreen implements Screen {
     private Table scrollTable;
     private ScrollPane scroller;
     private TextField inputArea;
-
+    private Texture background;
     private Client client;
 
 
@@ -60,7 +62,9 @@ public class MatchmakingScreen implements Screen {
         connectionTable.setFillParent(true);
         connectionTable.setDebug(false);
         stage.addActor(connectionTable);
-
+        background = new Texture(Gdx.files.internal("background.png"));
+        TextureRegionDrawable region =
+                new TextureRegionDrawable(new TextureRegion(background));
         final TextField serverIPField = new TextField("127.0.0.1", skin, "default");
         final Label serverIPLabel = new Label("Server's IP address", skin, "default");
 
@@ -91,7 +95,7 @@ public class MatchmakingScreen implements Screen {
         connectionTable.row();
         connectionTable.add(startGameButton);
         connectionTable.add(startingStatus);
-
+        connectionTable.background(region);
         scrollTable = new Table(skin);
         scrollTable.setDebug(false);
         scrollTable.setFillParent(false);
@@ -139,7 +143,7 @@ public class MatchmakingScreen implements Screen {
                             log.info("Creating Client with IP: {}", ip);
                             client.setCurrentScreen(instance);
                             game.setClient(client);
-                            client.sendPacket(new PacketInSearchMatch());
+                            client.sendPacket(new PacketSearchMatch());
                             connectionStatus.setText("Connecting...");
                         }
                     } catch (Exception e1) {
@@ -174,13 +178,13 @@ public class MatchmakingScreen implements Screen {
 
                 if (connectionStatus.getText().toString().equals("Connected: Match found")) {
                     if (!isReady) {
-                        game.getClient().sendPacket(new PacketInStartMatch());
+                        game.getClient().sendPacket(new PacketStartMatch());
                         isReady = true;
                         log.info("isReady is : {}", isReady);
                         startingStatus.setText("You're ready to play");
                     } else {
                         if (startingStatus.getText().toString().equals("The other player is waiting to get started")) {
-                            game.getClient().sendPacket(new PacketInStartMatch());
+                            game.getClient().sendPacket(new PacketStartMatch());
                             game.getClient().setCurrentScreen(new GameScreen(game));
                             game.setScreen(game.getClient().getCurrentScreen());
                         }
@@ -198,7 +202,7 @@ public class MatchmakingScreen implements Screen {
                 if (connectionStatus.getText().toString().equals("Connected: Match found")) {
                     final String msg = inputArea.getText();
                     addMessageToBox(true, msg);
-                    game.getClient().sendPacket(new PacketInChatMessage(this.toString(), msg));
+                    game.getClient().sendPacket(new PacketChatMessage(this.toString(), msg));
                 }
             }
         });
@@ -206,7 +210,7 @@ public class MatchmakingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+        Gdx.gl.glClearColor(0.45f,0.63f,0.76f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         handlePacketQueue();
@@ -275,22 +279,22 @@ public class MatchmakingScreen implements Screen {
             log.info("Traffic: New {}", type.toString());
 
             switch (type) {
-                case PACKETOUTENDOFGAME:
+                case PACKETENDOFGAME:
                     if (game.getClient() != null) {
                         connectionStatus.setText("Partner lost connection");
                     }
                     break;
-                case PACKETOUTSEARCHMATCH:
+                case PACKETSEARCHMATCH:
                     connectionStatus.setText("Connected: Waiting for Enemy");
                     break;
-                case PACKETOUTMATCHFOUND:
+                case PACKETMATCHFOUND:
                     connectionStatus.setText("Connected: Match found");
                     break;
-                case PACKETOUTCHATMESSAGE:
-                    PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
-                    addMessageToBox(false, packetOutChatMessage.getText());
+                case PACKETCHATMESSAGE:
+                    PacketChatMessage packetChatMessage = (PacketChatMessage) packet;
+                    addMessageToBox(false, packetChatMessage.getText());
                     break;
-                case PACKETOUTSTARTMATCH:
+                case PACKETSTARTMATCH:
                     //checking if player is ready to start game. If not it is set to true
                     //else the scene changes
                     if (isReady) {

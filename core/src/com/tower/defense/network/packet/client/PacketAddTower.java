@@ -4,16 +4,16 @@ import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import org.json.JSONObject;
 
-public class PacketInRemoveTower extends Packet {
+public class PacketAddTower extends Packet {
 
     private float x;
     private float y;
 
-    public PacketInRemoveTower() {
+    public PacketAddTower() {
 
     }
 
-    public PacketInRemoveTower(float x, float y) {
+    public PacketAddTower(float x, float y) {
         this.packetType = PacketType.getPacketTypeByClass(getClass());
         this.x = x;
         this.y = y;

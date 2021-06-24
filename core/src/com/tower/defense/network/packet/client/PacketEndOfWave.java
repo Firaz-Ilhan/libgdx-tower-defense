@@ -1,45 +1,37 @@
-package com.tower.defense.network.packet.server;
+package com.tower.defense.network.packet.client;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import org.json.JSONObject;
 
-public class PacketOutRemoveTower extends Packet {
+public class PacketEndOfWave extends Packet {
 
-    private float x;
-    private float y;
+    private int reward;
 
-    public PacketOutRemoveTower() {
-
+    public PacketEndOfWave() {
     }
 
-    public PacketOutRemoveTower(float x, float y) {
+    public PacketEndOfWave(int walletValue) {
         this.packetType = PacketType.getPacketTypeByClass(getClass());
-        this.x = x;
-        this.y = y;
+        this.reward = walletValue;
     }
 
     @Override
     public JSONObject read() {
         JSONObject object = new JSONObject();
         object.put("id", packetType.getPacketID());
-        object.put("x", x);
-        object.put("y", y);
+        object.put("reward", reward);
         return object;
     }
 
     @Override
     public void write(JSONObject object) {
         this.packetType = PacketType.getPacketTypeByID(object.getInt("id"));
-        this.x = object.getInt("x");
-        this.y = object.getInt("y");
+        this.reward = object.getInt("reward");
     }
 
-    public float getX() {
-        return x;
+    public int getReward() {
+        return reward;
     }
 
-    public float getY() {
-        return y;
-    }
 }

@@ -8,25 +8,17 @@ import com.tower.defense.network.packet.server.*;
 public enum PacketType {
 
 	//Clientpackets
-	PACKETINSEARCHMATCH(1, PacketInSearchMatch.class),
-	PACKETINCHATMESSAGE(3, PacketInChatMessage.class),
-	PACKETINSTARTMATCH(4, PacketInStartMatch.class),
-	PACKETINENDOFWAVE(5,PacketInEndOfWave.class),
-	PACKETINLIFEPOINTS(6,PacketInLifepoints.class),
-	PACKETINADDTOWER(7, PacketInAddTower.class),
-	PACKETINREMOVETOWER(8, PacketInRemoveTower.class),
-	PACKETINENDOFGAME(9,PacketInEndOfGame.class),
+	PACKETCHATMESSAGE(3, PacketChatMessage.class),
+	PACKETSTARTMATCH(4, PacketStartMatch.class),
+	PACKETENDOFWAVE(5, PacketEndOfWave.class),
+	PACKETLIFEPOINTS(6, PacketLifepoints.class),
+	PACKETADDTOWER(7, PacketAddTower.class),
+	PACKETREMOVETOWER(8, PacketRemoveTower.class),
+	PACKETENDOFGAME(9, PacketEndOfGame.class),
 
 	//Serverpackets
-	PACKETOUTSEARCHMATCH(101, PacketOutSearchMatch.class),
-	PACKETOUTMATCHFOUND(102, PacketOutMatchFound.class),
-	PACKETOUTCHATMESSAGE(103, PacketOutChatMessage.class),
-	PACKETOUTSTARTMATCH(104, PacketOutStartMatch.class),
-	PACKETOUTLIEFEPOINTS(106, PacketOutLifepoints.class),
-	PACKETOUTENDOFWAVE(105,PacketOutEndOfWave.class),
-	PACKETOUTADDTOWER(107, PacketOutAddTower.class),
-	PACKETOUTREMOVETOWER(108, PacketOutRemoveTower.class),
-	PACKETOUTENDOFGAME(109,PacketOutEndOfGame.class);
+	PACKETSEARCHMATCH(101, PacketSearchMatch.class),
+	PACKETMATCHFOUND(102, PacketMatchFound.class);
 
 
 	private int packetID;

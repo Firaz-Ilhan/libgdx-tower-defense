@@ -3,7 +3,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
-import com.tower.defense.network.packet.client.PacketInEndOfWave;
+import com.tower.defense.network.packet.client.PacketEndOfWave;
 import com.tower.defense.screen.GameScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,7 +77,7 @@ public class Wave {
             int reward = calculateReward();
             GameScreen.player1.addToWallet(reward);
             if (game.getClient() != null) {
-                game.getClient().sendPacket(new PacketInEndOfWave(reward));
+                game.getClient().sendPacket(new PacketEndOfWave(reward));
             }
             pausing = true;
             log.info("Pausing: {}", pausing);

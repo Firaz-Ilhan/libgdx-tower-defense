@@ -2,9 +2,8 @@ package com.tower.defense.wave;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
-import com.tower.defense.network.packet.client.PacketInLifepoints;
+import com.tower.defense.network.packet.client.PacketLifepoints;
 import com.tower.defense.player.Player;
 
 import java.util.Iterator;
@@ -85,7 +84,7 @@ public class RenderWave {
                     player.reduceLifepoints(enemy.getDamage());
                     //NETWORKING
                     if (waveClass.getGame().getClient() != null) {
-                        waveClass.getGame().getClient().sendPacket(new PacketInLifepoints(player.getLifepoints()));
+                        waveClass.getGame().getClient().sendPacket(new PacketLifepoints(player.getLifepoints()));
                     }
                     //
                     waveClass.enemyPassed();

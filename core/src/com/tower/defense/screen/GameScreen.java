@@ -151,14 +151,7 @@ public class GameScreen implements Screen {
         this.zeroTowerAlert = false;
         this.buildMode = false;
         this.sellMode = false;
-
-
         this.turretIsHovered = false;
-
-
-
-
-
     }
 
     @Override
@@ -299,9 +292,6 @@ public class GameScreen implements Screen {
         }
 
 
-
-
-
         //if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
 
         if (Gdx.input.isButtonPressed(0) && !leftMouseButtonDown) {
@@ -316,7 +306,7 @@ public class GameScreen implements Screen {
         }
 
 
-         //drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
+        //drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
 
 
         if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles) && buildMode && player1.getWalletValue() >= 20) {
@@ -342,20 +332,12 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
-            tower1.updateTargetarray(wave,player1);
+            tower1.updateTargetarray(wave, player1);
             tower1.update();
 
 
             //Output if player tries to delete the last turret
-
-            if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1) {
-                //System.out.println("You cant own 0 turrets");
-                // zeroTowerAlert = true;
-            }
-
-
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
-
 
 
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
@@ -364,10 +346,6 @@ public class GameScreen implements Screen {
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                     player1.sellTower(tower1);
                     System.out.println(turretsPlaced);
-
-                    game.getClient().sendPacket
-                            (new PacketInRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
-
 
                     if (game.getClient() != null) {
                         game.getClient().sendPacket(
@@ -385,20 +363,20 @@ public class GameScreen implements Screen {
 
 
         }
-       //draw indicator for Turretrange while mouse is hoverd over turret
+        //draw indicator for Turretrange while mouse is hoverd over turret
         turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
 
 
-        if(Gdx.input.isKeyPressed(57)){
+        if (Gdx.input.isKeyPressed(57)) {
             turretIsHovered = true;
-        }else{
+        } else {
             turretIsHovered = false;
         }
 
         if (turretIsHovered) {
 
             //spriteBatch.draw(turret1RangeIndicator, tower1.getX() - 75 , tower1.getY() - 75);
-            spriteBatch.draw(turret1RangeIndicator, hoveredTilePosition.x * 50 - 175 , hoveredTilePosition.y * 50 - 175);      //zur not auf Mausposition
+            spriteBatch.draw(turret1RangeIndicator, hoveredTilePosition.x * 50 - 175, hoveredTilePosition.y * 50 - 175);      //zur not auf Mausposition
         }
 
 
@@ -409,7 +387,7 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
-            tower1.updateTargetarray(wave,player2);
+            tower1.updateTargetarray(wave, player2);
             tower1.update();
 
         }
@@ -476,8 +454,7 @@ public class GameScreen implements Screen {
 
 
     /**
-     *Switch between build and sell mode with the buttons provided for this
-     *
+     * Switch between build and sell mode with the buttons provided for this
      */
     public void handleInput() {
         if (sellTurretsController.isSellModePressed()) {
@@ -485,8 +462,7 @@ public class GameScreen implements Screen {
             buildMode = false;
 
 
-        }
-        else if(sellTurretsController.isBuildModePressed()){
+        } else if (sellTurretsController.isBuildModePressed()) {
             buildMode = true;
             sellMode = false;
             zeroTowerAlert = false;

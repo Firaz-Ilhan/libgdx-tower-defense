@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.helper.Constant;
 import com.tower.defense.helper.NetworkINTF;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
@@ -23,8 +23,9 @@ import com.tower.defense.network.packet.server.PacketOutChatMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
+
+import static com.tower.defense.helper.PacketQueue.packetQueue;
 
 public class MatchmakingScreen implements Screen {
 
@@ -34,7 +35,6 @@ public class MatchmakingScreen implements Screen {
     private final Skin skin;
     private final TowerDefense game;
     private final MatchmakingScreen instance;
-    private final Queue<Packet> packetQueue = new Queue<>();
 
     private boolean isReady = false;
     private Label connectionStatus;
@@ -43,10 +43,12 @@ public class MatchmakingScreen implements Screen {
     private ScrollPane scroller;
     private TextField inputArea;
 
+    private Client client;
+
 
     public MatchmakingScreen(final TowerDefense game) {
         this.game = game;
-        skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
+        skin = game.assetManager.get(Constant.SKIN_PATH);
         stage = new Stage(new ScreenViewport());
         this.instance = this;
         Gdx.input.setInputProcessor(stage);
@@ -133,7 +135,7 @@ public class MatchmakingScreen implements Screen {
                     try {
                         if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy") && !connectionStatus.getText().toString().equals("Connected: Match found")) {
                             connectionStatus.setText("Trying to connect");
-                            Client client = new Client(ip, 3456);
+                            client = new Client(ip, Constant.SERVER_PORT);
                             log.info("Creating Client with IP: {}", ip);
                             client.setCurrentScreen(instance);
                             game.setClient(client);
@@ -142,9 +144,12 @@ public class MatchmakingScreen implements Screen {
                         }
                     } catch (Exception e1) {
                         connectionStatus.setText("could not connect to the server");
+                        client = null; // set client to null after failed connection attempt
                     }
-                }//192.168.178.92
-                else {
+
+                    game.setClient(client);
+
+                } else {
                     connectionStatus.setText("Please enter a correct server IPv4 address,if you're running the server,type your own");
                     log.info("IP from Textfield is: {}(else Block)", ip);
                 }
@@ -169,13 +174,10 @@ public class MatchmakingScreen implements Screen {
 
                 if (connectionStatus.getText().toString().equals("Connected: Match found")) {
                     if (!isReady) {
-                        log.info("before PacketInStartMatch");
                         game.getClient().sendPacket(new PacketInStartMatch());
-                        log.info("packet send");
                         isReady = true;
                         log.info("isReady is : {}", isReady);
                         startingStatus.setText("You're ready to play");
-                        log.info("text set");
                     } else {
                         if (startingStatus.getText().toString().equals("The other player is waiting to get started")) {
                             game.getClient().sendPacket(new PacketInStartMatch());
@@ -263,16 +265,21 @@ public class MatchmakingScreen implements Screen {
      * Most of the time it changes something in the GUI.
      */
     public void handlePacketQueue() {
-        if(packetQueue.isEmpty()){
+        if (packetQueue.isEmpty()) {
             return;
         }
-        while(!packetQueue.isEmpty()) {
+        while (!packetQueue.isEmpty()) {
             Packet packet = packetQueue.removeFirst();
             PacketType type = packet.getPacketType();
 
             log.info("Traffic: New {}", type.toString());
 
             switch (type) {
+                case PACKETOUTENDOFGAME:
+                    if (game.getClient() != null) {
+                        connectionStatus.setText("Partner lost connection");
+                    }
+                    break;
                 case PACKETOUTSEARCHMATCH:
                     connectionStatus.setText("Connected: Waiting for Enemy");
                     break;
@@ -288,9 +295,7 @@ public class MatchmakingScreen implements Screen {
                     //else the scene changes
                     if (isReady) {
                         Client client = game.getClient();
-                        log.info("client bekommen");
                         client.setCurrentScreen(new GameScreen(game));
-                        log.info("client.set screen");
                         game.setScreen(new GameScreen(game));
                     } else {
                         isReady = true;
@@ -305,10 +310,9 @@ public class MatchmakingScreen implements Screen {
     }
 
     /**
-     *
      * @param packet packet that was created in run() by ClientConnection()
      */
-    public void handle(Packet packet){
+    public void handle(Packet packet) {
         packetQueue.addFirst(packet);
     }
 }

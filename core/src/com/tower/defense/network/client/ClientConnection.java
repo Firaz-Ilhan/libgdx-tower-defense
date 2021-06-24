@@ -3,8 +3,12 @@ package com.tower.defense.network.client;
 import com.badlogic.gdx.Screen;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
+import com.tower.defense.network.packet.client.PacketInEndOfGame;
 import com.tower.defense.screen.GameScreen;
+import com.tower.defense.screen.MainMenuScreen;
 import com.tower.defense.screen.MatchmakingScreen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 import java.io.DataInputStream;
@@ -15,7 +19,7 @@ import java.util.Objects;
 
 
 public class ClientConnection implements Runnable {
-
+    private final static Logger log = LogManager.getLogger(ClientConnection.class);
     private final Socket socket;
     private final Client client;
     private final DataInputStream inputStream;
@@ -43,7 +47,7 @@ public class ClientConnection implements Runnable {
     public void sendPacketToServer(Packet packet) throws IOException {
         outputStream.writeUTF(packet.read().toString());
         outputStream.flush();
-        System.out.println("clientConnection sent packet");
+        log.debug("clientConnection sent packet");
     }
 
     /**
@@ -51,9 +55,11 @@ public class ClientConnection implements Runnable {
      */
     public void closeConnection() {
         try {
+            sendPacketToServer(new PacketInEndOfGame());
             inputStream.close();
             outputStream.close();
             socket.close();
+            log.info("socket closed");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,7 @@
 package com.tower.defense;
 
+import com.tower.defense.helper.Constant;
+import com.tower.defense.network.packet.client.PacketInEndOfGame;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +39,7 @@ public class TowerDefense extends Game {
 
         // loading assets
         assetManager = new AssetManager();
-        assetManager.load("skins/glassyui/glassy-ui.json", Skin.class);
+        assetManager.load(Constant.SKIN_PATH, Skin.class);
         assetManager.finishLoading();
         log.debug("asset manager loaded: {}", assetManager.getAssetNames());
 
@@ -53,6 +55,9 @@ public class TowerDefense extends Game {
 
     @Override
     public void dispose() {
+        if (client != null) {
+            client.sendPacket(new PacketInEndOfGame());
+        }
         assetManager.dispose();
     }
 

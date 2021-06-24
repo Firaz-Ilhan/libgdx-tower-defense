@@ -1,6 +1,7 @@
 package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.helper.Constant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +26,7 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(TowerDefense game) {
         this.game = game;
-        skin = game.assetManager.get("skins/glassyui/glassy-ui.json");
+        skin = game.assetManager.get(Constant.SKIN_PATH);
         //create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -36,7 +38,6 @@ public class MainMenuScreen implements Screen {
         menuTable.setFillParent(true);
         menuTable.setDebug(false);
         stage.addActor(menuTable);
-
         //create buttons
         final TextButton multiplayerButton = new TextButton("Multiplayer", skin, "default");
         final TextButton settingsButton = new TextButton("Settings", skin, "default");

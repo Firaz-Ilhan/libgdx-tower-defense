@@ -2,8 +2,14 @@ package com.tower.defense.tower.Factory;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
+import com.tower.defense.enemy.Enemy;
+import com.tower.defense.player.Player;
 import com.tower.defense.tower.ITower;
+import com.tower.defense.wave.Wave;
 
+import java.awt.geom.Point2D;
+import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 public class Tower1 implements ITower {
@@ -13,11 +19,14 @@ public class Tower1 implements ITower {
     boolean is_attacking;
     private double damage = 1;
     private double firerate = 1;
-    private double range = 50;
+    private double range = 250;
     private int cost = 20;
     private Texture turretTexture;
     private float width, height;
     private SpriteBatch spriteBatch;
+    protected HashMap <Enemy,Float> enemyMap;
+    long startTime;
+    long endTime;
 
     public Tower1(Texture turretTexture,float x, float y, int width, int height, SpriteBatch batch) {
         this.x = x;
@@ -27,6 +36,7 @@ public class Tower1 implements ITower {
         this.width = width;
         this.height = height;
         this.spriteBatch = batch;
+        this.startTime = System.nanoTime();
     }
 
 
@@ -65,6 +75,37 @@ public class Tower1 implements ITower {
 
     public int getCost() {
         return cost;
+    }
+
+    public void updateTargetarray(Wave waveClass, Player player){
+            enemyMap = new HashMap<>();
+            Array<Enemy> wave;
+        if (player.getPlayerSide()) {
+            wave = waveClass.waveLeft;
+        } else {
+            wave = waveClass.waveRight;
+        }
+        for (int i = 0; i < wave.size; i++) {
+            int PosX = (int) wave.get(i).getX();
+            int PosY = (int) wave.get(i).getY();
+            float distance = (float) Point2D.distance(getX(),getY(),PosX,PosY);
+            if (distance < range){
+                enemyMap.put(wave.get(i),distance);
+            }else {
+                enemyMap.remove(wave.get(i));
+            }
+
+        }
+
+    }
+    public void update(){
+        endTime = System.nanoTime();
+        double difference = (endTime-startTime)/1e9;
+
+        if (enemyMap.size()>0 && difference>firerate){
+            enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
+            startTime = System.nanoTime();
+        }
     }
 
 

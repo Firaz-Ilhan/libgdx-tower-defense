@@ -1,5 +1,6 @@
 package com.tower.defense.tower;
 
+import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
 
 public interface ITower {
@@ -21,7 +22,7 @@ public interface ITower {
     double getFirerate();
 
     int getCost();
-    void updateTargetarray(Wave wave);
+    void updateTargetarray(Wave wave, Player player);
     void update();
 
 }

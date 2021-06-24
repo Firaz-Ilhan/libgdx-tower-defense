@@ -346,7 +346,7 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
-            tower1.updateTargetarray(wave);
+            tower1.updateTargetarray(wave,player1);
             tower1.update();
 
 
@@ -365,7 +365,7 @@ public class GameScreen implements Screen {
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                    player1.sellTower(player1.getInventory().lastIndexOf(tower1));
+                    player1.sellTower(tower1);
                     System.out.println(turretsPlaced);
 
                     if (game.getClient() != null) {
@@ -391,7 +391,8 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
-
+            tower1.updateTargetarray(wave,player2);
+            tower1.update();
 
         }
 
@@ -562,6 +563,7 @@ public class GameScreen implements Screen {
                     tower1 = new Tower1(turret1Texture, (mapWidth - xCordAdd) * 50,
                             yCordAdd * 50, 50, 50, spriteBatch);
                     enemyTowersPlaced.add(tower1);
+                    player2.buyTower(tower1);
                     break;
                 case PACKETOUTREMOVETOWER:
                     log.info("packetoutremovetower received");
@@ -574,6 +576,7 @@ public class GameScreen implements Screen {
                         if (enemyTowersPlaced.size() > 1) {
                             if (tower1.getX() == (mapWidth - xCordRemove) * 50 && tower1.getY() == yCordRemove * 50) {
                                 tower1ListIterator1.remove();
+                                player2.sellTower(tower1);
                             }
                         }
                     }

@@ -12,18 +12,16 @@ public class Player {
 
     private final static Logger log = LogManager.getLogger(Player.class);
     private boolean lost = false;
-    private String name;
+    private final String name;
     private int wallet = 100;
-    private boolean playerSide;
+    private final boolean playerSide;
 
     private int lifepoints = 200;
-    private LinkedList<ITower> inventory;
 
     public Player(String name, boolean playerSide) {
         this.name = name;
         this.playerSide = playerSide;
         log.info("player: {}", name);
-        inventory = new LinkedList<>();
 
     }
 
@@ -52,18 +50,10 @@ public class Player {
         }
 
     /**
-     * @return inventory
-     */
-    public List<ITower> getInventory() {
-        return inventory;
-    }
-
-    /**
      * If a Tower was bought it is added to the list of the players towers(inventory)
      * The cost will be deducted from the wallet
      */
     public void buyTower(ITower tower) {
-        inventory.add(tower);
         log.info("tower {} was added to the inventory", tower.toString());
         wallet = wallet - tower.getCost();
         log.info("wallet: {}", wallet);
@@ -73,12 +63,9 @@ public class Player {
      * selling Towers only regain 80% of the costs. The result is rounded to an Integer
      * At the end the Tower is removed from the list
      */
-    public void sellTower(int index) {
-        ITower tower = inventory.get(index);
+    public void sellTower(ITower tower) {
         wallet = (int) (wallet + Math.round(tower.getCost() * 0.8));
         log.info("wallet: {}", wallet);
-        inventory.remove(index);
-        log.info("tower at index {} was sold", index);
     }
 
 

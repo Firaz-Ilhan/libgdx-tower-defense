@@ -1,7 +1,7 @@
 main INFO  defense.TowerDefense - OS: Windows 10 amd64
-mmain INFO  server.Server - New incoming Connection Port: 57968
-ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSEARCHMATCH
-main INFO  server.Server - New incoming Connection Port: 57969
+main INFO  defense.TowerDefense - JRE version: 14.0.1
+main INFO  defense.TowerDefense - libGDX version: 1.10.0
+main INFO  defense.TowerDefense - OpenGl main INFO  server.Server - New incoming Connection Port: 62893
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSEARCHMATCH
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSTARTMATCH
 ServerConnectionThread INFO  server.ServerConnection - Traffic: New PACKETINSTARTMATCH

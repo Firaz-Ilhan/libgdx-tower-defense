@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.tower.defense.helper.Constant;
 
 import static com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
 import static com.badlogic.gdx.graphics.Texture.TextureFilter.MipMapLinearLinear;
@@ -22,22 +24,20 @@ public class IngameButtonsController {
 
     private final Viewport buttonViewPort;
     private final Stage buttonStage;
-    private boolean sellModePressed, buildModePressed;
-    private final OrthographicCamera buttonCam;
-    private final Table buttonTable;
+    private final ImageButton buildButton;
+    private final ImageButton sellButton;
 
 
     public IngameButtonsController() {
-        buttonCam = new OrthographicCamera();
-        buttonViewPort = new FitViewport(1600, 900, buttonCam);
+        OrthographicCamera buttonCam = new OrthographicCamera();
+        buttonViewPort = new FitViewport(Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT, buttonCam);
         buttonStage = new Stage(buttonViewPort);
-        buttonTable = new Table();
+        Table buttonTable = new Table();
         buttonTable.left().bottom();
 
 
-        //Texture sellTexture = new Texture("core/assets/buttons/sellMode.png");
-        Texture sellTexture = new Texture(Gdx.files.internal("core/assets/buttons/sellMode.png"), true);
-        Texture sellDownTexture = new Texture(Gdx.files.internal("core/assets/buttons/sellModeDown.png"), true);
+        Texture sellTexture = new Texture(Gdx.files.internal("buttons/sellMode.png"), true);
+        Texture sellDownTexture = new Texture(Gdx.files.internal("buttons/sellModeDown.png"), true);
 
         // improves texture scaling for low resolution
         sellDownTexture.setFilter(MipMapLinearLinear, Linear);
@@ -46,24 +46,11 @@ public class IngameButtonsController {
         Drawable sellImage = new TextureRegionDrawable(new TextureRegion(sellTexture));
         Drawable sellDownImage = new TextureRegionDrawable(new TextureRegion(sellDownTexture));
 
-        ImageButton sellButton = new ImageButton(sellImage, sellDownImage);
+        ImageButton.ImageButtonStyle sellStyle = new ImageButton.ImageButtonStyle();
+        sellStyle.imageUp = sellImage;
+        sellStyle.imageChecked = sellDownImage;
 
-        sellButton.addListener(new InputListener() {
-
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                sellModePressed = true;
-                return true;
-
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                sellModePressed = false;
-
-            }
-        });
+        sellButton = new ImageButton(sellStyle);
 
         Texture buildTexture = new Texture(Gdx.files.internal("buttons/buildMode.png"), true);
         Texture buildDownTexture = new Texture(Gdx.files.internal("buttons/buildModeDown.png"), true);
@@ -75,26 +62,37 @@ public class IngameButtonsController {
         Drawable buildDownImage = new TextureRegionDrawable(new TextureRegion(buildDownTexture));
         Drawable buildImage = new TextureRegionDrawable(new TextureRegion(buildTexture));
 
-        ImageButton buildButton = new ImageButton(buildImage, buildDownImage);
+        ImageButton.ImageButtonStyle buildStyle = new ImageButton.ImageButtonStyle();
+        buildStyle.imageUp = buildImage;
+        buildStyle.imageChecked = buildDownImage;
+
+        buildButton = new ImageButton(buildStyle);
+        buildButton.setChecked(true);
 
         buildButton.addListener(new InputListener() {
 
-
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                buildModePressed = true;
-
+            public boolean keyDown(InputEvent event, int keycode) {
+                buildButton.setChecked(true);
+                sellButton.setChecked(false);
                 return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                buildModePressed = false;
             }
         });
 
-        //buttonTable.add(sellImage).size(sellImage.getWidth(), sellImage.getHeight());
-        //buttonTable.add(buildImage).size(buildImage.getWidth(), buildImage.getHeight());
+
+        sellButton.addListener(new InputListener() {
+
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                sellButton.setChecked(true);
+                buildButton.setChecked(false);
+                return true;
+            }
+        });
+
+        ButtonGroup<ImageButton> buttonGroup = new ButtonGroup<>(sellButton, buildButton);
+        buttonGroup.setMaxCheckCount(1);
+        buttonGroup.setMinCheckCount(1);
         buttonTable.add(sellButton);
         buttonTable.add(buildButton);
 
@@ -109,11 +107,11 @@ public class IngameButtonsController {
     }
 
     public boolean isSellModePressed() {
-        return sellModePressed;
+        return sellButton.isChecked();
     }
 
     public boolean isBuildModePressed() {
-        return buildModePressed;
+        return buildButton.isChecked();
     }
 
     public void resize(int width, int height) {

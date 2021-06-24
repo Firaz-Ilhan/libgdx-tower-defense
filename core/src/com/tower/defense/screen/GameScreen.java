@@ -315,7 +315,7 @@ public class GameScreen implements Screen {
             canDraw = true;
         }
 
-        //avoid multiple rightclicking
+        //avoid multiple right-clicking
 
 
         if (Gdx.input.isButtonPressed(1) && !rightMouseButtonDown) {
@@ -361,7 +361,7 @@ public class GameScreen implements Screen {
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
 
-                //-zeroTowerAllert = false;
+                //zeroTowerAllert = false;
 
                 //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
                 //System.out.println(hoveredTilePosition.x * 50 + "," + hoveredTilePosition.y * 50);
@@ -506,8 +506,7 @@ public class GameScreen implements Screen {
 
 
     /**
-     *Switch between build and sell mode
-     *
+     *Switch between build and sell mode with the buttons provided for this
      */
     public void handleInput(){
         if (sellTurretsController.isSellModePressed()){

@@ -28,6 +28,9 @@ public class IngameButtonsController {
     private boolean sellModePressed, buildModePressed;
     private OrthographicCamera buttonCam;
     private Table buttonTable;
+    private Table controlMenu;
+
+    private boolean controlsIsPressed;
 
 
     public IngameButtonsController() {
@@ -39,12 +42,22 @@ public class IngameButtonsController {
         buttonTable = new Table();
         buttonTable.left().bottom();
 
+        controlMenu = new Table();
+        controlMenu.right().bottom();
 
+
+        //Textures for sell-mode
         Texture sellTexture = new Texture("core/assets/buttons/sellMode.png");
         Texture sellDownTexture = new Texture("core/assets/buttons/sellModeDown.png");
         Drawable sellImage = new TextureRegionDrawable(new TextureRegion(sellTexture));
         Drawable sellDownImage = new TextureRegionDrawable(new TextureRegion(sellDownTexture));
 
+        //Textures for the controlMenu
+        Texture controlsTexture = new Texture("core/assets/buttons/controlMenu.jpg");
+        Drawable controlsImage = new TextureRegionDrawable(new TextureRegion(controlsTexture));
+
+
+        //Create sale button to switch to sale mode
         ImageButton sellButton = new ImageButton(sellImage, sellDownImage);
 
         sellButton.addListener(new InputListener() {
@@ -64,12 +77,13 @@ public class IngameButtonsController {
             }
         });
 
-
+        //textures for sell-mode
         Texture buildTexture = new Texture("core/assets/buttons/buildMode.png");
         Texture buildDownTexture = new Texture("core/assets/buttons/buildModeDown.png");
         Drawable buildDownImage = new TextureRegionDrawable(new TextureRegion(buildDownTexture));
         Drawable buildImage = new TextureRegionDrawable(new TextureRegion(buildTexture));
 
+        //Create build button to switch to build-mode
         ImageButton buildButton = new ImageButton(buildImage, buildDownImage);
 
         buildButton.addListener(new InputListener() {
@@ -93,7 +107,35 @@ public class IngameButtonsController {
         buttonTable.add(sellButton);
         buttonTable.add(buildButton);
 
+
+        ImageButton controlButton = new ImageButton(controlsImage);
+
+        controlButton.addListener(new InputListener(){
+
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                controlsIsPressed = true;
+
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                controlsIsPressed = false;
+            }
+        });
+
+
+
+        controlMenu.add(controlButton);
+
+
         buttonStage.addActor(buttonTable);
+        buttonStage.addActor(controlMenu);
+
+
+
 
 
     }

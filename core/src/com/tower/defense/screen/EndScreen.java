@@ -65,7 +65,6 @@ public class EndScreen implements Screen {
         }
 
         log.info(winner);
-
         // create gui elements
         final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
         final Label whoWon;

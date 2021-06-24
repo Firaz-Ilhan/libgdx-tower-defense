@@ -3,9 +3,8 @@ package com.tower.defense.network.client;
 import com.badlogic.gdx.Screen;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
-import com.tower.defense.network.packet.client.PacketInEndOfGame;
+import com.tower.defense.network.packet.client.PacketEndOfGame;
 import com.tower.defense.screen.GameScreen;
-import com.tower.defense.screen.MainMenuScreen;
 import com.tower.defense.screen.MatchmakingScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +54,7 @@ public class ClientConnection implements Runnable {
      */
     public void closeConnection() {
         try {
-            sendPacketToServer(new PacketInEndOfGame());
+            sendPacketToServer(new PacketEndOfGame());
             inputStream.close();
             outputStream.close();
             socket.close();

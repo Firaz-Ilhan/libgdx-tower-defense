@@ -18,11 +18,9 @@ import com.tower.defense.helper.NetworkINTF;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
-import com.tower.defense.network.packet.client.PacketInChatMessage;
-import com.tower.defense.network.packet.client.PacketInEndOfGame;
+import com.tower.defense.network.packet.client.PacketChatMessage;
 import com.tower.defense.network.packet.client.PacketInSearchMatch;
 import com.tower.defense.network.packet.client.PacketInStartMatch;
-import com.tower.defense.network.packet.server.PacketOutChatMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -203,7 +201,7 @@ public class MatchmakingScreen implements Screen {
                 if (connectionStatus.getText().toString().equals("Connected: Match found")) {
                     final String msg = inputArea.getText();
                     addMessageToBox(true, msg);
-                    game.getClient().sendPacket(new PacketInChatMessage(this.toString(), msg));
+                    game.getClient().sendPacket(new PacketChatMessage(this.toString(), msg));
                 }
             }
         });
@@ -280,7 +278,7 @@ public class MatchmakingScreen implements Screen {
             log.info("Traffic: New {}", type.toString());
 
             switch (type) {
-                case PACKETOUTENDOFGAME:
+                case PACKETENDOFGAME:
                     if (game.getClient() != null) {
                         connectionStatus.setText("Partner lost connection");
                     }
@@ -291,9 +289,9 @@ public class MatchmakingScreen implements Screen {
                 case PACKETOUTMATCHFOUND:
                     connectionStatus.setText("Connected: Match found");
                     break;
-                case PACKETOUTCHATMESSAGE:
-                    PacketOutChatMessage packetOutChatMessage = (PacketOutChatMessage) packet;
-                    addMessageToBox(false, packetOutChatMessage.getText());
+                case PACKETCHATMESSAGE:
+                    PacketChatMessage packetChatMessage = (PacketChatMessage) packet;
+                    addMessageToBox(false, packetChatMessage.getText());
                     break;
                 case PACKETOUTSTARTMATCH:
                     //checking if player is ready to start game. If not it is set to true

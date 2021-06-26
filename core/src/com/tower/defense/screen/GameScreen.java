@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -22,6 +23,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
+import com.tower.defense.enemy.Factory.Enemy1;
+import com.tower.defense.enemy.Factory.EnemyFactory;
 import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.helper.Constant;
 import com.tower.defense.network.packet.Packet;
@@ -100,10 +103,14 @@ public class GameScreen implements Screen {
 
     private Tower1 tower1;
 
-    private int tower1Costs;
-
     private Texture enemyImage;
+    private Texture healthBarBG;
+    private Texture healthBar;
 
+    //get the lifepoints of the current enemy type.
+    // The multiplicator is required to correctly scale the healthbar
+    private int lifepointsAtStart = EnemyFactory.getEnemyInstance("easy", 0, 0, 0).getLifepoints();
+    float multiplicator = (float) 100 / lifepointsAtStart;
 
     // this boolean determines which side of the map the player is on
     private boolean playerSide;
@@ -156,6 +163,8 @@ public class GameScreen implements Screen {
         hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
 
         enemyImage = new Texture(Gdx.files.internal(Constant.VIRUS_ENEMY_PATH));
+        healthBarBG = new Texture(Gdx.files.internal("healthBarBG.png"));
+        healthBar = new Texture(Gdx.files.internal("healthBar.png"));
 
         // getting the layers of the map
         MapLayers mapLayers = map.getLayers();
@@ -254,14 +263,10 @@ public class GameScreen implements Screen {
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 
-        //drawing the hoveredTile based on what player side you are on and whether you allowed to or not
-
-        // drawing the hoveredTile based on what player side you are on and whether you
-        // allowed to or not
-
         stage.act();
 
-
+        //drawing the hoveredTile based on what player side you are on and whether you
+        //allowed to or not
         spriteBatch.begin();
 
         if (playerSide) {
@@ -277,14 +282,24 @@ public class GameScreen implements Screen {
                 spriteBatch.draw(hoveredTileNotAllowed, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
             }
         }
-        // WAVE: drawing the enemies
+        // WAVE: drawing the enemies and a healthbar above them to
+        //       show that an enemy got hit by a turret
         for (Enemy enemy : wave.waveRight) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
+            float currentLifepoints = (lifepointsAtStart - (lifepointsAtStart - enemy.getLifepoints())) * multiplicator;
+            if (currentLifepoints != lifepointsAtStart * multiplicator) {
+                spriteBatch.draw(healthBarBG, enemy.getX() - 25, enemy.getY() + 50, 100, 10);
+                spriteBatch.draw(healthBar, enemy.getX() - 25, enemy.getY() + 50, currentLifepoints, 10);
+            }
         }
         for (Enemy enemy : wave.waveLeft) {
             spriteBatch.draw(enemyImage, enemy.getX(), enemy.getY());
+            float currentLifepoints = (lifepointsAtStart - (lifepointsAtStart - enemy.getLifepoints())) * multiplicator;
+            if (currentLifepoints != lifepointsAtStart * multiplicator) {
+                spriteBatch.draw(healthBarBG, enemy.getX() - 25, enemy.getY() + 50, 100, 10);
+                spriteBatch.draw(healthBar, enemy.getX() - 25, enemy.getY() + 50, currentLifepoints, 10);
+            }
         }
-
 
         //if statement to avoid multiple spawning of turrets by clicking the left mousebutton once
 
@@ -571,5 +586,7 @@ public class GameScreen implements Screen {
         generator.dispose();
         renderer.dispose();
         skin.dispose();
+        healthBarBG.dispose();
+        healthBar.dispose();
     }
 }

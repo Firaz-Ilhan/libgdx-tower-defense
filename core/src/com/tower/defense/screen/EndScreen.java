@@ -17,9 +17,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.helper.Constant;
+import com.tower.defense.network.packet.Packet;
+import com.tower.defense.network.packet.PacketType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.tower.defense.helper.PacketQueue.packetQueue;
+import static com.tower.defense.network.packet.PacketType.PACKETENDOFGAME;
 import static com.tower.defense.screen.GameScreen.player1;
 import static com.tower.defense.screen.GameScreen.player2;
 
@@ -30,7 +34,7 @@ public class EndScreen implements Screen {
     private final Stage stage;
     private final Skin skin;
     private final TowerDefense game;
-    private String winner;
+    private String outcome;
     private Texture background;
 
     public EndScreen(final TowerDefense game) {
@@ -54,26 +58,15 @@ public class EndScreen implements Screen {
         headerTable.setFillParent(true);
         headerTable.setDebug(false);
         stage.addActor(headerTable);
-        if (player1.hasLost() && player2.hasLost() ) {
-            winner = "Draw";
-        } else if (player1.hasLost() ) {
-            winner = "You lost";
-        } else if(player1.hasLost()) {
-            winner = "You won!";
-        }
-        else{
-            winner = "you quit the game";
-        }
-
-        log.info(winner);
+        computeOutcome();
         // create gui elements
         final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
         final Label whoWon;
         if(player1.hasLost()|| !player2.hasLost() && !player1.hasLost()) {
-            whoWon = new Label(winner, skin, "main");
+            whoWon = new Label(outcome, skin, "main");
         }
         else{
-            whoWon = new Label(winner, skin, "won");
+            whoWon = new Label(outcome, skin, "won");
         }
         mainMenuButton.addListener(new ChangeListener() {
             @Override
@@ -90,9 +83,24 @@ public class EndScreen implements Screen {
         table.align(Align.center);
         table.add(whoWon);
     }
+    private String computeOutcome(){
+        if (player1.hasLost() && player2.hasLost() ) {
+            outcome = "Draw";
+        } else if (player1.hasLost() ) {
+            outcome = "You lost";
+        } else if(player2.hasLost()) {
+            outcome = "You won!";
+        }
+        else{
+            outcome = "you quit the game";
+        }
+
+        return outcome;
+    }
 
     @Override
     public void render(float delta) {
+        handle();
         Gdx.gl.glClearColor(0.45f,0.63f,0.76f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
@@ -123,5 +131,16 @@ public class EndScreen implements Screen {
         stage.dispose();
         skin.dispose();
         game.dispose();
+    }
+    private void handle() {
+        while (!packetQueue.isEmpty()) {
+            Packet packet = packetQueue.removeFirst();
+            PacketType type = packet.getPacketType();
+
+            log.info("Traffic: New {}", type.toString());
+            if (type == PACKETENDOFGAME) {
+                player2.lost();
+            }
+        }
     }
 }

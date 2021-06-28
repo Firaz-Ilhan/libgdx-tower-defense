@@ -37,7 +37,7 @@ public class Tower2 implements ITower {
         this.y = y;
     }
 
-    public void setIs_attacking(boolean is_attacking) {
+    public void shooting() {
         this.is_attacking = is_attacking;
     }
 

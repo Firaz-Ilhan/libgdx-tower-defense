@@ -3,6 +3,7 @@ package com.tower.defense.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -23,7 +23,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.enemy.Enemy;
-import com.tower.defense.enemy.Factory.Enemy1;
 import com.tower.defense.enemy.Factory.EnemyFactory;
 import com.tower.defense.helper.AllowedTiles;
 import com.tower.defense.helper.Constant;
@@ -38,7 +37,6 @@ import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.sound.sampled.Line;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
@@ -125,6 +123,8 @@ public class GameScreen implements Screen {
     private final Skin skin;
     private FreeTypeFontGenerator generator;
 
+    private Music backgroundMusic;
+
     public GameScreen(TowerDefense game) {
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -165,6 +165,10 @@ public class GameScreen implements Screen {
         enemyImage = new Texture(Gdx.files.internal(Constant.VIRUS_ENEMY_PATH));
         healthBarBG = new Texture(Gdx.files.internal("healthBarBG.png"));
         healthBar = new Texture(Gdx.files.internal("healthBar.png"));
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background_music.mp3"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.play();
 
         // getting the layers of the map
         MapLayers mapLayers = map.getLayers();
@@ -568,7 +572,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-
+        backgroundMusic.stop();
     }
 
     @Override
@@ -589,5 +593,6 @@ public class GameScreen implements Screen {
         skin.dispose();
         healthBarBG.dispose();
         healthBar.dispose();
+        backgroundMusic.dispose();
     }
 }

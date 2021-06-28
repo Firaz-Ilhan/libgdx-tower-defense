@@ -12,7 +12,7 @@ public interface ITower {
 
     void setY(int y);
 
-    void setIs_attacking(boolean is_attacking);
+    void shooting();
 
     double getDamage();
 

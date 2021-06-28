@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -73,6 +74,7 @@ public class GameScreen implements Screen {
 
     private Texture turret1Texture;
     private Texture turret2Texture;
+    private TextureRegion shootingTexture;
 
     // list to store own towers
     private final LinkedList turretsPlaced = new LinkedList<ITower>();
@@ -177,6 +179,9 @@ public class GameScreen implements Screen {
         //creating the textures of the turrets
         turret1Texture = new Texture(Gdx.files.internal("turrets/turret1Texture.png"));
         turret2Texture = new Texture(Gdx.files.internal("turrets/turret2Texture.png"));
+        Texture texture = new Texture(Gdx.files.internal("turrets/rect.png"));
+        shootingTexture = new TextureRegion(texture);
+
 
         // setting up the camera
         float width = 1600;
@@ -440,7 +445,7 @@ public class GameScreen implements Screen {
     public void spawnTurret1() {
         //Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-        tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
+        tower1 = new Tower1(turret1Texture,shootingTexture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
         turretsPlaced.add(tower1);
 
         if (game.getClient() != null) {
@@ -559,7 +564,7 @@ public class GameScreen implements Screen {
                     float xCordAdd = packetOutAddTower.getX();
                     float yCordAdd = packetOutAddTower.getY();
 
-                    tower1 = new Tower1(turret1Texture, (mapWidth - xCordAdd) * 50,
+                    tower1 = new Tower1(turret1Texture,shootingTexture, (mapWidth - xCordAdd) * 50,
                             yCordAdd * 50, 50, 50, spriteBatch);
                     enemyTowersPlaced.add(tower1);
                     break;
@@ -619,6 +624,7 @@ public class GameScreen implements Screen {
         stage.dispose();
         turret1Texture.dispose();
         turret2Texture.dispose();
+
         enemyImage.dispose();
         hoveredTileTexture.dispose();
         hoveredTileNotAllowed.dispose();

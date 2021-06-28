@@ -90,7 +90,7 @@ public class Tower1 implements ITower {
         float xTarget = enemyMap.keySet().stream().findFirst().get().getX();
         double angle = Math.asin((xTarget-getX())/(float) length);
         angle = Math.toDegrees(angle);
-        System.out.println(angle);
+        //System.out.println(angle);
         spriteBatch.draw(projectile,x,y,width/2,height/2,length,10,1,1,(float)angle+180);
 
 

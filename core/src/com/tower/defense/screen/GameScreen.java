@@ -166,9 +166,13 @@ public class GameScreen implements Screen {
         healthBarBG = new Texture(Gdx.files.internal("healthBarBG.png"));
         healthBar = new Texture(Gdx.files.internal("healthBar.png"));
 
-        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background_music.mp3"));
-        backgroundMusic.setLooping(true);
-        backgroundMusic.play();
+        if (game.getSettings().isMusicEnabled()) {
+            backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background_music.mp3"));
+            backgroundMusic.setLooping(true);
+            backgroundMusic.setVolume(game.getSettings().getVolume());
+            backgroundMusic.play();
+            log.info("music playing at volume: {}", backgroundMusic.getVolume());
+        }
 
         // getting the layers of the map
         MapLayers mapLayers = map.getLayers();
@@ -572,7 +576,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-        backgroundMusic.stop();
+        if (backgroundMusic != null) {
+            backgroundMusic.stop();
+        }
     }
 
     @Override

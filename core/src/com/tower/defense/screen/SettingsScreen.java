@@ -5,10 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -47,6 +44,8 @@ public class SettingsScreen implements Screen {
         // create gui elements
         final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
         final CheckBox fullscreenModeCheckBox = new CheckBox("Fullscreen", skin, "default");
+        final CheckBox musicCheckBox = new CheckBox("Music", skin, "default");
+        final Slider musicVolumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
 
         mainMenuButton.addListener(new ChangeListener() {
             @Override
@@ -56,10 +55,6 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        if (game.getSettings().isFullscreenEnabled()) {
-            fullscreenModeCheckBox.setChecked(true);
-        }
-
         fullscreenModeCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -68,10 +63,38 @@ public class SettingsScreen implements Screen {
             }
         });
 
+        musicCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.getSettings().setMusicState(musicCheckBox.isChecked());
+            }
+        });
+
+        musicVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.getSettings().setMusicVolume(musicVolumeSlider.getValue());
+            }
+        });
+
+        // check for current state in persistent setting file and change gui state
+        if (game.getSettings().isFullscreenEnabled()) {
+            fullscreenModeCheckBox.setChecked(true);
+        }
+
+        if (game.getSettings().isMusicEnabled()) {
+            musicCheckBox.setChecked(true);
+        }
+
+        musicVolumeSlider.setValue(game.getSettings().getVolume());
+
         headerTable.align(Align.top);
         headerTable.add(mainMenuButton);
 
         settingsTable.defaults().pad(10f);
+        settingsTable.add(musicCheckBox);
+        settingsTable.add(musicVolumeSlider);
+        settingsTable.row();
         settingsTable.add(fullscreenModeCheckBox);
     }
 

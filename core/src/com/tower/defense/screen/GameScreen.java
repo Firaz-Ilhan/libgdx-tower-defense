@@ -117,8 +117,8 @@ public class GameScreen implements Screen {
 
     // WAVE
     private Wave wave;
-    public static Player player1;
-    public static Player player2;
+    public static Player player;
+    public static Player opponent;
 
     private final Skin skin;
     private FreeTypeFontGenerator generator;
@@ -208,8 +208,8 @@ public class GameScreen implements Screen {
         allowedTiles = new AllowedTiles();
         // WAVE: initiating Players and Wave
 
-        player1 = new Player("Player", playerSide);
-        player2 = new Player("Opponent", !playerSide);
+        player = new Player("Player", playerSide);
+        opponent = new Player("Opponent", !playerSide);
         // for testing
         // player2.reduceLifepoints(40);
 
@@ -248,10 +248,10 @@ public class GameScreen implements Screen {
 //        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
 //        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 25, 160);
 //        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 125, 160);
-        font.draw(renderer.getBatch(), "LP: " + player1.getLifepoints(), 25, 890);
-        font.draw(renderer.getBatch(), "LP: " + player2.getLifepoints(), 1375, 890);
-        font.draw(renderer.getBatch(), "Money: " + player1.getWalletValue(), 25, 840);
-        font.draw(renderer.getBatch(), "Money: " + player2.getWalletValue(), 1375, 840);
+        font.draw(renderer.getBatch(), "LP: " + player.getLifepoints(), 25, 890);
+        font.draw(renderer.getBatch(), "LP: " + opponent.getLifepoints(), 1375, 890);
+        font.draw(renderer.getBatch(), "Money: " + player.getWalletValue(), 25, 840);
+        font.draw(renderer.getBatch(), "Money: " + opponent.getWalletValue(), 1375, 840);
         font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 725, 890);
 
         if (zeroTowerAlert) {
@@ -322,12 +322,12 @@ public class GameScreen implements Screen {
         //drawing the turret at the selected tile and avoid turret-stacking by removing the used tile-position from the AllowedTiles-list
 
 
-        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles) && buildMode && player1.getWalletValue() >= 20) {
+        if (canDraw && !leftMouseButtonDown && allowedTiles.tileInArray(hoveredTilePosition, AllowedTiles.playerOneAllowedTiles) && buildMode && player.getWalletValue() >= 20) {
 
             spawnTurret1();
             AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
 
-            player1.buyTower(tower1);
+            player.buyTower(tower1);
 
 
         } else {
@@ -345,7 +345,7 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
-            tower1.updateTargetarray(wave, player1);
+            tower1.updateTargetarray(wave, player);
             tower1.update();
 
 
@@ -357,7 +357,7 @@ public class GameScreen implements Screen {
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                    player1.sellTower(tower1);
+                    player.sellTower(tower1);
                     System.out.println(turretsPlaced);
 
                     if (game.getClient() != null) {
@@ -400,7 +400,7 @@ public class GameScreen implements Screen {
 
             tower1 = tower1ListIterator1.next();
             tower1.draw();
-            tower1.updateTargetarray(wave, player2);
+            tower1.updateTargetarray(wave, opponent);
             tower1.update();
 
         }
@@ -419,12 +419,12 @@ public class GameScreen implements Screen {
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
 
-        RenderWave.renderWave(player1, wave);
-        RenderWave.renderWave(player2, wave);
+        RenderWave.renderWave(player, wave);
+        RenderWave.renderWave(opponent, wave);
 
         // END OF GAME
-        if (player1.getLifepoints() <= 0) {
-            player1.lost();
+        if (player.getLifepoints() <= 0) {
+            player.lost();
 
             if (game.getClient() != null) {
                 game.getClient().sendPacket(new PacketEndOfGame());
@@ -503,14 +503,14 @@ public class GameScreen implements Screen {
             switch (type) {
                 case PACKETLIFEPOINTS:
                     PacketLifepoints packetLifepoints = (PacketLifepoints) packet;
-                    player2.setLifepoints(packetLifepoints.getLP());
+                    opponent.setLifepoints(packetLifepoints.getLP());
                     break;
                 case PACKETENDOFWAVE:
                     PacketEndOfWave packetEndOfWave = (PacketEndOfWave) packet;
                     wave.partnerWaveEnded(packetEndOfWave.getReward());
                     break;
                 case PACKETENDOFGAME:
-                    player2.lost();
+                    opponent.lost();
                     dispose();
                     game.setScreen(new EndScreen(game));
                     log.info("set screen to {}", game.getScreen().getClass());
@@ -524,7 +524,7 @@ public class GameScreen implements Screen {
                     tower1 = new Tower1(turret2Texture, (mapWidth - xCordAdd) * 50,
                             yCordAdd * 50, 50, 50, spriteBatch);
                     enemyTowersPlaced.add(tower1);
-                    player2.buyTower(tower1);
+                    opponent.buyTower(tower1);
                     break;
                 case PACKETREMOVETOWER:
                     log.info("packetoutremovetower received");
@@ -537,7 +537,7 @@ public class GameScreen implements Screen {
                         if (enemyTowersPlaced.size() > 1) {
                             if (tower1.getX() == (mapWidth - xCordRemove) * 50 && tower1.getY() == yCordRemove * 50) {
                                 tower1ListIterator1.remove();
-                                player2.sellTower(tower1);
+                                opponent.sellTower(tower1);
                             }
                         }
                     }

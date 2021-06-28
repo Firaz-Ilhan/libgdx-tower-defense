@@ -14,7 +14,7 @@ public class RenderWave {
 
         Array<Enemy> wave;
 
-        if (player.getPlayerSide()) {
+        if (player.getPlayer()) {
             wave = waveClass.waveLeft;
         } else {
             wave = waveClass.waveRight;
@@ -29,7 +29,7 @@ public class RenderWave {
             Vector2 currentEnemyPosition = enemy.getPosition();
 
             // the next waypoint the enemy will move to
-            Vector2 nextWantedWaypoint = enemy.nextWaypoint(player.getPlayerSide());
+            Vector2 nextWantedWaypoint = enemy.nextWaypoint(player.getPlayer());
 
             // only if the enemy's current position isn't the same as the desired waypoint
             // it will move towards it based on which coordinate (x and/or y) is wrong
@@ -80,7 +80,7 @@ public class RenderWave {
             // removed and the player looses health points based
             // on the enemy's damage
             if (enemy.getY() < -10) {
-                if (player.getPlayerSide()) {
+                if (player.getPlayer()) {
                     player.reduceLifepoints(enemy.getDamage());
                     //NETWORKING
                     if (waveClass.getGame().getClient() != null) {

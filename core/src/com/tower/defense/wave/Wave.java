@@ -75,7 +75,7 @@ public class Wave {
     public void endOfWave() {
         if (!pausing) {
             int reward = calculateReward();
-            GameScreen.player1.addToWallet(reward);
+            GameScreen.player.addToWallet(reward);
             if (game.getClient() != null) {
                 game.getClient().sendPacket(new PacketEndOfWave(reward));
             }
@@ -110,7 +110,7 @@ public class Wave {
     //is called by the handle() method if a EndOfWave packet was received
     public void partnerWaveEnded(int reward) {
         log.info("partners wave ended");
-        GameScreen.player2.addToWallet(reward);
+        GameScreen.opponent.addToWallet(reward);
         partnerIsPausing = true;
     }
 

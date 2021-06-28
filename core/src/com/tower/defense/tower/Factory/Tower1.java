@@ -10,7 +10,6 @@ import com.tower.defense.wave.Wave;
 
 import java.awt.geom.Point2D;
 import java.util.HashMap;
-import java.util.concurrent.TimeoutException;
 
 public class Tower1 implements ITower {
 
@@ -80,7 +79,7 @@ public class Tower1 implements ITower {
     public void updateTargetarray(Wave waveClass, Player player){
             enemyMap = new HashMap<>();
             Array<Enemy> wave;
-        if (player.getPlayerSide()) {
+        if (player.getPlayer()) {
             wave = waveClass.waveLeft;
         } else {
             wave = waveClass.waveRight;

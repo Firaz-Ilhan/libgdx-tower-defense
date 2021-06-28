@@ -3,10 +3,6 @@ package com.tower.defense.player;
 import com.tower.defense.tower.ITower;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.awt.image.ImageWatched;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class Player {
 
@@ -14,13 +10,13 @@ public class Player {
     private boolean lost = false;
     private final String name;
     private int wallet = 50;
-    private final boolean playerSide;
+    private final boolean isPlayer;
 
     private int lifepoints = 200;
 
-    public Player(String name, boolean playerSide) {
+    public Player(String name, boolean isPlayer) {
         this.name = name;
-        this.playerSide = playerSide;
+        this.isPlayer = isPlayer;
         log.info("player: {}", name);
 
     }
@@ -118,8 +114,8 @@ public class Player {
         return lost;
     }
 
-    public boolean getPlayerSide() {
-        return playerSide;
+    public boolean getPlayer() {
+        return isPlayer;
     }
 
 }

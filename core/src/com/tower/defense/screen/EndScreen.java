@@ -24,8 +24,8 @@ import org.apache.logging.log4j.Logger;
 
 import static com.tower.defense.helper.PacketQueue.packetQueue;
 import static com.tower.defense.network.packet.PacketType.PACKETENDOFGAME;
-import static com.tower.defense.screen.GameScreen.player1;
-import static com.tower.defense.screen.GameScreen.player2;
+import static com.tower.defense.screen.GameScreen.player;
+import static com.tower.defense.screen.GameScreen.opponent;
 
 public class EndScreen implements Screen {
 
@@ -62,7 +62,7 @@ public class EndScreen implements Screen {
         // create gui elements
         final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
         final Label whoWon;
-        if(player1.hasLost()|| !player2.hasLost() && !player1.hasLost()) {
+        if(player.hasLost()|| !opponent.hasLost() && !player.hasLost()) {
             whoWon = new Label(outcome, skin, "main");
         }
         else{
@@ -84,11 +84,11 @@ public class EndScreen implements Screen {
         table.add(whoWon);
     }
     private String computeOutcome(){
-        if (player1.hasLost() && player2.hasLost() ) {
+        if (player.hasLost() && opponent.hasLost() ) {
             outcome = "Draw";
-        } else if (player1.hasLost() ) {
+        } else if (player.hasLost() ) {
             outcome = "You lost";
-        } else if(player2.hasLost()) {
+        } else if(opponent.hasLost()) {
             outcome = "You won!";
         }
         else{
@@ -139,7 +139,7 @@ public class EndScreen implements Screen {
 
             log.info("Traffic: New {}", type.toString());
             if (type == PACKETENDOFGAME) {
-                player2.lost();
+                opponent.lost();
             }
         }
     }

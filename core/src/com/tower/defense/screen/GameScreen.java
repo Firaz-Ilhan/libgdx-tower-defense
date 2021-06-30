@@ -3,6 +3,7 @@ package com.tower.defense.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -101,6 +102,9 @@ public class GameScreen implements Screen {
 
     private Tower1 tower1;
 
+    //for loading the assets
+    AssetManager assetManager;
+
     private Texture enemyImage;
     private Texture healthBarBG;
     private Texture healthBar;
@@ -153,21 +157,33 @@ public class GameScreen implements Screen {
         this.buildMode = false;
         this.sellMode = false;
         this.turretIsHovered = false;
+
+        assetManager = game.assetManager;
     }
 
     @Override
     public void show() {
         // loading Textures
-        map = new TmxMapLoader().load("map/TowerDefenseMapPrototype.tmx");
-        hoveredTileTexture = new Texture(Gdx.files.internal("hovered_tile.png"));
-        hoveredTileNotAllowed = new Texture(Gdx.files.internal("hovered_tile_not_allowed.png"));
+        assetManager.load(Constant.HOVERED_TILE_TEXTURE_PATH,Texture.class);
+        assetManager.load(Constant.HOVERED_TILE_NOT_ALLOWED_PATH,Texture.class);
+        assetManager.load(Constant.VIRUS_ENEMY_PATH, Texture.class);
+        assetManager.load(Constant.HEALTHBAR_BG_PATH,Texture.class);
+        assetManager.load(Constant.HEALTHBAR_PATH,Texture.class);
+        assetManager.load(Constant.BACKGROUND_MUSIC_PATH, Music.class);
+        assetManager.load(Constant.TOWER1_PATH,Texture.class);
+        assetManager.load(Constant.TOWER2_PATH,Texture.class);
+        assetManager.finishLoading();
 
-        enemyImage = new Texture(Gdx.files.internal(Constant.VIRUS_ENEMY_PATH));
-        healthBarBG = new Texture(Gdx.files.internal("healthBarBG.png"));
-        healthBar = new Texture(Gdx.files.internal("healthBar.png"));
+        map = new TmxMapLoader().load(Constant.TOWER_DEFENSE_MAP_PATH);
+        hoveredTileTexture = assetManager.get(Constant.HOVERED_TILE_TEXTURE_PATH,Texture.class);
+        hoveredTileNotAllowed = assetManager.get(Constant.HOVERED_TILE_NOT_ALLOWED_PATH,Texture.class);
+
+        enemyImage = assetManager.get(Constant.VIRUS_ENEMY_PATH,Texture.class);
+        healthBarBG = assetManager.get(Constant.HEALTHBAR_BG_PATH,Texture.class);
+        healthBar = assetManager.get(Constant.HEALTHBAR_PATH,Texture.class);
 
         if (game.getSettings().isMusicEnabled()) {
-            backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("background_music.mp3"));
+            backgroundMusic = assetManager.get(Constant.BACKGROUND_MUSIC_PATH,Music.class);
             backgroundMusic.setLooping(true);
             backgroundMusic.setVolume(game.getSettings().getVolume());
             backgroundMusic.play();
@@ -180,11 +196,8 @@ public class GameScreen implements Screen {
         decorationLayerIndices = new int[]{mapLayers.getIndex("decoration")};
 
         //creating the textures of the turrets
-        turret1Texture = new Texture(Gdx.files.internal(Constant.TOWER1_PATH), true);
-        turret2Texture = new Texture(Gdx.files.internal(Constant.TOWER2_PATH), true);
-
-        turret1Texture.setFilter(MipMapLinearLinear, Linear);
-
+        turret1Texture = assetManager.get(Constant.TOWER1_PATH,Texture.class);
+        turret2Texture = assetManager.get(Constant.TOWER2_PATH,Texture.class);
         camera.setToOrtho(false, Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT);
         camera.update();
 
@@ -579,26 +592,26 @@ public class GameScreen implements Screen {
         if (backgroundMusic != null) {
             backgroundMusic.stop();
         }
+        assetManager.unload(Constant.HOVERED_TILE_TEXTURE_PATH);
+        assetManager.unload(Constant.HOVERED_TILE_NOT_ALLOWED_PATH);
+        assetManager.unload(Constant.VIRUS_ENEMY_PATH);
+        assetManager.unload(Constant.HEALTHBAR_BG_PATH);
+        assetManager.unload(Constant.HEALTHBAR_PATH);
+        assetManager.unload(Constant.BACKGROUND_MUSIC_PATH);
+        assetManager.unload(Constant.TOWER1_PATH);
     }
 
     @Override
     public void dispose() {
-        enemyImage.dispose();
         map.dispose();
         game.dispose();
         stage.dispose();
-        turret1Texture.dispose();
-        turret2Texture.dispose();
         enemyImage.dispose();
-        hoveredTileTexture.dispose();
-        hoveredTileNotAllowed.dispose();
         spriteBatch.dispose();
         font.dispose();
         generator.dispose();
         renderer.dispose();
         skin.dispose();
-        healthBarBG.dispose();
-        healthBar.dispose();
         backgroundMusic.dispose();
     }
 }

@@ -43,15 +43,6 @@ public class TowerDefense extends Game {
         // loading assets
         assetManager = new AssetManager();
         assetManager.load(Constant.SKIN_PATH, Skin.class);
-        assetManager.load(Constant.HOVERED_TILE_TEXTURE_PATH, Texture.class);
-        assetManager.load(Constant.HOVERED_TILE_NOT_ALLOWED_PATH, Texture.class);
-        assetManager.load(Constant.VIRUS_ENEMY_PATH, Texture.class);
-        assetManager.load(Constant.HEALTHBAR_BG_PATH, Texture.class);
-        assetManager.load(Constant.HEALTHBAR_PATH, Texture.class);
-        assetManager.load(Constant.BACKGROUND_MUSIC_PATH, Music.class);
-        assetManager.load(Constant.TOWER1_PATH, Texture.class);
-        assetManager.load(Constant.TOWER2_PATH, Texture.class);
-        assetManager.load(Constant.TOWER1_RANGE_INDICATOR, Texture.class);
         assetManager.finishLoading();
         log.debug("asset manager loaded: {}", assetManager.getAssetNames());
 

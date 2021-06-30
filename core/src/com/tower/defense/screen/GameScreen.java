@@ -158,6 +158,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        game.assetManager.load(Constant.HOVERED_TILE_TEXTURE_PATH, Texture.class);
+        game.assetManager.load(Constant.HOVERED_TILE_NOT_ALLOWED_PATH, Texture.class);
+        game.assetManager.load(Constant.VIRUS_ENEMY_PATH, Texture.class);
+        game.assetManager.load(Constant.HEALTHBAR_BG_PATH, Texture.class);
+        game.assetManager.load(Constant.HEALTHBAR_PATH, Texture.class);
+        game.assetManager.load(Constant.BACKGROUND_MUSIC_PATH, Music.class);
+        game.assetManager.load(Constant.TOWER1_PATH, Texture.class);
+        game.assetManager.load(Constant.TOWER2_PATH, Texture.class);
+        game.assetManager.load(Constant.TOWER1_RANGE_INDICATOR, Texture.class);
+        game.assetManager.finishLoading();
+
         // loading Textures
         //turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
         turret1RangeIndicator = game.assetManager.get(Constant.TOWER1_RANGE_INDICATOR);

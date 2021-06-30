@@ -56,6 +56,14 @@ public class Player {
     }
 
     /**
+     * Triggered if a "Heal opponent Wave" was bought
+     * The cost will be deducted from the wallet
+     */
+    public void buyInfluence(int cost) {
+        wallet = wallet - cost;
+        log.info("wallet: {}", wallet);
+    }
+    /**
      * selling Towers only regain 80% of the costs. The result is rounded to an Integer
      * At the end the Tower is removed from the list
      */

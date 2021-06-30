@@ -102,9 +102,6 @@ public class GameScreen implements Screen {
 
     private Tower1 tower1;
 
-    //for loading the assets
-    AssetManager assetManager;
-
     private Texture enemyImage;
     private Texture healthBarBG;
     private Texture healthBar;
@@ -157,33 +154,22 @@ public class GameScreen implements Screen {
         this.buildMode = false;
         this.sellMode = false;
         this.turretIsHovered = false;
-
-        assetManager = game.assetManager;
     }
 
     @Override
     public void show() {
         // loading Textures
-        assetManager.load(Constant.HOVERED_TILE_TEXTURE_PATH,Texture.class);
-        assetManager.load(Constant.HOVERED_TILE_NOT_ALLOWED_PATH,Texture.class);
-        assetManager.load(Constant.VIRUS_ENEMY_PATH, Texture.class);
-        assetManager.load(Constant.HEALTHBAR_BG_PATH,Texture.class);
-        assetManager.load(Constant.HEALTHBAR_PATH,Texture.class);
-        assetManager.load(Constant.BACKGROUND_MUSIC_PATH, Music.class);
-        assetManager.load(Constant.TOWER1_PATH,Texture.class);
-        assetManager.load(Constant.TOWER2_PATH,Texture.class);
-        assetManager.finishLoading();
-
+        //turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
+        turret1RangeIndicator = game.assetManager.get(Constant.TOWER1_RANGE_INDICATOR);
         map = new TmxMapLoader().load(Constant.TOWER_DEFENSE_MAP_PATH);
-        hoveredTileTexture = assetManager.get(Constant.HOVERED_TILE_TEXTURE_PATH,Texture.class);
-        hoveredTileNotAllowed = assetManager.get(Constant.HOVERED_TILE_NOT_ALLOWED_PATH,Texture.class);
-
-        enemyImage = assetManager.get(Constant.VIRUS_ENEMY_PATH,Texture.class);
-        healthBarBG = assetManager.get(Constant.HEALTHBAR_BG_PATH,Texture.class);
-        healthBar = assetManager.get(Constant.HEALTHBAR_PATH,Texture.class);
+        enemyImage = game.assetManager.get(Constant.VIRUS_ENEMY_PATH, Texture.class);
+        healthBarBG = game.assetManager.get(Constant.HEALTHBAR_BG_PATH, Texture.class);
+        healthBar = game.assetManager.get(Constant.HEALTHBAR_PATH, Texture.class);
+        hoveredTileTexture = game.assetManager.get(Constant.HOVERED_TILE_TEXTURE_PATH, Texture.class);
+        hoveredTileNotAllowed = game.assetManager.get(Constant.HOVERED_TILE_NOT_ALLOWED_PATH, Texture.class);
 
         if (game.getSettings().isMusicEnabled()) {
-            backgroundMusic = assetManager.get(Constant.BACKGROUND_MUSIC_PATH,Music.class);
+            backgroundMusic = game.assetManager.get(Constant.BACKGROUND_MUSIC_PATH, Music.class);
             backgroundMusic.setLooping(true);
             backgroundMusic.setVolume(game.getSettings().getVolume());
             backgroundMusic.play();
@@ -196,8 +182,8 @@ public class GameScreen implements Screen {
         decorationLayerIndices = new int[]{mapLayers.getIndex("decoration")};
 
         //creating the textures of the turrets
-        turret1Texture = assetManager.get(Constant.TOWER1_PATH,Texture.class);
-        turret2Texture = assetManager.get(Constant.TOWER2_PATH,Texture.class);
+        turret1Texture = game.assetManager.get(Constant.TOWER1_PATH, Texture.class);
+        turret2Texture = game.assetManager.get(Constant.TOWER2_PATH, Texture.class);
         camera.setToOrtho(false, Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT);
         camera.update();
 
@@ -393,8 +379,6 @@ public class GameScreen implements Screen {
 
 
         }
-        //draw indicator for Turretrange while mouse is hoverd over turret
-        turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
 
 
         if (Gdx.input.isKeyPressed(57)) {
@@ -446,7 +430,6 @@ public class GameScreen implements Screen {
             if (game.getClient() != null) {
                 game.getClient().sendPacket(new PacketEndOfGame());
             }
-            dispose();
             game.setScreen(new EndScreen(game));
             log.info("set screen to {}", game.getScreen().getClass());
 
@@ -528,7 +511,6 @@ public class GameScreen implements Screen {
                     break;
                 case PACKETENDOFGAME:
                     opponent.lost();
-                    dispose();
                     game.setScreen(new EndScreen(game));
                     log.info("set screen to {}", game.getScreen().getClass());
                     break;
@@ -592,13 +574,13 @@ public class GameScreen implements Screen {
         if (backgroundMusic != null) {
             backgroundMusic.stop();
         }
-        assetManager.unload(Constant.HOVERED_TILE_TEXTURE_PATH);
-        assetManager.unload(Constant.HOVERED_TILE_NOT_ALLOWED_PATH);
-        assetManager.unload(Constant.VIRUS_ENEMY_PATH);
-        assetManager.unload(Constant.HEALTHBAR_BG_PATH);
-        assetManager.unload(Constant.HEALTHBAR_PATH);
-        assetManager.unload(Constant.BACKGROUND_MUSIC_PATH);
-        assetManager.unload(Constant.TOWER1_PATH);
+        game.assetManager.unload(Constant.HOVERED_TILE_TEXTURE_PATH);
+        game.assetManager.unload(Constant.HOVERED_TILE_NOT_ALLOWED_PATH);
+        game.assetManager.unload(Constant.VIRUS_ENEMY_PATH);
+        game.assetManager.unload(Constant.HEALTHBAR_BG_PATH);
+        game.assetManager.unload(Constant.HEALTHBAR_PATH);
+        game.assetManager.unload(Constant.BACKGROUND_MUSIC_PATH);
+        game.assetManager.unload(Constant.TOWER1_PATH);
     }
 
     @Override

@@ -18,6 +18,7 @@ public final class Constant {
     public static final String HEALTHBAR_PATH = "healthBar.png";
     public static final String BACKGROUND_MUSIC_PATH = "background_music.mp3";
     public static final String TOWER_DEFENSE_MAP_PATH = "map/TowerDefenseMap.tmx";
+    public static final String TOWER1_RANGE_INDICATOR = "turrets/turret1RangeIndicator.png";
 
     private Constant() {
 

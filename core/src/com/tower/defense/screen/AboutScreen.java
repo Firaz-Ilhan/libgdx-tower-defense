@@ -27,7 +27,7 @@ public class AboutScreen implements Screen {
     private final Skin skin;
     private final TowerDefense game;
     private Texture background;
-    private final String ABOUT_TEXT= "This Game was Developed by the following people: \n" +
+    private final String ABOUT_TEXT= "This Game was developed by the following people: \n" +
                                         "Firaz Ilhan \n" +
                                         "Lea Gutierrez \n" +
                                         "Luca Baur \n" +
@@ -44,10 +44,10 @@ public class AboutScreen implements Screen {
 
     @Override
     public void show() {
-        final Table menuTable = new Table();
-        menuTable.setFillParent(true);
-        menuTable.setDebug(false);
-        stage.addActor(menuTable);
+        final Table table = new Table();
+        table.setFillParent(true);
+        table.setDebug(false);
+        stage.addActor(table);
 
         //create buttons
         background = new Texture(Gdx.files.internal("backgroundTitle.png"));
@@ -57,11 +57,11 @@ public class AboutScreen implements Screen {
         final TextButton aboutText = new TextButton(ABOUT_TEXT,skin,"small");
         aboutText.setDisabled(true);
         //add buttons to table
-        menuTable.defaults().pad(10f);
-        menuTable.background(backgroundRegion);
-        menuTable.add(aboutText);
-        menuTable.row();
-        menuTable.add(mainMenuButton);
+        table.defaults().pad(10f);
+        table.background(backgroundRegion);
+        table.add(aboutText);
+        table.row();
+        table.add(mainMenuButton);
         aboutText.setBounds(0,0,200,500);
         //create button listeners
         mainMenuButton.addListener(new ChangeListener() {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -66,10 +67,10 @@ public class MatchmakingScreen implements Screen {
         TextureRegionDrawable region =
                 new TextureRegionDrawable(new TextureRegion(background));
         final TextField serverIPField = new TextField("127.0.0.1", skin, "default");
-        final Label serverIPLabel = new Label("Server's IP address", skin, "default");
+        final Label serverIPLabel = new Label("Server's IP address", skin, "black");
 
-        final Label ownLabel = new Label("Your IP address:", skin, "default");
-        final Label ownIPLabel = new Label("placeholder", skin, "default");
+        final Label ownLabel = new Label("Your IP address:", skin, "black");
+        final Label ownIPLabel = new Label("placeholder", skin, "black");
 
         try {
             ownIPLabel.setText(NetworkINTF.getLocalIpAddress());
@@ -77,8 +78,8 @@ public class MatchmakingScreen implements Screen {
             e.printStackTrace();
             ownIPLabel.setText("could not get local ip");
         }
-        connectionStatus = new Label("not connected", skin, "default");
-        startingStatus = new Label("", skin, "default");
+        connectionStatus = new Label("not connected", skin, "black");
+        startingStatus = new Label("", skin, "black");
         final TextButton connectButton = new TextButton("Connect...", skin, "small");
         final TextButton startGameButton = new TextButton("Start Game...", skin, "small");
 
@@ -96,6 +97,7 @@ public class MatchmakingScreen implements Screen {
         connectionTable.add(startGameButton);
         connectionTable.add(startingStatus);
         connectionTable.background(region);
+
         scrollTable = new Table(skin);
         scrollTable.setDebug(false);
         scrollTable.setFillParent(false);
@@ -121,7 +123,7 @@ public class MatchmakingScreen implements Screen {
         chatTable.add(inputArea);
         chatTable.add(sendMessageButton);
 
-        this.stage.addActor(chatTable);
+        stage.addActor(chatTable);
 
         /**
          * if the connectButton is clicked, it takes the text of TextField serverIPField
@@ -186,7 +188,6 @@ public class MatchmakingScreen implements Screen {
                         if (startingStatus.getText().toString().equals("The other player is waiting to get started")) {
                             game.getClient().sendPacket(new PacketStartMatch());
                             game.getClient().setCurrentScreen(new GameScreen(game));
-                            dispose();
                             game.setScreen(game.getClient().getCurrentScreen());
                         }
                     }
@@ -211,7 +212,7 @@ public class MatchmakingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.45f,0.63f,0.76f,1f);
+        Gdx.gl.glClearColor(0.45f, 0.63f, 0.76f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         handlePacketQueue();
@@ -243,23 +244,24 @@ public class MatchmakingScreen implements Screen {
         stage.dispose();
         skin.dispose();
         game.dispose();
+        background.dispose();
     }
 
     private void addMessageToBox(boolean self, String msg) {
         if (!msg.isEmpty()) {
             scrollTable.row();
-            final Label msglabel = new Label(msg, skin);
+            final Label msgLabel = new Label(msg, skin);
 
             if (self) {
-                msglabel.setAlignment(Align.right);
-                msglabel.setColor(Color.GREEN);
+                msgLabel.setAlignment(Align.right);
+                msgLabel.setColor(Color.BLACK);
             } else {
-                msglabel.setAlignment(Align.left);
-                msglabel.setColor(Color.GRAY);
+                msgLabel.setAlignment(Align.left);
+                msgLabel.setColor(Color.RED);
             }
 
-            msglabel.setWrap(true);
-            scrollTable.add(msglabel).expandX().fillX();
+            msgLabel.setWrap(true);
+            scrollTable.add(msgLabel).expandX().fillX();
         }
         inputArea.setText("");
         scroller.scrollTo(0, 0, 0, 0); // scroll to bottom
@@ -301,7 +303,6 @@ public class MatchmakingScreen implements Screen {
                     if (isReady) {
                         Client client = game.getClient();
                         client.setCurrentScreen(new GameScreen(game));
-                        dispose();
                         game.setScreen(new GameScreen(game));
                     } else {
                         isReady = true;
@@ -313,12 +314,5 @@ public class MatchmakingScreen implements Screen {
 
             }
         }
-    }
-
-    /**
-     * @param packet packet that was created in run() by ClientConnection()
-     */
-    public void handle(Packet packet) {
-        packetQueue.addFirst(packet);
     }
 }

@@ -434,7 +434,6 @@ public class GameScreen implements Screen {
             if (game.getClient() != null) {
                 game.getClient().sendPacket(new PacketEndOfGame());
             }
-            dispose();
             game.setScreen(new EndScreen(game));
             log.info("set screen to {}", game.getScreen().getClass());
 
@@ -516,7 +515,6 @@ public class GameScreen implements Screen {
                     break;
                 case PACKETENDOFGAME:
                     opponent.lost();
-                    dispose();
                     game.setScreen(new EndScreen(game));
                     log.info("set screen to {}", game.getScreen().getClass());
                     break;

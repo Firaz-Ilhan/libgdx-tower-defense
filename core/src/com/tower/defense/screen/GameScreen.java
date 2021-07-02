@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
     private final LinkedList enemyTowersPlaced = new LinkedList<ITower>();
 
 
-    private boolean turretIsHovered;
+    private boolean altIsPressed;
     private Texture turret1RangeIndicator;
 
 
@@ -163,7 +163,7 @@ public class GameScreen implements Screen {
         this.zeroTowerAlert = false;
         this.buildMode = false;
         this.sellMode = false;
-        this.turretIsHovered = false;
+        this.altIsPressed = false;
     }
 
     @Override
@@ -272,8 +272,12 @@ public class GameScreen implements Screen {
         font.draw(renderer.getBatch(), "Money: " + player.getWalletValue(), 25, 840);
         font.draw(renderer.getBatch(), "Money: " + opponent.getWalletValue(), 1375, 840);
         font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 725, 890);
+/*
+        if (zeroTowerAlert) {
+            font.draw(renderer.getBatch(), "You can't own 0 turrets !", hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
+        }
 
-
+ */
 
 
         renderer.getBatch().end();
@@ -285,9 +289,7 @@ public class GameScreen implements Screen {
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
 
         stage.act();
-        if (zeroTowerAlert) {
-            font.draw(renderer.getBatch(), "You can't own 0 turrets !", hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
-        }
+
 
         //drawing the hoveredTile based on what player side you are on and whether you
         //allowed to or not
@@ -387,21 +389,22 @@ public class GameScreen implements Screen {
             }
         }
 
+        //ask if alt is pressed
         if (Gdx.input.isKeyPressed(57)) {
-            turretIsHovered = true;
+            altIsPressed = true;
         } else {
-            turretIsHovered = false;
-        }
-
-        if (turretIsHovered) {
-
-            //spriteBatch.draw(turret1RangeIndicator, tower1.getX() - 75 , tower1.getY() - 75);
-            spriteBatch.draw(turret1RangeIndicator, hoveredTilePosition.x * 50 - 175, hoveredTilePosition.y * 50 - 175);      //zur not auf Mausposition
+            altIsPressed = false;
         }
 
 
+        //draw TurretRangeIndicator to Mouseposition while alt is pressed
+        if (altIsPressed) {
+            spriteBatch.draw(turret1RangeIndicator, hoveredTilePosition.x * 50 - 175, hoveredTilePosition.y * 50 - 175);
+        }
+
+
+        //iterate over enemyTowerPlaced and draw them to the screen (enemy Site)
         tower1ListIterator1 = enemyTowersPlaced.listIterator();
-
 
         while (tower1ListIterator1.hasNext()) {
 

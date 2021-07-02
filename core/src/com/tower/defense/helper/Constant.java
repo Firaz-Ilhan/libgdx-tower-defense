@@ -8,7 +8,7 @@ public final class Constant {
 
     // files
     public static final String SKIN_PATH = "skins/glassyui/glassy-ui.json";
-    public static final String FONT_PATH = "fonts/FiraCode-Regular.ttf";
+    public static final String FONT_PATH = "fonts/Rounded_Elegance.ttf";
     public static final String TOWER1_PATH = "turrets/turret1Texture.png";
     public static final String TOWER2_PATH = "turrets/turret2Texture.png";
     public static final String VIRUS_ENEMY_PATH = "virus.png";

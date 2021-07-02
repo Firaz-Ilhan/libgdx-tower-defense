@@ -1,5 +1,6 @@
 package com.tower.defense.tower;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.tower.defense.player.Player;
 import com.tower.defense.wave.Wave;
 
@@ -13,7 +14,7 @@ public interface ITower {
 
     void setY(int y);
 
-    void shooting();
+    void shooting(ShapeRenderer shapeRenderer);
 
     double getDamage();
 
@@ -23,6 +24,7 @@ public interface ITower {
 
     int getCost();
     void updateTargetarray(Wave wave, Player player);
-    void update();
+    void update(ShapeRenderer shapeRenderer);
+
 
 }

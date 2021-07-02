@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -130,6 +131,9 @@ public class GameScreen implements Screen {
     private Sound turretRemovedSound;
     private Sound enemyKilledSound;
     private Sound shootingSound;
+
+    private ShapeRenderer  shapeRenderer = new ShapeRenderer();
+
 
     public GameScreen(TowerDefense game) {
         this.game = game;
@@ -377,7 +381,7 @@ public class GameScreen implements Screen {
             tower1 = tower1ListIterator1.next();
             tower1.draw();
             tower1.updateTargetarray(wave, player);
-            tower1.update();
+            tower1.update(shapeRenderer);
 
 
             //Output if player tries to delete the last turret
@@ -431,7 +435,7 @@ public class GameScreen implements Screen {
             tower1 = tower1ListIterator1.next();
             tower1.draw();
             tower1.updateTargetarray(wave, opponent);
-            tower1.update();
+            tower1.update(shapeRenderer);
 
         }
 

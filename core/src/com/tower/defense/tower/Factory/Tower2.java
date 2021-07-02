@@ -1,5 +1,6 @@
 package com.tower.defense.tower.Factory;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.tower.defense.player.Player;
 import com.tower.defense.tower.ITower;
 import com.tower.defense.wave.Wave;
@@ -37,6 +38,11 @@ public class Tower2 implements ITower {
         this.y = y;
     }
 
+    @Override
+    public void shooting(ShapeRenderer shapeRenderer) {
+
+    }
+
     public void shooting() {
         this.is_attacking = is_attacking;
     }
@@ -63,7 +69,7 @@ public class Tower2 implements ITower {
     }
 
     @Override
-    public void update() {
+    public void update(ShapeRenderer shapeRenderer) {
 
     }
 }

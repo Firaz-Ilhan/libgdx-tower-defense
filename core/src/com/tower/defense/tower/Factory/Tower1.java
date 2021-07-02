@@ -1,8 +1,10 @@
 package com.tower.defense.tower.Factory;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.tower.defense.enemy.Enemy;
 import com.tower.defense.player.Player;
@@ -59,6 +61,20 @@ public class Tower1 implements ITower {
         this.y = y;
     }
 
+
+    public void shooting(ShapeRenderer shapeRenderer) {
+        float xTarget =  enemyMap.keySet().stream().findFirst().get().getX();
+        float yTarget =  enemyMap.keySet().stream().findFirst().get().getY();
+
+        enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(1,0,0,1);
+        shapeRenderer.rectLine(x,y,xTarget,yTarget,5, Color.BLUE,Color.BLUE);
+        shapeRenderer.end();
+        shootingSound.play();
+        startTime = System.nanoTime();
+    }
+
     public void setIs_attacking(boolean is_attacking) {
         this.is_attacking = is_attacking;
     }
@@ -100,14 +116,13 @@ public class Tower1 implements ITower {
         }
 
     }
-    public void update(){
+    public void update(ShapeRenderer shapeRenderer){
         endTime = System.nanoTime();
         double difference = (endTime-startTime)/1e9;
 
         if (enemyMap.size()>0 && difference>firerate){
-            enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
-            shootingSound.play();
-            startTime = System.nanoTime();
+            shooting(shapeRenderer);
+
         }
     }
 

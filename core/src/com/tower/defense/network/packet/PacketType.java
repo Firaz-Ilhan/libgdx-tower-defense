@@ -15,6 +15,7 @@ public enum PacketType {
 	PACKETADDTOWER(7, PacketAddTower.class),
 	PACKETREMOVETOWER(8, PacketRemoveTower.class),
 	PACKETENDOFGAME(9, PacketEndOfGame.class),
+	PACKETINFLUENCE(10,PacketInfluence.class),
 
 	//Serverpackets
 	PACKETSEARCHMATCH(101, PacketSearchMatch.class),

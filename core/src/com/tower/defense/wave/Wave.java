@@ -8,6 +8,8 @@ import com.tower.defense.screen.GameScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Iterator;
+
 import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
 
 public class Wave {
@@ -102,6 +104,19 @@ public class Wave {
         return waveReward;
     }
 
+    public void healAndBuffWave(boolean own){
+        Array<Enemy> wave;
+        if(own){
+            wave = waveLeft;
+        }
+        else{
+            wave = waveRight;
+        }
+        for (Iterator<Enemy> iter = wave.iterator(); iter.hasNext(); ) {
+            Enemy enemy = iter.next();
+            enemy.healAndBuff();
+        }
+    }
     // for displaying which wave this is
     public int getWaveCount() {
         return waveCount;

@@ -39,7 +39,8 @@ public class EndScreen implements Screen {
 
     public EndScreen(final TowerDefense game) {
         this.game = game;
-        game.getClient().getClientConnection().closeConnection();
+        if(game.getClient()!=null){
+            game.getClient().getClientConnection().closeConnection();  }
         skin = game.assetManager.get(Constant.SKIN_PATH);
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);

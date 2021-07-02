@@ -4,17 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.tower.defense.TowerDefense;
 import com.tower.defense.helper.Constant;
+import com.tower.defense.network.packet.Packet;
+import com.tower.defense.network.packet.client.PacketInfluence;
 
 import static com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
 import static com.badlogic.gdx.graphics.Texture.TextureFilter.MipMapLinearLinear;
@@ -26,12 +29,20 @@ public class IngameButtonsController {
     private final Stage buttonStage;
     private final ImageButton buildButton;
     private final ImageButton sellButton;
+
     private final ImageButton controlsButton;
-    private boolean controlActivePressed;
+
+    private final ImageButton influenceButton;
+    private final TowerDefense game;
+    private GameScreen screen;
 
 
-    public IngameButtonsController() {
 
+
+
+    public IngameButtonsController(TowerDefense game,GameScreen screen) {
+        this.game = game;
+        this.screen = screen;
 
         OrthographicCamera buttonCam = new OrthographicCamera();
         buttonViewPort = new FitViewport(Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT, buttonCam);
@@ -43,9 +54,11 @@ public class IngameButtonsController {
         Texture sellTexture = new Texture(Gdx.files.internal("buttons/sellMode.png"), true);
         Texture sellDownTexture = new Texture(Gdx.files.internal("buttons/sellModeDown.png"), true);
 
+
         // improves texture scaling for low resolution
         sellDownTexture.setFilter(MipMapLinearLinear, Linear);
         sellTexture.setFilter(MipMapLinearLinear, Linear);
+
 
         Drawable sellImage = new TextureRegionDrawable(new TextureRegion(sellTexture));
         Drawable sellDownImage = new TextureRegionDrawable(new TextureRegion(sellDownTexture));
@@ -55,6 +68,18 @@ public class IngameButtonsController {
         sellStyle.imageChecked = sellDownImage;
 
         sellButton = new ImageButton(sellStyle);
+
+        Texture influenceTextureDown = new Texture(Gdx.files.internal("buttons/influenceDown.png"), true);
+        Texture influenceTextureUp = new Texture(Gdx.files.internal("buttons/influenceUp.png"), true);
+        influenceTextureDown.setFilter(MipMapLinearLinear, Linear);
+        influenceTextureUp.setFilter(MipMapLinearLinear, Linear);
+        Drawable influenceImageUp = new TextureRegionDrawable(new TextureRegion(influenceTextureUp));
+        Drawable influenceImageDown = new TextureRegionDrawable(new TextureRegion(influenceTextureDown));
+        ImageButton.ImageButtonStyle influenceStyle = new ImageButton.ImageButtonStyle();
+        influenceStyle.imageUp = influenceImageUp;
+        influenceStyle.imageDown = influenceImageDown;
+
+        influenceButton = new ImageButton(influenceStyle);
 
         Texture buildTexture = new Texture(Gdx.files.internal("buttons/buildMode.png"), true);
         Texture buildDownTexture = new Texture(Gdx.files.internal("buttons/buildModeDown.png"), true);
@@ -90,19 +115,34 @@ public class IngameButtonsController {
             public boolean keyDown(InputEvent event, int keycode) {
                 sellButton.setChecked(true);
                 buildButton.setChecked(false);
+                influenceButton.setChecked(false);
                 return true;
             }
         });
-
+        influenceButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("button pressed");
+                buildButton.setChecked(false);
+                sellButton.setChecked(false);
+                if(game.getClient() != null && GameScreen.player.getWalletValue() >= 100 ) {
+                    game.getClient().sendPacket(new PacketInfluence());
+                    screen.wave.healAndBuffWave(false);
+                    GameScreen.player.buyInfluence(100);
+                }
+            }
+        });
         ButtonGroup<ImageButton> buttonGroup = new ButtonGroup<>(sellButton, buildButton);
         buttonGroup.setMaxCheckCount(1);
         buttonGroup.setMinCheckCount(1);
         buttonTable.add(sellButton);
         buttonTable.add(buildButton);
+        buttonTable.add(influenceButton);
+
+        buttonStage.addActor(buttonTable);
 
 
         //creating button to see the controls
-
         Table controlTable = new Table();
         controlTable.setPosition(1550,50);
 
@@ -127,14 +167,14 @@ public class IngameButtonsController {
 
 
             public boolean touchDown(InputEvent event, int keycode) {
-                controlActivePressed = true;
+               // controlActivePressed = true;
                 return true;
 
             }
 
 
             public boolean touchUp(InputEvent event, int keycode) {
-                controlActivePressed = false;
+                //controlActivePressed = false;
                 return false;
 
           }});
@@ -164,6 +204,9 @@ public class IngameButtonsController {
 
     public boolean isBuildModePressed() {
         return buildButton.isChecked();
+    }
+    public boolean isInfluenceModePressed() {
+        return influenceButton.isChecked();
     }
 
     public boolean isControlsPressed(){

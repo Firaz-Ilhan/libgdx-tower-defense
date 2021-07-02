@@ -44,6 +44,12 @@
       b: 1
       a: 1
     }
+    grey: {
+      r: 73
+      g: 98
+      b: 125
+      a: 1
+    }
   }
   com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
     pale-blue: {

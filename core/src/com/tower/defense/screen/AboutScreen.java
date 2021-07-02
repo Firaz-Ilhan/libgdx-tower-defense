@@ -2,6 +2,7 @@ package com.tower.defense.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -18,15 +20,21 @@ import com.tower.defense.helper.Constant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MainMenuScreen implements Screen {
+public class AboutScreen implements Screen {
 
     private final static Logger log = LogManager.getLogger(MainMenuScreen.class);
-
     private final Stage stage;
     private final Skin skin;
     private final TowerDefense game;
     private Texture background;
-    public MainMenuScreen(TowerDefense game) {
+    private final String ABOUT_TEXT= "This Game was developed by the following people: \n" +
+                                        "Firaz Ilhan \n" +
+                                        "Lea Gutierrez \n" +
+                                        "Luca Baur \n" +
+                                        "Niklas Maeckle \n" +
+                                        "Niko Dangel \n" +
+                                        "Music by : '©2021 Fesliyan Studios Inc. - Royalty Free Music And Sound Effects' ";
+    public AboutScreen(TowerDefense game) {
         this.game = game;
         skin = game.assetManager.get(Constant.SKIN_PATH);
         //create stage and set it as input processor
@@ -36,60 +44,34 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
-        final Table menuTable = new Table();
-        menuTable.setFillParent(true);
-        menuTable.setDebug(false);
-        stage.addActor(menuTable);
+        final Table table = new Table();
+        table.setFillParent(true);
+        table.setDebug(false);
+        stage.addActor(table);
+
         //create buttons
         background = new Texture(Gdx.files.internal("backgroundTitle.png"));
         TextureRegionDrawable backgroundRegion =
                 new TextureRegionDrawable(new TextureRegion(background));
-        final TextButton multiplayerButton = new TextButton("Multiplayer", skin, "default");
-        final TextButton settingsButton = new TextButton("Settings", skin, "default");
-        final TextButton aboutButton = new TextButton("About", skin, "default");
-        final TextButton exitButton = new TextButton("Exit", skin, "default");
-
+        final TextButton mainMenuButton = new TextButton("Back", skin, "small");
+        final TextButton aboutText = new TextButton(ABOUT_TEXT,skin,"small");
+        aboutText.setDisabled(true);
         //add buttons to table
-        menuTable.defaults().pad(10f);
-        menuTable.add(multiplayerButton);
-        menuTable.row();
-        menuTable.add(settingsButton);
-        menuTable.row();
-        menuTable.add(aboutButton);
-        menuTable.row();
-        menuTable.add(exitButton);
-        menuTable.background(backgroundRegion);
+        table.defaults().pad(10f);
+        table.background(backgroundRegion);
+        table.add(aboutText);
+        table.row();
+        table.add(mainMenuButton);
+        aboutText.setBounds(0,0,200,500);
         //create button listeners
-        exitButton.addListener(new ChangeListener() {
+        mainMenuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
-                log.info("user has closed the program with the exit button");
+                game.setScreen(new MainMenuScreen(game));
+                log.info("switched to {}", game.getScreen());
             }
         });
 
-        settingsButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new SettingsScreen(game));
-                log.info("set screen to {}", game.getScreen().getClass());
-            }
-        });
-
-        multiplayerButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MatchmakingScreen(game));
-                log.info("set screen to {}", game.getScreen().getClass());
-            }
-        });
-        aboutButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new AboutScreen(game));
-                log.info("set screen to {}", game.getScreen().getClass());
-            }
-        });
     }
 
     @Override

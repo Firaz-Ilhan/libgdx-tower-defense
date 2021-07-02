@@ -14,7 +14,7 @@ public abstract class Enemy {
     private int lifepoints;
     private float speed;
     private int damage;
-
+    private int fullLifepoints;
     // ArrayLists that are used to tell an Enemy what wayPoints they have
     // to follow when navigating the map
     private ArrayList<Vector2> wavePatternLeft;
@@ -29,7 +29,8 @@ public abstract class Enemy {
     public Enemy(float x, float y, int lifepoints, int damage, float speed) {
         this.posX = x;
         this.posY = y;
-        this.lifepoints = lifepoints;
+        this.lifepoints= lifepoints;
+        this.fullLifepoints = lifepoints;
         this.damage = damage;
         this.speed = speed;
         wavePatternLeft = new ArrayList<>(Arrays.asList(new Vector2(525, 525), new Vector2(325, 525),
@@ -99,6 +100,11 @@ public abstract class Enemy {
             log.info("You can not deal negative damage");
         }
 
+    }
+
+    public void healAndBuff(){
+        lifepoints = fullLifepoints + 5;
+        log.info("enemy healed");
     }
 
     /**

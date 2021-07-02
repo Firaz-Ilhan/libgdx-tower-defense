@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
     private AllowedTiles allowedTiles;
 
     // WAVE
-    private Wave wave;
+    public Wave wave;
     public static Player player;
     public static Player opponent;
 
@@ -134,7 +134,7 @@ public class GameScreen implements Screen {
         this.skin = game.assetManager.get(Constant.SKIN_PATH);
 
         // sell and buy towers
-        this.sellTurretsController = new IngameButtonsController();
+        this.sellTurretsController = new IngameButtonsController(game,this);
 
         QuitDialog quitDialog = new QuitDialog(game, skin, stage);
 
@@ -184,6 +184,9 @@ public class GameScreen implements Screen {
         turret2Texture = new Texture(Gdx.files.internal(Constant.TOWER2_PATH), true);
 
         turret1Texture.setFilter(MipMapLinearLinear, Linear);
+
+        //draw indicator for Turretrange while mouse is hoverd over turret
+        turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
 
         camera.setToOrtho(false, Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT);
         camera.update();
@@ -248,8 +251,8 @@ public class GameScreen implements Screen {
         // temporary help
 //        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 1375, 40);
 //        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 1475, 40);
-//        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
-//        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
+       font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
+      font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
 //        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 25, 160);
 //        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 125, 160);
         font.draw(renderer.getBatch(), "LP: " + player.getLifepoints(), 25, 890);
@@ -380,8 +383,6 @@ public class GameScreen implements Screen {
 
 
         }
-        //draw indicator for Turretrange while mouse is hoverd over turret
-        turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
 
 
         if (Gdx.input.isKeyPressed(57)) {
@@ -433,7 +434,6 @@ public class GameScreen implements Screen {
             if (game.getClient() != null) {
                 game.getClient().sendPacket(new PacketEndOfGame());
             }
-            dispose();
             game.setScreen(new EndScreen(game));
             log.info("set screen to {}", game.getScreen().getClass());
 
@@ -464,12 +464,6 @@ public class GameScreen implements Screen {
 
     }
 
-
-    public void spawnTurret2() {
-
-    }
-
-
     /**
      * Switch between build and sell mode with the buttons provided for this
      */
@@ -487,6 +481,12 @@ public class GameScreen implements Screen {
 
         } else if (sellTurretsController.isBuildModePressed()) {
             buildMode = true;
+            sellMode = false;
+            zeroTowerAlert = false;
+
+        }
+        else if (sellTurretsController.isInfluenceModePressed()) {
+            buildMode = false;
             sellMode = false;
             zeroTowerAlert = false;
 
@@ -515,7 +515,6 @@ public class GameScreen implements Screen {
                     break;
                 case PACKETENDOFGAME:
                     opponent.lost();
-                    dispose();
                     game.setScreen(new EndScreen(game));
                     log.info("set screen to {}", game.getScreen().getClass());
                     break;
@@ -546,6 +545,9 @@ public class GameScreen implements Screen {
                         }
                     }
                     break;
+                case PACKETINFLUENCE :
+                    wave.healAndBuffWave(true);
+                    opponent.buyInfluence(100);
                 default:
                     break;
 
@@ -553,9 +555,6 @@ public class GameScreen implements Screen {
         }
     }
 
-    public static void handle(Packet packet) {
-        packetQueue.addFirst(packet);
-    }
 
     @Override
     public void resize(int width, int height) {

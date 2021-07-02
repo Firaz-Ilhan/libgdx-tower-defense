@@ -185,6 +185,9 @@ public class GameScreen implements Screen {
 
         turret1Texture.setFilter(MipMapLinearLinear, Linear);
 
+        //draw indicator for Turretrange while mouse is hoverd over turret
+        turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
+
         camera.setToOrtho(false, Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT);
         camera.update();
 
@@ -380,8 +383,6 @@ public class GameScreen implements Screen {
 
 
         }
-        //draw indicator for Turretrange while mouse is hoverd over turret
-        turret1RangeIndicator = new Texture(Gdx.files.internal("turrets/turret1RangeIndicator.png"));
 
 
         if (Gdx.input.isKeyPressed(57)) {

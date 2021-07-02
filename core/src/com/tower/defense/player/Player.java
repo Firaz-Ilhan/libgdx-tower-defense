@@ -9,7 +9,7 @@ public class Player {
     private final static Logger log = LogManager.getLogger(Player.class);
     private boolean lost = false;
     private final String name;
-    private int wallet = 50;
+    private int wallet = 150;
     private final boolean isPlayer;
 
     private int lifepoints = 200;

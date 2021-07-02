@@ -31,9 +31,9 @@ public class AboutScreen implements Screen {
                                         "Firaz Ilhan \n" +
                                         "Lea Gutierrez \n" +
                                         "Luca Baur \n" +
-                                        "Niklas Mäckle \n" +
+                                        "Niklas Maeckle \n" +
                                         "Niko Dangel \n" +
-                                        "Musik by : 'Platzhalter' ";
+                                        "Music by : '©2021 Fesliyan Studios Inc. - Royalty Free Music And Sound Effects' ";
     public AboutScreen(TowerDefense game) {
         this.game = game;
         skin = game.assetManager.get(Constant.SKIN_PATH);

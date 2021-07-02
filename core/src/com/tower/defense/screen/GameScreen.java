@@ -275,8 +275,8 @@ public class GameScreen implements Screen {
         // temporary help
 //        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 1375, 40);
 //        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 1475, 40);
-       font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
-      font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
+//        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
+//        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
 //        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 25, 160);
 //        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 125, 160);
         font.draw(renderer.getBatch(), "LP: " + player.getLifepoints(), 25, 890);

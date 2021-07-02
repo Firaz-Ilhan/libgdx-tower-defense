@@ -1,5 +1,6 @@
 package com.tower.defense.tower.Factory;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
@@ -26,8 +27,9 @@ public class Tower1 implements ITower {
     protected HashMap <Enemy,Float> enemyMap;
     long startTime;
     long endTime;
+    Sound shootingSound;
 
-    public Tower1(Texture turretTexture,float x, float y, int width, int height, SpriteBatch batch) {
+    public Tower1(Texture turretTexture, float x, float y, int width, int height, SpriteBatch batch, Sound shootingSound) {
         this.x = x;
         this.y = y;
         this.is_attacking = false;
@@ -36,6 +38,7 @@ public class Tower1 implements ITower {
         this.height = height;
         this.spriteBatch = batch;
         this.startTime = System.nanoTime();
+        this.shootingSound = shootingSound;
     }
 
 
@@ -103,6 +106,7 @@ public class Tower1 implements ITower {
 
         if (enemyMap.size()>0 && difference>firerate){
             enemyMap.keySet().stream().findFirst().get().setLifepoints((int) damage);
+            shootingSound.play();
             startTime = System.nanoTime();
         }
     }

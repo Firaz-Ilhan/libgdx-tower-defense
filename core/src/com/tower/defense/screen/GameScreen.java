@@ -3,8 +3,8 @@ package com.tower.defense.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -126,6 +126,11 @@ public class GameScreen implements Screen {
 
     private Music backgroundMusic;
 
+    private Sound turretPlacedSound;
+    private Sound turretRemovedSound;
+    private Sound enemyKilledSound;
+    private Sound shootingSound;
+
     public GameScreen(TowerDefense game) {
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -167,6 +172,10 @@ public class GameScreen implements Screen {
         game.assetManager.load(Constant.TOWER1_PATH, Texture.class);
         game.assetManager.load(Constant.TOWER2_PATH, Texture.class);
         game.assetManager.load(Constant.TOWER1_RANGE_INDICATOR, Texture.class);
+        game.assetManager.load(Constant.TURRET_PLACED_SOUND_PATH, Sound.class);
+        game.assetManager.load(Constant.TURRET_REMOVED_SOUND_PATH, Sound.class);
+        game.assetManager.load(Constant.ENEMY_KILLED_SOUND_PATH, Sound.class);
+        game.assetManager.load(Constant.TURRET_SHOT_SOUND_PATH, Sound.class);
         game.assetManager.finishLoading();
 
         // loading Textures
@@ -178,6 +187,10 @@ public class GameScreen implements Screen {
         healthBar = game.assetManager.get(Constant.HEALTHBAR_PATH, Texture.class);
         hoveredTileTexture = game.assetManager.get(Constant.HOVERED_TILE_TEXTURE_PATH, Texture.class);
         hoveredTileNotAllowed = game.assetManager.get(Constant.HOVERED_TILE_NOT_ALLOWED_PATH, Texture.class);
+        turretPlacedSound = game.assetManager.get(Constant.TURRET_PLACED_SOUND_PATH, Sound.class);
+        turretRemovedSound = game.assetManager.get(Constant.TURRET_REMOVED_SOUND_PATH, Sound.class);
+        enemyKilledSound = game.assetManager.get(Constant.ENEMY_KILLED_SOUND_PATH, Sound.class);
+        shootingSound = game.assetManager.get(Constant.TURRET_SHOT_SOUND_PATH, Sound.class);
 
         if (game.getSettings().isMusicEnabled()) {
             backgroundMusic = game.assetManager.get(Constant.BACKGROUND_MUSIC_PATH, Music.class);
@@ -376,6 +389,7 @@ public class GameScreen implements Screen {
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                     player.sellTower(tower1);
+                    turretRemovedSound.play();
                     System.out.println(turretsPlaced);
 
                     if (game.getClient() != null) {
@@ -435,8 +449,8 @@ public class GameScreen implements Screen {
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
 
-        RenderWave.renderWave(player, wave);
-        RenderWave.renderWave(opponent, wave);
+        RenderWave.renderWave(player, wave, enemyKilledSound);
+        RenderWave.renderWave(opponent, wave, enemyKilledSound);
 
         // END OF GAME
         if (player.getLifepoints() <= 0) {
@@ -465,8 +479,9 @@ public class GameScreen implements Screen {
     public void spawnTurret1() {
         //Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-        tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch);
+        tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch, shootingSound);
         turretsPlaced.add(tower1);
+        turretPlacedSound.play();
 
         if (game.getClient() != null) {
             game.getClient().sendPacket(new PacketAddTower(hoveredTilePosition.x, hoveredTilePosition.y));
@@ -536,7 +551,7 @@ public class GameScreen implements Screen {
                     float yCordAdd = packetAddTower.getY();
 
                     tower1 = new Tower1(turret2Texture, (mapWidth - xCordAdd) * 50,
-                            yCordAdd * 50, 50, 50, spriteBatch);
+                            yCordAdd * 50, 50, 50, spriteBatch, shootingSound);
                     enemyTowersPlaced.add(tower1);
                     opponent.buyTower(tower1);
                     break;
@@ -596,6 +611,8 @@ public class GameScreen implements Screen {
         game.assetManager.unload(Constant.HEALTHBAR_PATH);
         game.assetManager.unload(Constant.BACKGROUND_MUSIC_PATH);
         game.assetManager.unload(Constant.TOWER1_PATH);
+        game.assetManager.unload(Constant.TURRET_PLACED_SOUND_PATH);
+        game.assetManager.unload(Constant.TURRET_REMOVED_SOUND_PATH);
     }
 
     @Override

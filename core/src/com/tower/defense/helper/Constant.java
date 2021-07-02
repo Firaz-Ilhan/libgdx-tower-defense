@@ -20,6 +20,11 @@ public final class Constant {
     public static final String TOWER_DEFENSE_MAP_PATH = "map/TowerDefenseMap.tmx";
     public static final String TOWER1_RANGE_INDICATOR = "turrets/turret1RangeIndicator.png";
 
+    public static final String ENEMY_KILLED_SOUND_PATH = "sounds/enemy_killed.wav";
+    public static final String TURRET_PLACED_SOUND_PATH = "sounds/turret_placed.wav";
+    public static final String TURRET_REMOVED_SOUND_PATH = "sounds/turret_removed.wav";
+    public static final String TURRET_SHOT_SOUND_PATH = "sounds/turret_shot.wav";
+
     private Constant() {
 
     }

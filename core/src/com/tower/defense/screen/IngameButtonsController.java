@@ -62,13 +62,15 @@ public class IngameButtonsController {
 
         sellButton = new ImageButton(sellStyle);
 
-        Texture influenceTexture = new Texture(Gdx.files.internal("buttons/influenceButton.png"), true);
-        influenceTexture.setFilter(MipMapLinearLinear, Linear);
-        Drawable influenceImage = new TextureRegionDrawable(new TextureRegion(influenceTexture));
-
+        Texture influenceTextureDown = new Texture(Gdx.files.internal("buttons/influenceDown.png"), true);
+        Texture influenceTextureUp = new Texture(Gdx.files.internal("buttons/influenceUp.png"), true);
+        influenceTextureDown.setFilter(MipMapLinearLinear, Linear);
+        influenceTextureUp.setFilter(MipMapLinearLinear, Linear);
+        Drawable influenceImageUp = new TextureRegionDrawable(new TextureRegion(influenceTextureUp));
+        Drawable influenceImageDown = new TextureRegionDrawable(new TextureRegion(influenceTextureDown));
         ImageButton.ImageButtonStyle influenceStyle = new ImageButton.ImageButtonStyle();
-        influenceStyle.imageUp = influenceImage;
-        influenceStyle.imageDown = sellDownImage;
+        influenceStyle.imageUp = influenceImageUp;
+        influenceStyle.imageDown = influenceImageDown;
 
         influenceButton = new ImageButton(influenceStyle);
 

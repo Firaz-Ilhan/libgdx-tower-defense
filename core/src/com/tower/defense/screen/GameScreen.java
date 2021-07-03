@@ -41,7 +41,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import static com.badlogic.gdx.graphics.Texture.TextureFilter.*;
+import static com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
 import static com.tower.defense.helper.PacketQueue.packetQueue;
 
 
@@ -140,7 +140,7 @@ public class GameScreen implements Screen {
         this.skin = game.assetManager.get(Constant.SKIN_PATH);
 
         // sell and buy towers
-        this.sellTurretsController = new IngameButtonsController(game,this);
+        this.sellTurretsController = new IngameButtonsController(game, this);
 
         QuitDialog quitDialog = new QuitDialog(game, skin, stage);
 
@@ -195,7 +195,7 @@ public class GameScreen implements Screen {
         if (game.getSettings().isMusicEnabled()) {
             backgroundMusic = game.assetManager.get(Constant.BACKGROUND_MUSIC_PATH, Music.class);
             backgroundMusic.setLooping(true);
-            backgroundMusic.setVolume(game.getSettings().getVolume());
+            backgroundMusic.setVolume(game.getSettings().getMusicVolume());
             backgroundMusic.play();
             log.info("music playing at volume: {}", backgroundMusic.getVolume());
         }
@@ -389,8 +389,10 @@ public class GameScreen implements Screen {
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                     player.sellTower(tower1);
-                    turretRemovedSound.play();
-                    System.out.println(turretsPlaced);
+
+                    if (game.getSettings().isSoundEnabled()) {
+                        turretRemovedSound.play(game.getSettings().getSoundVolume());
+                    }
 
                     if (game.getClient() != null) {
                         game.getClient().sendPacket(
@@ -481,7 +483,10 @@ public class GameScreen implements Screen {
 
         tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch, shootingSound);
         turretsPlaced.add(tower1);
-        turretPlacedSound.play();
+
+        if (game.getSettings().isSoundEnabled()) {
+            turretPlacedSound.play(game.getSettings().getSoundVolume());
+        }
 
         if (game.getClient() != null) {
             game.getClient().sendPacket(new PacketAddTower(hoveredTilePosition.x, hoveredTilePosition.y));
@@ -510,8 +515,7 @@ public class GameScreen implements Screen {
             sellMode = false;
             zeroTowerAlert = false;
 
-        }
-        else if (sellTurretsController.isInfluenceModePressed()) {
+        } else if (sellTurretsController.isInfluenceModePressed()) {
             buildMode = false;
             sellMode = false;
             zeroTowerAlert = false;
@@ -571,7 +575,7 @@ public class GameScreen implements Screen {
                         }
                     }
                     break;
-                case PACKETINFLUENCE :
+                case PACKETINFLUENCE:
                     wave.healAndBuffWave(true);
                     opponent.buyInfluence(100);
                 default:

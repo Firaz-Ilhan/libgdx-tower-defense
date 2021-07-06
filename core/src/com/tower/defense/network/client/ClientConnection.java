@@ -1,16 +1,12 @@
 package com.tower.defense.network.client;
 
-import com.badlogic.gdx.Screen;
 import com.tower.defense.helper.PacketQueue;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.PacketEndOfGame;
-import com.tower.defense.screen.GameScreen;
-import com.tower.defense.screen.MatchmakingScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

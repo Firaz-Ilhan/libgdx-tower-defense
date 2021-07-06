@@ -42,6 +42,7 @@ public class EndScreen implements Screen {
         if(game.getClient()!=null){
             game.getClient().getClientConnection().closeConnection();
         }
+
         skin = game.assetManager.get(Constant.SKIN_PATH);
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);

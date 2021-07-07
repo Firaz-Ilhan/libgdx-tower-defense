@@ -1,6 +1,6 @@
 package com.tower.defense.player;
 
-import com.tower.defense.tower.ITower;
+import com.tower.defense.tower.Factory.Tower;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +49,7 @@ public class Player {
      * If a Tower was bought it is added to the list of the players towers(inventory)
      * The cost will be deducted from the wallet
      */
-    public void buyTower(ITower tower) {
+    public void buyTower(Tower tower) {
         log.info("tower {} was added to the inventory", tower.toString());
         wallet = wallet - tower.getCost();
         log.info("wallet: {}", wallet);
@@ -67,7 +67,7 @@ public class Player {
      * selling Towers only regain 80% of the costs. The result is rounded to an Integer
      * At the end the Tower is removed from the list
      */
-    public void sellTower(ITower tower) {
+    public void sellTower(Tower tower) {
         wallet = (int) (wallet + Math.round(tower.getCost() * 0.8));
         log.info("wallet: {}", wallet);
     }

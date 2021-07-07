@@ -32,8 +32,8 @@ import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
 import com.tower.defense.network.packet.client.*;
 import com.tower.defense.player.Player;
+import com.tower.defense.tower.Factory.Tower;
 import com.tower.defense.tower.Factory.Tower1;
-import com.tower.defense.tower.ITower;
 import com.tower.defense.wave.RenderWave;
 import com.tower.defense.wave.Wave;
 import org.apache.logging.log4j.LogManager;
@@ -75,11 +75,11 @@ public class GameScreen implements Screen {
     private Texture turret2Texture;
 
     // list to store own towers
-    private final LinkedList turretsPlaced = new LinkedList<ITower>();
-    private ListIterator<Tower1> tower1ListIterator1;
+    private final LinkedList turretsPlaced = new LinkedList<Tower>();
+    private ListIterator<Tower> tower1ListIterator1;
 
     // list to store towers of the opponent
-    private final LinkedList enemyTowersPlaced = new LinkedList<ITower>();
+    private final LinkedList enemyTowersPlaced = new LinkedList<Tower>();
 
 
     private boolean altIsPressed;
@@ -105,7 +105,7 @@ public class GameScreen implements Screen {
     private boolean leftMouseButtonDown;
     private boolean rightMouseButtonDown;
 
-    private Tower1 tower1;
+    private Tower tower;
 
     private Texture enemyImage;
     private Texture healthBarBG;
@@ -362,7 +362,7 @@ public class GameScreen implements Screen {
 
             spawnTurret1();
             AllowedTiles.playerOneAllowedTiles.remove(hoveredTilePosition);
-            player.buyTower(tower1);
+            player.buyTower(tower);
 
         } else {
             canDraw = false;
@@ -374,14 +374,14 @@ public class GameScreen implements Screen {
 
         while (tower1ListIterator1.hasNext()) {
 
-            tower1 = tower1ListIterator1.next();
-            tower1.draw();
-            tower1.updateTargetarray(wave, player);
-            tower1.update(shapeRenderer);
+            tower = tower1ListIterator1.next();
+            tower.draw();
+            tower.updateTargetarray(wave, player);
+            tower.update(shapeRenderer);
 
 
             //Output if player tries to delete the last turret
-            if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1 && sellMode && tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50)
+            if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1 && sellMode && tower.getX() == hoveredTilePosition.x * 50 && tower.getY() == hoveredTilePosition.y * 50)
                 zeroTowerBoolean = true;
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
@@ -389,11 +389,11 @@ public class GameScreen implements Screen {
                 zeroTowerBoolean = false;
 
 
-                if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
+                if (tower.getX() == hoveredTilePosition.x * 50 && tower.getY() == hoveredTilePosition.y * 50 && sellMode) {
 
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
-                    player.sellTower(tower1);
+                    player.sellTower(tower);
                     turretRemovedSound.play();
                     System.out.println(turretsPlaced);
 
@@ -432,10 +432,10 @@ public class GameScreen implements Screen {
 
         while (tower1ListIterator1.hasNext()) {
 
-            tower1 = tower1ListIterator1.next();
-            tower1.draw();
-            tower1.updateTargetarray(wave, opponent);
-            tower1.update(shapeRenderer);
+            tower = tower1ListIterator1.next();
+            tower.draw();
+            tower.updateTargetarray(wave, opponent);
+            tower.update(shapeRenderer);
 
         }
 
@@ -496,8 +496,8 @@ public class GameScreen implements Screen {
     public void spawnTurret1() {
         //Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
-        tower1 = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch, shootingSound);
-        turretsPlaced.add(tower1);
+        tower = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch, shootingSound);
+        turretsPlaced.add(tower);
         turretPlacedSound.play();
 
         if (game.getClient() != null) {
@@ -570,10 +570,10 @@ public class GameScreen implements Screen {
                     float xCordAdd = packetAddTower.getX();
                     float yCordAdd = packetAddTower.getY();
 
-                    tower1 = new Tower1(turret2Texture, (mapWidth - xCordAdd) * 50,
+                    tower = new Tower1(turret2Texture, (mapWidth - xCordAdd) * 50,
                             yCordAdd * 50, 50, 50, spriteBatch, shootingSound);
-                    enemyTowersPlaced.add(tower1);
-                    opponent.buyTower(tower1);
+                    enemyTowersPlaced.add(tower);
+                    opponent.buyTower(tower);
                     break;
                 case PACKETREMOVETOWER:
                     log.info("packetoutremovetower received");
@@ -582,11 +582,11 @@ public class GameScreen implements Screen {
                     float yCordRemove = packetOutRemoveTower.getY();
                     tower1ListIterator1 = enemyTowersPlaced.listIterator();
                     while (tower1ListIterator1.hasNext()) {
-                        tower1 = tower1ListIterator1.next();
+                        tower = tower1ListIterator1.next();
                         if (enemyTowersPlaced.size() > 1) {
-                            if (tower1.getX() == (mapWidth - xCordRemove) * 50 && tower1.getY() == yCordRemove * 50) {
+                            if (tower.getX() == (mapWidth - xCordRemove) * 50 && tower.getY() == yCordRemove * 50) {
                                 tower1ListIterator1.remove();
-                                opponent.sellTower(tower1);
+                                opponent.sellTower(tower);
                             }
                         }
                     }

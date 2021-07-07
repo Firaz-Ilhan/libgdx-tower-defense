@@ -492,7 +492,7 @@ public class GameScreen implements Screen {
 
 
     /**
-     * Method to spawn a Turret1 and add him to the turretsPlaced list
+     * Method to spawn a Tower1 and add him to the turretsPlaced list
      */
     public void spawnTurret1() {
         //Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));

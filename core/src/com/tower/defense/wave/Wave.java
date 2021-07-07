@@ -43,6 +43,11 @@ public class Wave {
         spawnEnemy();
     }
 
+    /**
+     * checks whether wave is pausing or not.
+     * If not, enemies are spawning as long as the
+     * max waveSize is reached
+     */
     public void spawnEnemy() {
         if (!pausing) {
             if (enemiesSpawned == waveSize) {
@@ -63,17 +68,22 @@ public class Wave {
         }
     }
 
-    // check if we need to create a new enemy
+    /**
+     * check if we need to create a new enemy
+     */
+
     public void newEnemySpawn() {
         if (TimeUtils.nanoTime() - lastSpawnTime > waveSpeed) {
             spawnEnemy();
         }
     }
 
-    // once a wave is over the players get money based on how many
-    // enemies they were able to kill.
-    // The waveSpeed, waveSize and waveReward all increase for
-    // the next wave
+    /**
+     *  once a wave is over the players get money based on how many
+     *  enemies they were able to kill.
+     *  The waveSpeed, waveSize and waveReward all increase for
+     *  the next wave
+     */
     public void endOfWave() {
         if (!pausing) {
             int reward = calculateReward();
@@ -98,12 +108,22 @@ public class Wave {
 
     }
 
+    /**
+     * Calculate earned reward
+     * @return
+     */
     public int calculateReward() {
         waveReward = waveReward - enemiesPastLeft * 2;
         log.info("reward: {}", waveReward);
         return waveReward;
     }
 
+    /**
+     * is called by Influence
+     * iterates through wave and calls healAndBuff()
+     * in Enemy.Class
+     * @param own whether it's your own wave or not
+     */
     public void healAndBuffWave(boolean own){
         Array<Enemy> wave;
         if(own){
@@ -117,19 +137,28 @@ public class Wave {
             enemy.healAndBuff();
         }
     }
-    // for displaying which wave this is
+
+    /**
+     * for displaying which wave this is
+     * @return waveCount
+     */
     public int getWaveCount() {
         return waveCount;
     }
 
-    //is called by the handle() method if a EndOfWave packet was received
+    /**
+     * is called by the handle() method if a EndOfWave packet was received
+     * @param reward int: End of Wave REward of opponent
+     */
     public void partnerWaveEnded(int reward) {
         log.info("partners wave ended");
         GameScreen.opponent.addToWallet(reward);
         partnerIsPausing = true;
     }
-
-    //is called in EndOfWave()
+    /**
+     * is called in EndOfWave()
+     * sets pausing false and increases WaveCount
+     */
     public void startWave() {
         partnerIsPausing = false;
         pausing = false;

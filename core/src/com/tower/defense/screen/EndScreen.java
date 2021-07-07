@@ -87,6 +87,11 @@ public class EndScreen implements Screen {
         table.align(Align.center);
         table.add(whoWon);
     }
+
+    /**
+     * based on who lost, the outcome String is assigned
+     * @return outcome String
+     */
     private String computeOutcome(){
         if (player.hasLost() && opponent.hasLost() ) {
             outcome = "Draw";

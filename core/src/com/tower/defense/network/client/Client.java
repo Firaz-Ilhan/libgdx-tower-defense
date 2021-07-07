@@ -32,6 +32,10 @@ public class Client {
         }
     }
 
+    /**
+     * calls sendPacket() of clientConnection
+     * @param packet Packet
+     */
     public void sendPacket(Packet packet) {
         try {
             clientConnection.sendPacketToServer(packet);
@@ -40,14 +44,26 @@ public class Client {
         }
     }
 
+    /**
+     * getCurrentScreen()
+     * @return currentScreen
+     */
     public Screen getCurrentScreen() {
         return currentScreen;
     }
 
+    /**
+     * setCurrentScreen()
+     * @param currentScreen Screen
+     */
     public void setCurrentScreen(Screen currentScreen) {
         this.currentScreen = currentScreen;
     }
 
+    /**
+     * getClientConnection()
+     * @return clientConnection
+     */
     public ClientConnection getClientConnection() {
         return clientConnection;
     }

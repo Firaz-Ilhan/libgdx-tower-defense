@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -21,8 +20,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.tower.defense.TowerDefense;
@@ -38,15 +35,13 @@ import com.tower.defense.tower.Factory.Tower1;
 import com.tower.defense.tower.ITower;
 import com.tower.defense.wave.RenderWave;
 import com.tower.defense.wave.Wave;
-import jdk.internal.org.jline.terminal.impl.jna.win.WindowsAnsiWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.naming.ldap.Control;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-import static com.badlogic.gdx.graphics.Texture.TextureFilter.*;
+import static com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
 import static com.tower.defense.helper.PacketQueue.packetQueue;
 
 

@@ -94,12 +94,13 @@ public class GameScreen implements Screen {
     private boolean sellMode;
     private boolean buildMode;
 
-    //Controls Window
+    //In-game windows
     private boolean controlIsPressed;
     private final ControlsWindow controlsWindow;
-
     //Alert that it is not allowed to delete the last owning turret
-    private boolean zeroTowerAlert;
+    private final ZeroTowerAlert zeroTowerAlert;
+
+    private boolean zeroTowerBoolean;
 
 
     //Booleans to avoid creating multiple turrets by clicking once
@@ -150,8 +151,9 @@ public class GameScreen implements Screen {
         // sell and buy towers
         this.sellTurretsController = new IngameButtonsController(game,this);
 
-        //ControlsWindow
+        //In-Game windows
         this.controlsWindow = new ControlsWindow();
+        this.zeroTowerAlert = new ZeroTowerAlert();
 
         QuitDialog quitDialog = new QuitDialog(game, skin, stage);
 
@@ -166,7 +168,7 @@ public class GameScreen implements Screen {
         this.rightMouseButtonDown = false;
         this.canDraw = false;
         this.canDelete = false;
-        this.zeroTowerAlert = false;
+        this.zeroTowerBoolean = false;
         this.buildMode = false;
         this.sellMode = false;
         this.altIsPressed = false;
@@ -296,12 +298,6 @@ public class GameScreen implements Screen {
         font.draw(renderer.getBatch(), "Money: " + player.getWalletValue(), 25, 840);
         font.draw(renderer.getBatch(), "Money: " + opponent.getWalletValue(), 1375, 840);
         font.draw(renderer.getBatch(), "Wave: " + wave.getWaveCount(), 725, 890);
-/*
-        if (zeroTowerAlert) {
-            font.draw(renderer.getBatch(), "You can't own 0 turrets !", hoveredTilePosition.x * 50, hoveredTilePosition.y * 50);
-        }
-
- */
 
 
         renderer.getBatch().end();
@@ -386,12 +382,12 @@ public class GameScreen implements Screen {
 
 
             //Output if player tries to delete the last turret
-            if(canDelete && !rightMouseButtonDown && turretsPlaced.size() <= 1)
-                zeroTowerAlert = true;
+            if(canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1 && sellMode && tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50)
+                zeroTowerBoolean = true;
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {
 
-                zeroTowerAlert = false;
+                zeroTowerBoolean = false;
 
 
                 if (tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50 && sellMode) {
@@ -410,7 +406,7 @@ public class GameScreen implements Screen {
 
             } else {
                 canDelete = false;
-                //sellState = false;
+
             }
         }
 
@@ -419,6 +415,11 @@ public class GameScreen implements Screen {
             altIsPressed = true;
         } else {
             altIsPressed = false;
+        }
+
+        if (Gdx.input.isButtonPressed(0) && sellMode){
+            zeroTowerBoolean = false;
+            System.out.println("left");
         }
 
         //draw TurretRangeIndicator to Mouseposition while alt is pressed
@@ -478,6 +479,12 @@ public class GameScreen implements Screen {
         if(controlIsPressed) {
             controlsWindow.draw();
         }
+        //Draw zeroTowerAlert window
+        if (zeroTowerBoolean) {
+            zeroTowerAlert.draw();
+        }
+
+
     }
 
 
@@ -514,20 +521,14 @@ public class GameScreen implements Screen {
         } else if (sellTurretsController.isBuildModePressed()) {
             buildMode = true;
             sellMode = false;
-            zeroTowerAlert = false;
-
-
-        } else if (sellTurretsController.isBuildModePressed()) {
-            buildMode = true;
-            sellMode = false;
-            zeroTowerAlert = false;
+            zeroTowerBoolean = false;
 
 
         }
         else if (sellTurretsController.isInfluenceModePressed()) {
             buildMode = false;
             sellMode = false;
-            zeroTowerAlert = false;
+
 
         }
 

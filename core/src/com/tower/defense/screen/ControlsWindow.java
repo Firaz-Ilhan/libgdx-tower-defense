@@ -24,25 +24,25 @@ public class ControlsWindow {
 
     public ControlsWindow() {
         windowCam = new OrthographicCamera();
-        windowViewPort = new FitViewport(Constant.WORLD_WIDTH,Constant.WORLD_HEIGHT,windowCam);
+        windowViewPort = new FitViewport(Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT, windowCam);
         windowStage = new Stage(windowViewPort);
 
 
         controlWindowTexture = new Texture(Gdx.files.internal("core/assets/controlMenu.png"));
-        controlWindowStyle = new Window.WindowStyle(new BitmapFont(), Color.BLACK,new TextureRegionDrawable(new TextureRegion(controlWindowTexture)));
+        controlWindowStyle = new Window.WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(new TextureRegion(controlWindowTexture)));
 
 
-        controlsWindow = new Window("",controlWindowStyle);
-        controlsWindow.setPosition(625,350);
-        controlsWindow.setSize(350,200);
+        controlsWindow = new Window("", controlWindowStyle);
+        controlsWindow.setPosition(625, 350);
+        controlsWindow.setSize(350, 200);
 
 
         windowStage.addActor(controlsWindow);
+
 
     }
 
     public void draw(){
         windowStage.draw();
     }
-
 }

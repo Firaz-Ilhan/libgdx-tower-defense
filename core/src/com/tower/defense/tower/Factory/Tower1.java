@@ -61,7 +61,8 @@ public class Tower1 implements ITower {
         this.y = y;
     }
 
-
+    //Shooting function
+    //get Shaperenderer and draw a line between the tower and the current enemy
     public void shooting(ShapeRenderer shapeRenderer) {
         float xTarget =  enemyMap.keySet().stream().findFirst().get().getX();
         float yTarget =  enemyMap.keySet().stream().findFirst().get().getY();
@@ -95,6 +96,9 @@ public class Tower1 implements ITower {
         return cost;
     }
 
+    //Create an Hashmap whitin all enemies which are at the current time in the tower-range
+    //also remove all enemies who arent in the range anymore
+    //the hashmap contains the enemie and the distance between enemy and tower
     public void updateTargetarray(Wave waveClass, Player player){
             enemyMap = new HashMap<>();
             Array<Enemy> wave;
@@ -116,6 +120,8 @@ public class Tower1 implements ITower {
         }
 
     }
+
+    //the update method gets called every loop
     public void update(ShapeRenderer shapeRenderer){
         endTime = System.nanoTime();
         double difference = (endTime-startTime)/1e9;

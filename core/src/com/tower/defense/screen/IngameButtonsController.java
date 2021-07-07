@@ -29,14 +29,21 @@ public class IngameButtonsController {
     private final Stage buttonStage;
     private final ImageButton buildButton;
     private final ImageButton sellButton;
+
+    private final ImageButton controlsButton;
+
     private final ImageButton influenceButton;
     private final TowerDefense game;
     private GameScreen screen;
 
 
+
+
+
     public IngameButtonsController(TowerDefense game,GameScreen screen) {
         this.game = game;
         this.screen = screen;
+
         OrthographicCamera buttonCam = new OrthographicCamera();
         buttonViewPort = new FitViewport(Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT, buttonCam);
         buttonStage = new Stage(buttonViewPort);
@@ -135,6 +142,55 @@ public class IngameButtonsController {
         buttonStage.addActor(buttonTable);
 
 
+        //creating button to see the controls
+        Table controlTable = new Table();
+        controlTable.setPosition(1550,50);
+
+        Texture controlsTexture = new Texture(Gdx.files.internal("buttons/controlButton.png"),true);
+        Texture controlsDownTexture = new Texture(Gdx.files.internal("buttons/controlButtonDown.png"),true);
+
+
+        controlsTexture.setFilter(MipMapLinearLinear, Linear);
+        controlsDownTexture.setFilter(MipMapLinearLinear, Linear);
+
+
+        Drawable controlsImage = new TextureRegionDrawable(new TextureRegion(controlsTexture));
+        Drawable controlsImageDown = new TextureRegionDrawable(new TextureRegion(controlsDownTexture));
+
+        ImageButton.ImageButtonStyle controlsStyle = new ImageButton.ImageButtonStyle();
+        controlsStyle.imageUp = controlsImage;
+        controlsStyle.imageDown = controlsImageDown;
+
+        controlsButton = new ImageButton(controlsStyle);
+
+        controlsButton.addListener(new InputListener() {
+
+
+            public boolean touchDown(InputEvent event, int keycode) {
+               // controlActivePressed = true;
+                return true;
+
+            }
+
+
+            public boolean touchUp(InputEvent event, int keycode) {
+                //controlActivePressed = false;
+                return false;
+
+          }});
+
+
+
+        //ButtonGroup<ImageButton> controlsGroup = new ButtonGroup<>(controlsButton);
+        //buttonGroup.setMaxCheckCount(1);
+
+        controlTable.add(controlsButton);
+
+
+
+        buttonStage.addActor(controlTable);
+        buttonStage.addActor(buttonTable);
+
     }
 
     public void draw() {
@@ -152,6 +208,12 @@ public class IngameButtonsController {
     public boolean isInfluenceModePressed() {
         return influenceButton.isChecked();
     }
+
+    public boolean isControlsPressed(){
+        return controlsButton.isPressed();
+    }
+
+
 
     public void resize(int width, int height) {
         buttonViewPort.update(width, height);

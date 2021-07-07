@@ -136,7 +136,7 @@ public class GameScreen implements Screen {
     private Sound enemyKilledSound;
     private Sound shootingSound;
 
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 
     public GameScreen(TowerDefense game) {
@@ -379,7 +379,7 @@ public class GameScreen implements Screen {
             tower = tower1ListIterator1.next();
             tower.draw();
             tower.updateTargetarray(wave, player);
-            tower.update(shapeRenderer);
+            tower.update(shapeRenderer, game);
 
 
             //Output if player tries to delete the last turret
@@ -444,7 +444,7 @@ public class GameScreen implements Screen {
             tower = tower1ListIterator1.next();
             tower.draw();
             tower.updateTargetarray(wave, opponent);
-            tower.update(shapeRenderer);
+            tower.update(shapeRenderer, game);
 
         }
 
@@ -462,8 +462,8 @@ public class GameScreen implements Screen {
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
 
-        RenderWave.renderWave(player, wave, enemyKilledSound);
-        RenderWave.renderWave(opponent, wave, enemyKilledSound);
+        RenderWave.renderWave(player, wave, enemyKilledSound, game);
+        RenderWave.renderWave(opponent, wave, enemyKilledSound, game);
 
         // END OF GAME
         if (player.getLifepoints() <= 0) {

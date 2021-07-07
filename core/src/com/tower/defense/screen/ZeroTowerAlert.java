@@ -28,7 +28,7 @@ public class ZeroTowerAlert {
             alertStage = new Stage(alertViewPort);
 
 
-            alertTexture = new Texture(Gdx.files.internal("core/assets/zeroTowerAlert.png"));
+            alertTexture = new Texture(Gdx.files.internal("zeroTowerAlert.png"));
             alertStyle = new Window.WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(new TextureRegion(alertTexture)));
 
 

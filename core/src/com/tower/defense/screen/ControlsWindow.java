@@ -28,7 +28,7 @@ public class ControlsWindow {
         windowStage = new Stage(windowViewPort);
 
 
-        controlWindowTexture = new Texture(Gdx.files.internal("core/assets/controlMenu.png"));
+        controlWindowTexture = new Texture(Gdx.files.internal("controlMenu.png"));
         controlWindowStyle = new Window.WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(new TextureRegion(controlWindowTexture)));
 
 

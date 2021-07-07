@@ -289,8 +289,8 @@ public class GameScreen implements Screen {
         // temporary help
 //        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.x), 1375, 40);
 //        font.draw(renderer.getBatch(), String.valueOf((int) mousePosition.y), 1475, 40);
-       font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
-      font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
+//        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.x), 1375, 100);
+//        font.draw(renderer.getBatch(), String.valueOf((int) hoveredTilePosition.y), 1475, 100);
 //        font.draw(renderer.getBatch(), String.valueOf(screenWidth), 25, 160);
 //        font.draw(renderer.getBatch(), String.valueOf(screenHeight), 125, 160);
         font.draw(renderer.getBatch(), "LP: " + player.getLifepoints(), 25, 890);
@@ -382,7 +382,7 @@ public class GameScreen implements Screen {
 
 
             //Output if player tries to delete the last turret
-            if(canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1 && sellMode && tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50)
+            if (canDelete && !rightMouseButtonDown && turretsPlaced.size() == 1 && sellMode && tower1.getX() == hoveredTilePosition.x * 50 && tower1.getY() == hoveredTilePosition.y * 50)
                 zeroTowerBoolean = true;
 
             if (canDelete && !rightMouseButtonDown && turretsPlaced.size() > 1) {

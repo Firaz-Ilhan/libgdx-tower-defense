@@ -1,4 +1,4 @@
-package com.tower.defense.network.server;
+package com.tower.defense.server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,7 +19,7 @@ public class Server {
 
     /**
      * while the server is running it always checks for new sockets.
-     * Those sockets are used to create a ServerConnection
+     * Those sockets are used to create a model.ServerConnection
      * which then runs as a separate Thread.
      * All sockets and its ServerConnections are stored in a LinkedHashMap
      */

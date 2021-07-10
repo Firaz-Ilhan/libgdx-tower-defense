@@ -1,11 +1,12 @@
-package com.tower.defense.network.server;
+package com.tower.defense.server;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
-import com.tower.defense.network.packet.server.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import com.tower.defense.network.packet.server.PacketMatchFound;
+import com.tower.defense.network.packet.server.PacketSearchMatch;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -96,7 +97,7 @@ public class ServerConnection extends Thread {
         log.info("Traffic: New {}", type.toString());
 
         switch (type) {
-            //calls GameManager to look for an opponent
+            //calls model.GameManager to look for an opponent
             case PACKETSEARCHMATCH:
 
                 ServerConnection serverSearchConnection = server.getGameManager().searchingForGame(this);

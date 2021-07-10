@@ -2,7 +2,8 @@ package com.tower.defense.network.packet;
 
 
 import com.tower.defense.network.packet.client.*;
-import com.tower.defense.network.packet.server.*;
+import com.tower.defense.network.packet.server.PacketMatchFound;
+import com.tower.defense.network.packet.server.PacketSearchMatch;
 
 
 public enum PacketType {

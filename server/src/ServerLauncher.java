@@ -1,6 +1,4 @@
-package com.tower.defense.desktop;
-
-import com.tower.defense.network.server.Server;
+import com.tower.defense.server.Server;
 
 public class ServerLauncher {
 	

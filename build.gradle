@@ -67,3 +67,12 @@ project(":core") {
     }
 }
 
+project(":server") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+
+    }
+}
+

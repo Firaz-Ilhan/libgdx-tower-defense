@@ -1,4 +1,4 @@
-package com.tower.defense.network.server;
+package com.tower.defense.server;
 
 import java.util.ArrayList;
 

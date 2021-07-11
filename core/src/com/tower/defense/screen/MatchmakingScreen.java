@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -39,7 +38,6 @@ public class MatchmakingScreen implements Screen {
     private final TowerDefense game;
     private final MatchmakingScreen instance;
 
-    private boolean isReady = false;
     private Label connectionStatus;
     private Label startingStatus;
     private Table scrollTable;
@@ -48,6 +46,9 @@ public class MatchmakingScreen implements Screen {
     private Texture background;
     private Client client;
 
+    private boolean isReady = false;
+    private boolean matchFound = false;
+    private boolean isWaitingForEnemy = false;
 
     public MatchmakingScreen(final TowerDefense game) {
         this.game = game;
@@ -139,7 +140,7 @@ public class MatchmakingScreen implements Screen {
                 log.debug("IP from Textfield is: {}", ip);
                 if (ip.matches(IP_REGEX)) {
                     try {
-                        if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy") && !connectionStatus.getText().toString().equals("Connected: Match found")) {
+                        if (!isWaitingForEnemy && !matchFound) {
                             connectionStatus.setText("Trying to connect");
                             client = new Client(ip, Constant.SERVER_PORT);
                             log.info("Creating Client with IP: {}", ip);
@@ -175,24 +176,19 @@ public class MatchmakingScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-                //game.setScreen(new GameScreen(game));
-                log.info("set screen to {}", game.getScreen().getClass());
-
-                if (connectionStatus.getText().toString().equals("Connected: Match found")) {
+                if (matchFound) {
                     if (!isReady) {
                         game.getClient().sendPacket(new PacketStartMatch());
                         isReady = true;
                         log.info("isReady is : {}", isReady);
                         startingStatus.setText("You're ready to play");
                     } else {
-                        if (startingStatus.getText().toString().equals("The other player is waiting to get started")) {
-                            game.getClient().sendPacket(new PacketStartMatch());
-                            game.getClient().setCurrentScreen(new GameScreen(game));
-                            game.setScreen(game.getClient().getCurrentScreen());
-                        }
+                        game.getClient().sendPacket(new PacketStartMatch());
+                        game.getClient().setCurrentScreen(new GameScreen(game));
+                        game.setScreen(game.getClient().getCurrentScreen());
                     }
                 } else {
-                    if (!connectionStatus.getText().toString().equals("Connected: Waiting for Enemy"))
+                    if (!isWaitingForEnemy)
                         game.setScreen(new GameScreen(game));
                 }
             }
@@ -201,7 +197,7 @@ public class MatchmakingScreen implements Screen {
         sendMessageButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (connectionStatus.getText().toString().equals("Connected: Match found")) {
+                if (matchFound) {
                     final String msg = inputArea.getText();
                     addMessageToBox(true, msg);
                     game.getClient().sendPacket(new PacketChatMessage(this.toString(), msg));
@@ -288,9 +284,11 @@ public class MatchmakingScreen implements Screen {
                     }
                     break;
                 case PACKETSEARCHMATCH:
+                    isWaitingForEnemy = true;
                     connectionStatus.setText("Connected: Waiting for Enemy");
                     break;
                 case PACKETMATCHFOUND:
+                    matchFound = true;
                     connectionStatus.setText("Connected: Match found");
                     break;
                 case PACKETCHATMESSAGE:

@@ -1,4 +1,4 @@
-package com.tower.defense.screen;
+package com.tower.defense.screen_helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,14 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.tower.defense.TowerDefense;
 import com.tower.defense.helper.Constant;
-import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.client.PacketInfluence;
+import com.tower.defense.screen.GameScreen;
 
 import static com.badlogic.gdx.graphics.Texture.TextureFilter.Linear;
 import static com.badlogic.gdx.graphics.Texture.TextureFilter.MipMapLinearLinear;

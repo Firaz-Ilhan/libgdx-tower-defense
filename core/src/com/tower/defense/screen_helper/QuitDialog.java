@@ -1,4 +1,4 @@
-package com.tower.defense.screen;
+package com.tower.defense.screen_helper;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.tower.defense.TowerDefense;
+import com.tower.defense.screen.EndScreen;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

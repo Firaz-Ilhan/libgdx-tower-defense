@@ -1,4 +1,4 @@
-package com.tower.defense.screen;
+package com.tower.defense.screen_helper;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

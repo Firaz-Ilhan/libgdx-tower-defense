@@ -136,7 +136,7 @@ public class GameScreen implements Screen {
     private Sound enemyKilledSound;
     private Sound shootingSound;
 
-    private ShapeRenderer  shapeRenderer = new ShapeRenderer();
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 
     public GameScreen(TowerDefense game) {
@@ -148,7 +148,7 @@ public class GameScreen implements Screen {
         this.skin = game.assetManager.get(Constant.SKIN_PATH);
 
         // sell and buy towers
-        this.sellTurretsController = new IngameButtonsController(game,this);
+        this.sellTurretsController = new IngameButtonsController(game, this);
 
         //In-Game windows
         this.controlsWindow = new ControlsWindow();
@@ -207,7 +207,7 @@ public class GameScreen implements Screen {
         if (game.getSettings().isMusicEnabled()) {
             backgroundMusic = game.assetManager.get(Constant.BACKGROUND_MUSIC_PATH, Music.class);
             backgroundMusic.setLooping(true);
-            backgroundMusic.setVolume(game.getSettings().getVolume());
+            backgroundMusic.setVolume(game.getSettings().getMusicVolume());
             backgroundMusic.play();
             log.info("music playing at volume: {}", backgroundMusic.getVolume());
         }
@@ -370,6 +370,8 @@ public class GameScreen implements Screen {
 
 
         //List iterator that draws all placed turrets and handles "turret removing"
+
+
         tower1ListIterator1 = turretsPlaced.listIterator();
 
         while (tower1ListIterator1.hasNext()) {
@@ -377,7 +379,7 @@ public class GameScreen implements Screen {
             tower = tower1ListIterator1.next();
             tower.draw();
             tower.updateTargetarray(wave, player);
-            tower.update(shapeRenderer);
+            tower.update(shapeRenderer, game);
 
 
             //Output if player tries to delete the last turret
@@ -394,19 +396,26 @@ public class GameScreen implements Screen {
                     tower1ListIterator1.remove();
                     AllowedTiles.playerOneAllowedTiles.add(hoveredTilePosition);
                     player.sellTower(tower);
-                    turretRemovedSound.play();
-                    System.out.println(turretsPlaced);
+
+                    if (game.getSettings().isSoundEnabled()) {
+                        turretRemovedSound.play(game.getSettings().getSoundVolume());
+                    }
 
                     if (game.getClient() != null) {
                         game.getClient().sendPacket(
                                 new PacketRemoveTower(hoveredTilePosition.x, hoveredTilePosition.y));
                     }
+
                 }
+
 
             } else {
                 canDelete = false;
+                //sellState = false;
 
             }
+
+
         }
 
         //ask if alt is pressed
@@ -416,7 +425,7 @@ public class GameScreen implements Screen {
             altIsPressed = false;
         }
 
-        if (Gdx.input.isButtonPressed(0) && sellMode){
+        if (Gdx.input.isButtonPressed(0) && sellMode) {
             zeroTowerBoolean = false;
             System.out.println("left");
         }
@@ -435,15 +444,15 @@ public class GameScreen implements Screen {
             tower = tower1ListIterator1.next();
             tower.draw();
             tower.updateTargetarray(wave, opponent);
-            tower.update(shapeRenderer);
+            tower.update(shapeRenderer, game);
 
         }
 
         leftMouseButtonDown = Gdx.input.isButtonPressed(0);
         rightMouseButtonDown = Gdx.input.isButtonPressed(1);
 
-        spriteBatch.end();
 
+        spriteBatch.end();
 
 
         // WAVE: check if we need to create a enemy
@@ -453,8 +462,8 @@ public class GameScreen implements Screen {
         // move the enemy, remove any that are beneath the bottom edge of
         // the screen or that have no more LP.
 
-        RenderWave.renderWave(player, wave, enemyKilledSound);
-        RenderWave.renderWave(opponent, wave, enemyKilledSound);
+        RenderWave.renderWave(player, wave, enemyKilledSound, game);
+        RenderWave.renderWave(opponent, wave, enemyKilledSound, game);
 
         // END OF GAME
         if (player.getLifepoints() <= 0) {
@@ -475,7 +484,7 @@ public class GameScreen implements Screen {
         sellTurretsController.draw();
 
         //Draw controls window
-        if(controlIsPressed) {
+        if (controlIsPressed) {
             controlsWindow.draw();
         }
         //Draw zeroTowerAlert window
@@ -487,9 +496,6 @@ public class GameScreen implements Screen {
     }
 
 
-
-
-
     /**
      * Method to spawn a Tower1 and add him to the turretsPlaced list
      */
@@ -498,7 +504,10 @@ public class GameScreen implements Screen {
 
         tower = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch, shootingSound);
         turretsPlaced.add(tower);
-        turretPlacedSound.play();
+
+        if (game.getSettings().isSoundEnabled()) {
+            turretPlacedSound.play(game.getSettings().getSoundVolume());
+        }
 
         if (game.getClient() != null) {
             game.getClient().sendPacket(new PacketAddTower(hoveredTilePosition.x, hoveredTilePosition.y));
@@ -509,7 +518,6 @@ public class GameScreen implements Screen {
 
     /**
      * Switch between build and sell mode with the buttons provided for this
-     * and open the window for the controls
      */
     public void handleInput() {
         if (sellTurretsController.isSellModePressed()) {
@@ -523,8 +531,7 @@ public class GameScreen implements Screen {
             zeroTowerBoolean = false;
 
 
-        }
-        else if (sellTurretsController.isInfluenceModePressed()) {
+        } else if (sellTurretsController.isInfluenceModePressed()) {
             buildMode = false;
             sellMode = false;
 
@@ -533,7 +540,7 @@ public class GameScreen implements Screen {
 
         if (sellTurretsController.isControlsPressed()) {
             controlIsPressed = true;
-        }else{
+        } else {
             controlIsPressed = false;
         }
     }
@@ -591,7 +598,7 @@ public class GameScreen implements Screen {
                         }
                     }
                     break;
-                case PACKETINFLUENCE :
+                case PACKETINFLUENCE:
                     wave.healAndBuffWave(true);
                     opponent.buyInfluence(100);
                 default:

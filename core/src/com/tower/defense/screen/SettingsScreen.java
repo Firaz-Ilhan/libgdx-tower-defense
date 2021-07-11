@@ -46,6 +46,8 @@ public class SettingsScreen implements Screen {
         final CheckBox fullscreenModeCheckBox = new CheckBox("Fullscreen", skin, "default");
         final CheckBox musicCheckBox = new CheckBox("Music", skin, "default");
         final Slider musicVolumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
+        final CheckBox soundEffectsCheckBox = new CheckBox("Sound effects", skin, "default");
+        final Slider soundEffectsVolumeSlider = new Slider(0f, 1f, 0.01f, false, skin);
 
         mainMenuButton.addListener(new ChangeListener() {
             @Override
@@ -77,6 +79,20 @@ public class SettingsScreen implements Screen {
             }
         });
 
+        soundEffectsCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.getSettings().setSoundState(soundEffectsCheckBox.isChecked());
+            }
+        });
+
+        soundEffectsVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.getSettings().setSoundVolume(soundEffectsVolumeSlider.getValue());
+            }
+        });
+
         // check for current state in persistent setting file and change gui state
         if (game.getSettings().isFullscreenEnabled()) {
             fullscreenModeCheckBox.setChecked(true);
@@ -86,7 +102,12 @@ public class SettingsScreen implements Screen {
             musicCheckBox.setChecked(true);
         }
 
-        musicVolumeSlider.setValue(game.getSettings().getVolume());
+        if (game.getSettings().isSoundEnabled()) {
+            soundEffectsCheckBox.setChecked(true);
+        }
+
+        musicVolumeSlider.setValue(game.getSettings().getMusicVolume());
+        soundEffectsVolumeSlider.setValue(game.getSettings().getSoundVolume());
 
         headerTable.align(Align.top);
         headerTable.add(mainMenuButton);
@@ -94,6 +115,9 @@ public class SettingsScreen implements Screen {
         settingsTable.defaults().pad(10f);
         settingsTable.add(musicCheckBox);
         settingsTable.add(musicVolumeSlider);
+        settingsTable.row();
+        settingsTable.add(soundEffectsCheckBox);
+        settingsTable.add(soundEffectsVolumeSlider);
         settingsTable.row();
         settingsTable.add(fullscreenModeCheckBox);
     }

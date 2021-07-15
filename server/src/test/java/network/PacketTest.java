@@ -36,12 +36,12 @@ public class PacketTest {
         client1.sendPacket(new PacketSearchMatch());
         client2.sendPacket(new PacketSearchMatch());
         //to assure that this packets come first
-        sleep(4000);
+        sleep(10000);
     }
 
     @Test
     public void testSearchMatchAndConnection() throws InterruptedException {
-        sleep(4000);
+        sleep(10000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
         Assertions.assertTrue(packet.getClass() == PacketMatchFound.class);
 
@@ -50,7 +50,7 @@ public class PacketTest {
     @Test
     public void testPacketChatMessage() throws InterruptedException {
         client1.sendPacket(new PacketChatMessage("name", "hallo"));
-        sleep(4000);
+        sleep(10000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
         Assertions.assertTrue(packet.getClass() == PacketChatMessage.class);
         Assertions.assertEquals("hallo", ((PacketChatMessage) packet).getText());
@@ -59,7 +59,7 @@ public class PacketTest {
     @Test
     public void testPacketEndOfGame() throws InterruptedException {
         client1.sendPacket(new PacketEndOfGame());
-        sleep(4000);
+        sleep(10000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
         Assertions.assertTrue(packet.getClass() == PacketEndOfGame.class);
     }
@@ -67,7 +67,7 @@ public class PacketTest {
     @Test
     public void testPacketInfluence() throws InterruptedException {
         client1.sendPacket(new PacketInfluence());
-        sleep(4000);
+        sleep(10000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
         Assertions.assertTrue(packet.getClass() == PacketInfluence.class);
     }

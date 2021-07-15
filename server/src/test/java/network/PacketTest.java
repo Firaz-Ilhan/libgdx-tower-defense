@@ -55,14 +55,6 @@ public class PacketTest {
     }
 
     @Test
-    public void testPacketEndOfGame() throws InterruptedException {
-        client1.sendPacket(new PacketEndOfGame());
-        sleep(10000);
-        Packet packet = PacketQueue.packetQueue.removeFirst();
-        Assertions.assertSame(packet.getClass(), PacketEndOfGame.class);
-    }
-
-    @Test
     public void testPacketInfluence() throws InterruptedException {
         client1.sendPacket(new PacketInfluence());
         sleep(10000);

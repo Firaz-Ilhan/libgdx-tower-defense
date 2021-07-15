@@ -34,6 +34,7 @@ public class Client {
 
     /**
      * calls sendPacket() of clientConnection
+     *
      * @param packet Packet
      */
     public void sendPacket(Packet packet) {
@@ -46,6 +47,7 @@ public class Client {
 
     /**
      * getCurrentScreen()
+     *
      * @return currentScreen
      */
     public Screen getCurrentScreen() {
@@ -54,6 +56,7 @@ public class Client {
 
     /**
      * setCurrentScreen()
+     *
      * @param currentScreen Screen
      */
     public void setCurrentScreen(Screen currentScreen) {
@@ -62,6 +65,7 @@ public class Client {
 
     /**
      * getClientConnection()
+     *
      * @return clientConnection
      */
     public ClientConnection getClientConnection() {

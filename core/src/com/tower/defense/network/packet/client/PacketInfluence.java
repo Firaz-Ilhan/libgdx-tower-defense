@@ -5,7 +5,7 @@ import com.tower.defense.network.packet.PacketType;
 import org.json.JSONObject;
 
 public class PacketInfluence extends Packet {
-    public PacketInfluence () {
+    public PacketInfluence() {
         this.packetType = PacketType.getPacketTypeByClass(getClass());
     }
 

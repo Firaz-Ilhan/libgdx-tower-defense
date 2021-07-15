@@ -11,8 +11,8 @@ public class AllowedTiles {
     public AllowedTiles() {
         playerOneAllowedTiles = new ArrayList<>();
 
-        for(int x = 6; x <= 7; x++){
-            for(int y = 0; y <= 3; y++){
+        for (int x = 6; x <= 7; x++) {
+            for (int y = 0; y <= 3; y++) {
                 playerOneAllowedTiles.add(new Vector2(x, y));
             }
         }

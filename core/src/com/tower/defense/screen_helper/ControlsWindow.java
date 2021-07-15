@@ -42,7 +42,7 @@ public class ControlsWindow {
 
     }
 
-    public void draw(){
+    public void draw() {
         windowStage.draw();
     }
 }

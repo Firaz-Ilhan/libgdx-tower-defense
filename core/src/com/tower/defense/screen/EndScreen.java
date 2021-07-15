@@ -24,8 +24,8 @@ import org.apache.logging.log4j.Logger;
 
 import static com.tower.defense.helper.PacketQueue.packetQueue;
 import static com.tower.defense.network.packet.PacketType.PACKETENDOFGAME;
-import static com.tower.defense.screen.GameScreen.player;
 import static com.tower.defense.screen.GameScreen.opponent;
+import static com.tower.defense.screen.GameScreen.player;
 
 public class EndScreen implements Screen {
 
@@ -39,7 +39,7 @@ public class EndScreen implements Screen {
 
     public EndScreen(final TowerDefense game) {
         this.game = game;
-        if(game.getClient()!=null){
+        if (game.getClient() != null) {
             game.getClient().getClientConnection().closeConnection();
         }
 
@@ -66,10 +66,9 @@ public class EndScreen implements Screen {
         // create gui elements
         final TextButton mainMenuButton = new TextButton("Go Back", skin, "small");
         final Label whoWon;
-        if(player.hasLost()|| !opponent.hasLost() && !player.hasLost()) {
+        if (player.hasLost() || !opponent.hasLost() && !player.hasLost()) {
             whoWon = new Label(outcome, skin, "main");
-        }
-        else{
+        } else {
             whoWon = new Label(outcome, skin, "won");
         }
         mainMenuButton.addListener(new ChangeListener() {
@@ -90,17 +89,17 @@ public class EndScreen implements Screen {
 
     /**
      * based on who lost, the outcome String is assigned
+     *
      * @return outcome String
      */
-    private String computeOutcome(){
-        if (player.hasLost() && opponent.hasLost() ) {
+    private String computeOutcome() {
+        if (player.hasLost() && opponent.hasLost()) {
             outcome = "Draw";
-        } else if (player.hasLost() ) {
+        } else if (player.hasLost()) {
             outcome = "You lost";
-        } else if(opponent.hasLost()) {
+        } else if (opponent.hasLost()) {
             outcome = "You won!";
-        }
-        else{
+        } else {
             outcome = "you quit the game";
         }
 
@@ -110,7 +109,7 @@ public class EndScreen implements Screen {
     @Override
     public void render(float delta) {
         handle();
-        Gdx.gl.glClearColor(0.45f,0.63f,0.76f,1f);
+        Gdx.gl.glClearColor(0.45f, 0.63f, 0.76f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }
@@ -141,6 +140,7 @@ public class EndScreen implements Screen {
         skin.dispose();
         game.dispose();
     }
+
     private void handle() {
         while (!packetQueue.isEmpty()) {
             Packet packet = packetQueue.removeFirst();

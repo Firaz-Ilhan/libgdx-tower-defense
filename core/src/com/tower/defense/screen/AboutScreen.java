@@ -25,13 +25,14 @@ public class AboutScreen implements Screen {
     private final Skin skin;
     private final TowerDefense game;
     private Texture background;
-    private final String ABOUT_TEXT= "This Game was developed by the following people: \n" +
-                                        "Firaz Ilhan \n" +
-                                        "Lea Gutierrez \n" +
-                                        "Luca Baur \n" +
-                                        "Niklas Maeckle \n" +
-                                        "Niko Dangel \n" +
-                                        "Music by : '©2021 Fesliyan Studios Inc. - Royalty Free Music And Sound Effects' ";
+    private final String ABOUT_TEXT = "This Game was developed by the following people: \n" +
+            "Firaz Ilhan \n" +
+            "Lea Gutierrez \n" +
+            "Luca Baur \n" +
+            "Niklas Maeckle \n" +
+            "Niko Dangel \n" +
+            "Music by : '©2021 Fesliyan Studios Inc. - Royalty Free Music And Sound Effects' ";
+
     public AboutScreen(TowerDefense game) {
         this.game = game;
         skin = game.assetManager.get(Constant.SKIN_PATH);
@@ -52,7 +53,7 @@ public class AboutScreen implements Screen {
         TextureRegionDrawable backgroundRegion =
                 new TextureRegionDrawable(new TextureRegion(background));
         final TextButton mainMenuButton = new TextButton("Back", skin, "small");
-        final TextButton aboutText = new TextButton(ABOUT_TEXT,skin,"small");
+        final TextButton aboutText = new TextButton(ABOUT_TEXT, skin, "small");
         aboutText.setDisabled(true);
         //add buttons to table
         table.defaults().pad(10f);
@@ -60,7 +61,7 @@ public class AboutScreen implements Screen {
         table.add(aboutText);
         table.row();
         table.add(mainMenuButton);
-        aboutText.setBounds(0,0,200,500);
+        aboutText.setBounds(0, 0, 200, 500);
         //create button listeners
         mainMenuButton.addListener(new ChangeListener() {
             @Override
@@ -74,7 +75,7 @@ public class AboutScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.45f,0.63f,0.76f,1f);
+        Gdx.gl.glClearColor(0.45f, 0.63f, 0.76f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }

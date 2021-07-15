@@ -37,6 +37,7 @@ public class GameManager {
     /**
      * if two Connections were matched,
      * they are added to the arrayList games
+     *
      * @param player1 Player
      * @param player2 Player
      */
@@ -46,6 +47,7 @@ public class GameManager {
 
     /**
      * getGame
+     *
      * @param serverConnection ServerConnection
      * @return game or null, if no matching game found
      */
@@ -61,6 +63,7 @@ public class GameManager {
 
     /**
      * returns PartnerConnection
+     *
      * @param serverConnection ServerConnection
      * @return PartnerConnection
      */

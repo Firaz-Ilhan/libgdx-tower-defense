@@ -15,35 +15,35 @@ import com.tower.defense.helper.Constant;
 
 public class ZeroTowerAlert {
 
-        private final Window alertWindow;
-        private final Texture alertTexture;
-        private final Window.WindowStyle alertStyle;
-        private final Stage alertStage;
-        private final Viewport alertViewPort;
-        private final OrthographicCamera alertCam;
+    private final Window alertWindow;
+    private final Texture alertTexture;
+    private final Window.WindowStyle alertStyle;
+    private final Stage alertStage;
+    private final Viewport alertViewPort;
+    private final OrthographicCamera alertCam;
 
-        public ZeroTowerAlert() {
-            alertCam = new OrthographicCamera();
-            alertViewPort = new FitViewport(Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT, alertCam);
-            alertStage = new Stage(alertViewPort);
-
-
-            alertTexture = new Texture(Gdx.files.internal("zeroTowerAlert.png"));
-            alertStyle = new Window.WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(new TextureRegion(alertTexture)));
+    public ZeroTowerAlert() {
+        alertCam = new OrthographicCamera();
+        alertViewPort = new FitViewport(Constant.WORLD_WIDTH, Constant.WORLD_HEIGHT, alertCam);
+        alertStage = new Stage(alertViewPort);
 
 
-            alertWindow = new Window("", alertStyle);
-            alertWindow.setPosition(625, 350);
-            alertWindow.setSize(200, 75);
+        alertTexture = new Texture(Gdx.files.internal("zeroTowerAlert.png"));
+        alertStyle = new Window.WindowStyle(new BitmapFont(), Color.BLACK, new TextureRegionDrawable(new TextureRegion(alertTexture)));
 
 
-            alertStage.addActor(alertWindow);
+        alertWindow = new Window("", alertStyle);
+        alertWindow.setPosition(625, 350);
+        alertWindow.setSize(200, 75);
 
 
-        }
+        alertStage.addActor(alertWindow);
 
-        public void draw(){
-           alertStage.draw();
-        }
+
     }
+
+    public void draw() {
+        alertStage.draw();
+    }
+}
 

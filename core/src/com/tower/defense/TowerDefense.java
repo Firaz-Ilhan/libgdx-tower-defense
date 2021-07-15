@@ -1,20 +1,16 @@
 package com.tower.defense;
 
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
-import com.tower.defense.network.packet.client.PacketEndOfGame;
-import com.tower.defense.helper.Constant;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.tower.defense.helper.Constant;
 import com.tower.defense.helper.Settings;
 import com.tower.defense.network.client.Client;
+import com.tower.defense.network.packet.client.PacketEndOfGame;
 import com.tower.defense.screen.MainMenuScreen;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class TowerDefense extends Game {
 

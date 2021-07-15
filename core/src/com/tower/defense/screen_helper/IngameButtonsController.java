@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -36,10 +39,7 @@ public class IngameButtonsController {
     private GameScreen screen;
 
 
-
-
-
-    public IngameButtonsController(TowerDefense game,GameScreen screen) {
+    public IngameButtonsController(TowerDefense game, GameScreen screen) {
         this.game = game;
         this.screen = screen;
 
@@ -124,7 +124,7 @@ public class IngameButtonsController {
                 System.out.println("button pressed");
                 buildButton.setChecked(false);
                 sellButton.setChecked(false);
-                if(game.getClient() != null && GameScreen.player.getWalletValue() >= 100 ) {
+                if (game.getClient() != null && GameScreen.player.getWalletValue() >= 100) {
                     game.getClient().sendPacket(new PacketInfluence());
                     screen.wave.healAndBuffWave(false);
                     GameScreen.player.buyInfluence(100);
@@ -143,10 +143,10 @@ public class IngameButtonsController {
 
         //creating button to see the controls
         Table controlTable = new Table();
-        controlTable.setPosition(1550,50);
+        controlTable.setPosition(1550, 50);
 
-        Texture controlsTexture = new Texture(Gdx.files.internal("buttons/controlButton.png"),true);
-        Texture controlsDownTexture = new Texture(Gdx.files.internal("buttons/controlButtonDown.png"),true);
+        Texture controlsTexture = new Texture(Gdx.files.internal("buttons/controlButton.png"), true);
+        Texture controlsDownTexture = new Texture(Gdx.files.internal("buttons/controlButtonDown.png"), true);
 
 
         controlsTexture.setFilter(MipMapLinearLinear, Linear);
@@ -166,7 +166,7 @@ public class IngameButtonsController {
 
 
             public boolean touchDown(InputEvent event, int keycode) {
-               // controlActivePressed = true;
+                // controlActivePressed = true;
                 return true;
 
             }
@@ -176,15 +176,14 @@ public class IngameButtonsController {
                 //controlActivePressed = false;
                 return false;
 
-          }});
-
+            }
+        });
 
 
         //ButtonGroup<ImageButton> controlsGroup = new ButtonGroup<>(controlsButton);
         //buttonGroup.setMaxCheckCount(1);
 
         controlTable.add(controlsButton);
-
 
 
         buttonStage.addActor(controlTable);
@@ -204,14 +203,14 @@ public class IngameButtonsController {
     public boolean isBuildModePressed() {
         return buildButton.isChecked();
     }
+
     public boolean isInfluenceModePressed() {
         return influenceButton.isChecked();
     }
 
-    public boolean isControlsPressed(){
+    public boolean isControlsPressed() {
         return controlsButton.isPressed();
     }
-
 
 
     public void resize(int width, int height) {

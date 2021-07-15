@@ -19,6 +19,7 @@ public final class NetworkINTF {
 
     /**
      * used to show own IP address in Matchmaking screen
+     *
      * @return
      * @throws UnknownHostException
      */

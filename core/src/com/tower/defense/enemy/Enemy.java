@@ -1,12 +1,11 @@
 package com.tower.defense.enemy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import com.badlogic.gdx.math.Vector2;
-import com.tower.defense.enemy.Factory.Enemy1;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class Enemy {
     private float posX;
@@ -29,7 +28,7 @@ public abstract class Enemy {
     public Enemy(float x, float y, int lifepoints, int damage, float speed) {
         this.posX = x;
         this.posY = y;
-        this.lifepoints= lifepoints;
+        this.lifepoints = lifepoints;
         this.fullLifepoints = lifepoints;
         this.damage = damage;
         this.speed = speed;
@@ -102,7 +101,7 @@ public abstract class Enemy {
 
     }
 
-    public void healAndBuff(){
+    public void healAndBuff() {
         lifepoints = fullLifepoints + 5;
         log.info("enemy healed");
     }
@@ -115,17 +114,15 @@ public abstract class Enemy {
     }
 
     /**
-     *
      * @return this.speed
      */
-    public float getSpeed(){
+    public float getSpeed() {
         return speed;
     }
 
     /**
      * @param playerSide to determine which wavePattern has to be used
-     * @return
-     * the waypoint the enemy has to move towards currently
+     * @return the waypoint the enemy has to move towards currently
      */
     public Vector2 nextWaypoint(boolean playerSide) {
         if (playerSide) {

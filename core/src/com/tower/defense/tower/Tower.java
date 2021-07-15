@@ -1,4 +1,4 @@
-package com.tower.defense.tower.Factory;
+package com.tower.defense.tower;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;

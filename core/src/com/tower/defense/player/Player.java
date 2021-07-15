@@ -1,6 +1,6 @@
 package com.tower.defense.player;
 
-import com.tower.defense.tower.Factory.Tower;
+import com.tower.defense.tower.Tower;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,19 +31,17 @@ public class Player {
     public void addToWallet(int reward) {
         if (reward < 0) {
             log.info("You can not add a negative reward");
-        }
-        else{
-              if(reward>20){
+        } else {
+            if (reward > 20) {
                 log.info("reward: {}", reward);
                 wallet += reward;
-            }
-            else{
+            } else {
                 reward = 20;
                 log.info("reward: {}", reward);
                 wallet += reward;
             }
-            }
         }
+    }
 
     /**
      * If a Tower was bought it is added to the list of the players towers(inventory)
@@ -63,6 +61,7 @@ public class Player {
         wallet = wallet - cost;
         log.info("wallet: {}", wallet);
     }
+
     /**
      * selling Towers only regain 80% of the costs. The result is rounded to an Integer
      * At the end the Tower is removed from the list
@@ -84,6 +83,7 @@ public class Player {
 
     /**
      * can be called to update opponents lifepoints
+     *
      * @param lifepoints
      */
     public void setLifepoints(int lifepoints) {
@@ -93,9 +93,10 @@ public class Player {
     /**
      * sets boolean lost to true
      */
-    public void lost(){
+    public void lost() {
         lost = true;
     }
+
     /**
      * @return wallet
      */

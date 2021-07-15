@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="network.PacketTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2021-07-15T14:37:47" hostname="DESKTOP-VOCPJHE" time="33.602">
+  <properties/>
+  <testcase name="testPacketEndOfGame()" classname="network.PacketTest" time="9.566"/>
+  <testcase name="testSearchMatchAndConnection()" classname="network.PacketTest" time="8.009"/>
+  <testcase name="testPacketChatMessage()" classname="network.PacketTest" time="8.017"/>
+  <testcase name="testPacketInfluence()" classname="network.PacketTest" time="8.005"/>
+  <system-out><![CDATA[2021-07-15 16:37:48,414 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
+2021-07-15 16:37:48,686 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52418
+2021-07-15 16:37:48,693 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52419
+2021-07-15 16:37:48,737 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 16:37:48,738 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 16:37:52,714 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETENDOFGAME
+2021-07-15 16:37:56,728 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52420
+2021-07-15 16:37:56,731 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52421
+2021-07-15 16:37:56,736 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 16:37:56,736 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 16:38:04,739 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52422
+2021-07-15 16:38:04,745 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52423
+2021-07-15 16:38:04,753 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 16:38:04,753 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 16:38:08,751 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
+2021-07-15 16:38:12,756 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52424
+2021-07-15 16:38:12,757 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52425
+2021-07-15 16:38:12,771 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 16:38:12,773 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 16:38:16,760 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE
+]]></system-out>
+  <system-err><![CDATA[java.net.BindException: Address already in use: NET_Bind
+	at java.base/java.net.PlainSocketImpl.bind0(Native Method)
+	at java.base/java.net.PlainSocketImpl.socketBind(PlainSocketImpl.java:132)
+	at java.base/java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:436)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:395)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:257)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:149)
+	at com.tower.defense.server.Server.<init>(Server.java:27)
+	at network.PacketTest$1.run(PacketTest.java:27)
+java.net.BindException: Address already in use: NET_Bind
+	at java.base/java.net.PlainSocketImpl.bind0(Native Method)
+	at java.base/java.net.PlainSocketImpl.socketBind(PlainSocketImpl.java:132)
+	at java.base/java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:436)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:395)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:257)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:149)
+	at com.tower.defense.server.Server.<init>(Server.java:27)
+	at network.PacketTest$1.run(PacketTest.java:27)
+java.net.BindException: Address already in use: NET_Bind
+	at java.base/java.net.PlainSocketImpl.bind0(Native Method)
+	at java.base/java.net.PlainSocketImpl.socketBind(PlainSocketImpl.java:132)
+	at java.base/java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:436)
+	at java.base/java.net.ServerSocket.bind(ServerSocket.java:395)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:257)
+	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:149)
+	at com.tower.defense.server.Server.<init>(Server.java:27)
+	at network.PacketTest$1.run(PacketTest.java:27)
+]]></system-err>
+</testsuite>

@@ -1,4 +1,5 @@
 package com.tower.defense.wave;
+
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.tower.defense.TowerDefense;
@@ -10,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 
-import static com.tower.defense.enemy.Factory.EnemyFactory.getEnemyInstance;
+import static com.tower.defense.enemy.factory.EnemyFactory.getEnemyInstance;
 
 public class Wave {
 
@@ -56,8 +57,8 @@ public class Wave {
                     endOfWave();
                 }
             } else {
-                Enemy enemyLeft = getEnemyInstance("easy", 525, 700,enemySpeed);
-                Enemy enemyRight = getEnemyInstance("easy", 1025, 700,enemySpeed);
+                Enemy enemyLeft = getEnemyInstance("easy", 525, 700, enemySpeed);
+                Enemy enemyRight = getEnemyInstance("easy", 1025, 700, enemySpeed);
                 waveLeft.add(enemyLeft);
                 waveRight.add(enemyRight);
                 lastSpawnTime = TimeUtils.nanoTime();
@@ -79,10 +80,10 @@ public class Wave {
     }
 
     /**
-     *  once a wave is over the players get money based on how many
-     *  enemies they were able to kill.
-     *  The waveSpeed, waveSize and waveReward all increase for
-     *  the next wave
+     * once a wave is over the players get money based on how many
+     * enemies they were able to kill.
+     * The waveSpeed, waveSize and waveReward all increase for
+     * the next wave
      */
     public void endOfWave() {
         if (!pausing) {
@@ -110,6 +111,7 @@ public class Wave {
 
     /**
      * Calculate earned reward
+     *
      * @return
      */
     public int calculateReward() {
@@ -122,14 +124,14 @@ public class Wave {
      * is called by Influence
      * iterates through wave and calls healAndBuff()
      * in Enemy.Class
+     *
      * @param own whether it's your own wave or not
      */
-    public void healAndBuffWave(boolean own){
+    public void healAndBuffWave(boolean own) {
         Array<Enemy> wave;
-        if(own){
+        if (own) {
             wave = waveLeft;
-        }
-        else{
+        } else {
             wave = waveRight;
         }
         for (Iterator<Enemy> iter = wave.iterator(); iter.hasNext(); ) {
@@ -140,6 +142,7 @@ public class Wave {
 
     /**
      * for displaying which wave this is
+     *
      * @return waveCount
      */
     public int getWaveCount() {
@@ -148,6 +151,7 @@ public class Wave {
 
     /**
      * is called by the handle() method if a EndOfWave packet was received
+     *
      * @param reward int: End of Wave REward of opponent
      */
     public void partnerWaveEnded(int reward) {
@@ -155,6 +159,7 @@ public class Wave {
         GameScreen.opponent.addToWallet(reward);
         partnerIsPausing = true;
     }
+
     /**
      * is called in EndOfWave()
      * sets pausing false and increases WaveCount
@@ -164,9 +169,11 @@ public class Wave {
         pausing = false;
         waveCount++;
     }
-    public void enemyPassed(){
+
+    public void enemyPassed() {
         enemiesPastLeft++;
     }
+
     public TowerDefense getGame() {
         return game;
     }

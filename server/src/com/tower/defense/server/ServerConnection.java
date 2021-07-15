@@ -2,11 +2,11 @@ package com.tower.defense.server;
 
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.PacketType;
+import com.tower.defense.network.packet.server.PacketMatchFound;
+import com.tower.defense.network.packet.server.PacketSearchMatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
-import com.tower.defense.network.packet.server.PacketMatchFound;
-import com.tower.defense.network.packet.server.PacketSearchMatch;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

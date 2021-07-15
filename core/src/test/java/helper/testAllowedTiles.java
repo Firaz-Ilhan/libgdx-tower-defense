@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //tests used for checking that certain tiles are allowed to be used for a player and
 //the player's opponent, while also checking for edge cases like negative values

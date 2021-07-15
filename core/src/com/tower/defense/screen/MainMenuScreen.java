@@ -26,6 +26,7 @@ public class MainMenuScreen implements Screen {
     private final Skin skin;
     private final TowerDefense game;
     private Texture background;
+
     public MainMenuScreen(TowerDefense game) {
         this.game = game;
         skin = game.assetManager.get(Constant.SKIN_PATH);
@@ -94,7 +95,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.45f,0.63f,0.76f,1f);
+        Gdx.gl.glClearColor(0.45f, 0.63f, 0.76f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }

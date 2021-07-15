@@ -28,18 +28,18 @@ public class PacketTest {
         client1 = new Client("127.0.0.1", Constant.SERVER_PORT);
         client2 = new Client("127.0.0.1", Constant.SERVER_PORT);
 
-        if (client1 != null) {
+        if (client2 != null && client1 != null) {
             client1.sendPacket(new PacketSearchMatch());
             client2.sendPacket(new PacketSearchMatch());
             //to assure that this packets come first
-            sleep(10000);
+            sleep(5000);
         }
 
     }
 
     @Test
     public void testSearchMatchAndConnection() throws InterruptedException {
-        sleep(10000);
+        sleep(5000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
         Assertions.assertSame(packet.getClass(), PacketMatchFound.class);
 
@@ -48,7 +48,7 @@ public class PacketTest {
     @Test
     public void testPacketChatMessage() throws InterruptedException {
         client1.sendPacket(new PacketChatMessage("name", "hallo"));
-        sleep(10000);
+        sleep(5000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
         Assertions.assertSame(packet.getClass(), PacketChatMessage.class);
         Assertions.assertEquals("hallo", ((PacketChatMessage) packet).getText());
@@ -57,7 +57,7 @@ public class PacketTest {
     @Test
     public void testPacketInfluence() throws InterruptedException {
         client1.sendPacket(new PacketInfluence());
-        sleep(10000);
+        sleep(5000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
         Assertions.assertSame(packet.getClass(), PacketInfluence.class);
     }

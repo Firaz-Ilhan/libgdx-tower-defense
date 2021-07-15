@@ -17,6 +17,12 @@ public final class NetworkINTF {
     private NetworkINTF() {
     }
 
+    /**
+     * used to show own IP address in Matchmaking screen
+     * @return
+     * @throws UnknownHostException
+     */
+
     public static String getLocalIpAddress() throws UnknownHostException {
         final String localIp = InetAddress.getLocalHost().getHostAddress();
         log.info("local ip address: {}", localIp);

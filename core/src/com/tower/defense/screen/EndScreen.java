@@ -40,7 +40,9 @@ public class EndScreen implements Screen {
     public EndScreen(final TowerDefense game) {
         this.game = game;
         if(game.getClient()!=null){
-            game.getClient().getClientConnection().closeConnection();  }
+            game.getClient().getClientConnection().closeConnection();
+        }
+
         skin = game.assetManager.get(Constant.SKIN_PATH);
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -85,6 +87,11 @@ public class EndScreen implements Screen {
         table.align(Align.center);
         table.add(whoWon);
     }
+
+    /**
+     * based on who lost, the outcome String is assigned
+     * @return outcome String
+     */
     private String computeOutcome(){
         if (player.hasLost() && opponent.hasLost() ) {
             outcome = "Draw";

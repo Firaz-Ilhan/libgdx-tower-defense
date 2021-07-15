@@ -31,14 +31,22 @@ public enum PacketType {
 		this.packetClass = packetClass;
 	}
 
-
+	/**
+	 * Types are Iterated and id is checked
+	 * @param id int
+	 * @return packetType or null, if no type found
+	 */
 	public static PacketType getPacketTypeByID(int id) {
         for (PacketType pt : values()) {
             if (pt.getPacketID() == id) return pt;
         }
         return null;
     }
-
+	/**
+	 * Types are Iterated and class is checked
+	 * @param packet Class
+	 * @return packetType or null, if no type found
+	 */
     public static PacketType getPacketTypeByClass(Class<? extends Packet> packet) {
         for (PacketType pt : values()) {
             if (pt.getPacketClass().equals(packet)) return pt;

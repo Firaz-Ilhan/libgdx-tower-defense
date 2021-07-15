@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 public class PacketLifepoints extends Packet {
     private int LP;
+    //empty Constructor for declaredConstructor call in Connections
     public PacketLifepoints() {
     }
     public PacketLifepoints(int LP) {

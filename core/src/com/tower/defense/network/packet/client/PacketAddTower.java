@@ -9,6 +9,7 @@ public class PacketAddTower extends Packet {
     private float x;
     private float y;
 
+    //empty Constructor for declaredConstructor call in Connections
     public PacketAddTower() {
 
     }

@@ -8,6 +8,7 @@ public class PacketEndOfWave extends Packet {
 
     private int reward;
 
+    //empty Constructor for declaredConstructor call in Connections
     public PacketEndOfWave() {
     }
 

@@ -117,4 +117,5 @@ Thumbs.db
 
 *.log
 
-.html
+*.html
+*.bin

@@ -39,7 +39,7 @@ public class PacketTest {
     public void testSearchMatchAndConnection() throws InterruptedException {
         sleep(4000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
-        // PacketSearchMatch or PacketMatchFound?
+        // PacketSearchMatch or PacketMatchFound or ...?
         //Assertions.assertSame(packet.getClass(), PacketSearchMatch.class);
 
     }
@@ -52,15 +52,6 @@ public class PacketTest {
         Assertions.assertSame(packet.getClass(), PacketChatMessage.class);
         Assertions.assertEquals("hallo", ((PacketChatMessage) packet).getText());
     }
-
-    @Test
-    public void testPacketEndOfGame() throws InterruptedException {
-        client1.sendPacket(new PacketEndOfGame());
-        sleep(4000);
-        Packet packet = PacketQueue.packetQueue.removeFirst();
-        Assertions.assertSame(packet.getClass(), PacketEndOfGame.class);
-    }
-
 
     @Test
     public void testPacketInfluence() throws InterruptedException {

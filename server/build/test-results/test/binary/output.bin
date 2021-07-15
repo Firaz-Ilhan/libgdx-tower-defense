@@ -1,15 +1,20 @@
-h2021-07-15 17:32:34,404 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
-o2021-07-15 17:32:34,551 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53096
-o2021-07-15 17:32:34,556 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53097
-Œ2021-07-15 17:32:34,573 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-Œ2021-07-15 17:32:34,573 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-o2021-07-15 17:32:44,617 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53098
-o2021-07-15 17:32:44,619 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53099
-Œ2021-07-15 17:32:44,619 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-Œ2021-07-15 17:32:44,621 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-Œ2021-07-15 17:32:49,626 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
-o2021-07-15 17:32:54,643 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53101
-o2021-07-15 17:32:54,646 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53102
-Œ2021-07-15 17:32:54,654 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-Œ2021-07-15 17:32:54,654 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-Š2021-07-15 17:32:59,652 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE
+h2021-07-15 18:22:52,846 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
+o2021-07-15 18:22:53,178 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53882
+o2021-07-15 18:22:53,189 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53884
+Œ2021-07-15 18:22:53,224 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+Œ2021-07-15 18:22:53,224 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+Š2021-07-15 18:22:57,227 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETENDOFGAME
+o2021-07-15 18:23:01,265 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53885
+o2021-07-15 18:23:01,267 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53886
+Œ2021-07-15 18:23:01,271 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+Œ2021-07-15 18:23:01,271 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+o2021-07-15 18:23:09,275 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53887
+o2021-07-15 18:23:09,280 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53888
+Œ2021-07-15 18:23:09,285 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+Œ2021-07-15 18:23:09,288 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+Œ2021-07-15 18:23:13,286 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
+o2021-07-15 18:23:17,298 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53890
+o2021-07-15 18:23:17,304 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53891
+Œ2021-07-15 18:23:17,308 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+Œ2021-07-15 18:23:17,311 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+Š2021-07-15 18:23:21,306 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE

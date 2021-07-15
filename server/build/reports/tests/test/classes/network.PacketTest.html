@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">3</div>
+<div class="counter">4</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">31.122s</div>
+<div class="counter">33.653s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,17 +79,22 @@
 </thead>
 <tr>
 <td class="success">testPacketChatMessage()</td>
-<td class="success">10.023s</td>
+<td class="success">8.021s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testPacketEndOfGame()</td>
+<td class="success">9.616s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testPacketInfluence()</td>
-<td class="success">10.013s</td>
+<td class="success">8.010s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testSearchMatchAndConnection()</td>
-<td class="success">11.086s</td>
+<td class="success">8.006s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -97,21 +102,26 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2021-07-15 17:32:34,404 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
-2021-07-15 17:32:34,551 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53096
-2021-07-15 17:32:34,556 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53097
-2021-07-15 17:32:34,573 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:32:34,573 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:32:44,617 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53098
-2021-07-15 17:32:44,619 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53099
-2021-07-15 17:32:44,619 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:32:44,621 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:32:49,626 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
-2021-07-15 17:32:54,643 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53101
-2021-07-15 17:32:54,646 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53102
-2021-07-15 17:32:54,654 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:32:54,654 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:32:59,652 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE
+<pre>2021-07-15 18:22:52,846 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
+2021-07-15 18:22:53,178 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53882
+2021-07-15 18:22:53,189 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53884
+2021-07-15 18:22:53,224 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 18:22:53,224 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 18:22:57,227 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETENDOFGAME
+2021-07-15 18:23:01,265 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53885
+2021-07-15 18:23:01,267 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53886
+2021-07-15 18:23:01,271 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 18:23:01,271 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 18:23:09,275 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53887
+2021-07-15 18:23:09,280 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53888
+2021-07-15 18:23:09,285 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 18:23:09,288 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 18:23:13,286 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
+2021-07-15 18:23:17,298 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53890
+2021-07-15 18:23:17,304 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53891
+2021-07-15 18:23:17,308 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 18:23:17,311 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 18:23:21,306 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE
 </pre>
 </span>
 </div>
@@ -123,7 +133,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.1.1</a> at 15.07.2021, 17:33:05</p>
+<a href="http://www.gradle.org">Gradle 7.1.1</a> at 15.07.2021, 18:23:25</p>
 </div>
 </div>
 </body>

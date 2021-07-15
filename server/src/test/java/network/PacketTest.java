@@ -5,7 +5,6 @@ import com.tower.defense.helper.PacketQueue;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.client.PacketChatMessage;
-import com.tower.defense.network.packet.client.PacketEndOfGame;
 import com.tower.defense.network.packet.client.PacketInfluence;
 import com.tower.defense.network.packet.server.PacketSearchMatch;
 import com.tower.defense.server.Server;
@@ -19,9 +18,10 @@ import static java.lang.Thread.sleep;
 public class PacketTest {
     private Client client1;
 
+    Thread serverThread = new Thread(Server::new);
+
     @BeforeEach
     public void initialize() throws InterruptedException {
-        Thread serverThread = new Thread(Server::new);
         serverThread.setDaemon(true);
         serverThread.start();
         client1 = new Client("127.0.0.1", Constant.SERVER_PORT);

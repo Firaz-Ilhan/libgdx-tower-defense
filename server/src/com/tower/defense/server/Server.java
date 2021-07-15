@@ -36,8 +36,8 @@ public class Server {
                 serverConnectionThread.start();
                 connections.put(socket.getPort(), serverConnection);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignore) {
+
         }
     }
 

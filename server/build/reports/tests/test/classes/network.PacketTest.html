@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">1m1.15s</div>
+<div class="counter">31.122s</div>
 <p>duration</p>
 </div>
 </td>
@@ -66,9 +66,6 @@
 <li>
 <a href="#tab1">Standard output</a>
 </li>
-<li>
-<a href="#tab2">Standard error</a>
-</li>
 </ul>
 <div id="tab0" class="tab">
 <h2>Tests</h2>
@@ -82,17 +79,17 @@
 </thead>
 <tr>
 <td class="success">testPacketChatMessage()</td>
-<td class="success">20.023s</td>
+<td class="success">10.023s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testPacketInfluence()</td>
-<td class="success">20.012s</td>
+<td class="success">10.013s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testSearchMatchAndConnection()</td>
-<td class="success">21.112s</td>
+<td class="success">11.086s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -100,45 +97,21 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>2021-07-15 17:14:58,515 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
-2021-07-15 17:14:58,700 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52802
-2021-07-15 17:14:58,711 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52803
-2021-07-15 17:14:58,736 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:14:58,736 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:18,772 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52806
-2021-07-15 17:15:18,776 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52807
-2021-07-15 17:15:18,785 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:18,784 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:28,785 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
-2021-07-15 17:15:38,802 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52810
-2021-07-15 17:15:38,805 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52811
-2021-07-15 17:15:38,810 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:38,811 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:48,807 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE
-</pre>
-</span>
-</div>
-<div id="tab2" class="tab">
-<h2>Standard error</h2>
-<span class="code">
-<pre>java.net.BindException: Address already in use: NET_Bind
-	at java.base/java.net.PlainSocketImpl.bind0(Native Method)
-	at java.base/java.net.PlainSocketImpl.socketBind(PlainSocketImpl.java:132)
-	at java.base/java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:436)
-	at java.base/java.net.ServerSocket.bind(ServerSocket.java:395)
-	at java.base/java.net.ServerSocket.&lt;init&gt;(ServerSocket.java:257)
-	at java.base/java.net.ServerSocket.&lt;init&gt;(ServerSocket.java:149)
-	at com.tower.defense.server.Server.&lt;init&gt;(Server.java:27)
-	at java.base/java.lang.Thread.run(Thread.java:834)
-java.net.BindException: Address already in use: NET_Bind
-	at java.base/java.net.PlainSocketImpl.bind0(Native Method)
-	at java.base/java.net.PlainSocketImpl.socketBind(PlainSocketImpl.java:132)
-	at java.base/java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:436)
-	at java.base/java.net.ServerSocket.bind(ServerSocket.java:395)
-	at java.base/java.net.ServerSocket.&lt;init&gt;(ServerSocket.java:257)
-	at java.base/java.net.ServerSocket.&lt;init&gt;(ServerSocket.java:149)
-	at com.tower.defense.server.Server.&lt;init&gt;(Server.java:27)
-	at java.base/java.lang.Thread.run(Thread.java:834)
+<pre>2021-07-15 17:32:34,404 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
+2021-07-15 17:32:34,551 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53096
+2021-07-15 17:32:34,556 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53097
+2021-07-15 17:32:34,573 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:34,573 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:44,617 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53098
+2021-07-15 17:32:44,619 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53099
+2021-07-15 17:32:44,619 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:44,621 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:49,626 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
+2021-07-15 17:32:54,643 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53101
+2021-07-15 17:32:54,646 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53102
+2021-07-15 17:32:54,654 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:54,654 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:59,652 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE
 </pre>
 </span>
 </div>
@@ -150,7 +123,7 @@ java.net.BindException: Address already in use: NET_Bind
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.1.1</a> at 15.07.2021, 17:15:59</p>
+<a href="http://www.gradle.org">Gradle 7.1.1</a> at 15.07.2021, 17:33:05</p>
 </div>
 </div>
 </body>

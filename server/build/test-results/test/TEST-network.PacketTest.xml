@@ -1,42 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="network.PacketTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-07-15T15:14:57" hostname="DESKTOP-VOCPJHE" time="61.154">
+<testsuite name="network.PacketTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-07-15T15:32:33" hostname="DESKTOP-VOCPJHE" time="31.133">
   <properties/>
-  <testcase name="testSearchMatchAndConnection()" classname="network.PacketTest" time="21.112"/>
-  <testcase name="testPacketChatMessage()" classname="network.PacketTest" time="20.023"/>
-  <testcase name="testPacketInfluence()" classname="network.PacketTest" time="20.012"/>
-  <system-out><![CDATA[2021-07-15 17:14:58,515 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
-2021-07-15 17:14:58,700 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52802
-2021-07-15 17:14:58,711 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52803
-2021-07-15 17:14:58,736 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:14:58,736 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:18,772 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52806
-2021-07-15 17:15:18,776 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52807
-2021-07-15 17:15:18,785 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:18,784 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:28,785 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
-2021-07-15 17:15:38,802 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52810
-2021-07-15 17:15:38,805 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 52811
-2021-07-15 17:15:38,810 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:38,811 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
-2021-07-15 17:15:48,807 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE
+  <testcase name="testSearchMatchAndConnection()" classname="network.PacketTest" time="11.086"/>
+  <testcase name="testPacketChatMessage()" classname="network.PacketTest" time="10.023"/>
+  <testcase name="testPacketInfluence()" classname="network.PacketTest" time="10.013"/>
+  <system-out><![CDATA[2021-07-15 17:32:34,404 INFO  [Thread-3] server.Server (Server.java:28) - Starting server on Port 3456
+2021-07-15 17:32:34,551 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53096
+2021-07-15 17:32:34,556 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53097
+2021-07-15 17:32:34,573 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:34,573 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:44,617 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53098
+2021-07-15 17:32:44,619 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53099
+2021-07-15 17:32:44,619 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:44,621 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:49,626 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETCHATMESSAGE
+2021-07-15 17:32:54,643 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53101
+2021-07-15 17:32:54,646 INFO  [Thread-3] server.Server (Server.java:32) - New incoming Connection Port: 53102
+2021-07-15 17:32:54,654 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:54,654 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETSEARCHMATCH
+2021-07-15 17:32:59,652 INFO  [ServerConnectionThread] server.ServerConnection (ServerConnection.java:97) - Traffic: New PACKETINFLUENCE
 ]]></system-out>
-  <system-err><![CDATA[java.net.BindException: Address already in use: NET_Bind
-	at java.base/java.net.PlainSocketImpl.bind0(Native Method)
-	at java.base/java.net.PlainSocketImpl.socketBind(PlainSocketImpl.java:132)
-	at java.base/java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:436)
-	at java.base/java.net.ServerSocket.bind(ServerSocket.java:395)
-	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:257)
-	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:149)
-	at com.tower.defense.server.Server.<init>(Server.java:27)
-	at java.base/java.lang.Thread.run(Thread.java:834)
-java.net.BindException: Address already in use: NET_Bind
-	at java.base/java.net.PlainSocketImpl.bind0(Native Method)
-	at java.base/java.net.PlainSocketImpl.socketBind(PlainSocketImpl.java:132)
-	at java.base/java.net.AbstractPlainSocketImpl.bind(AbstractPlainSocketImpl.java:436)
-	at java.base/java.net.ServerSocket.bind(ServerSocket.java:395)
-	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:257)
-	at java.base/java.net.ServerSocket.<init>(ServerSocket.java:149)
-	at com.tower.defense.server.Server.<init>(Server.java:27)
-	at java.base/java.lang.Thread.run(Thread.java:834)
-]]></system-err>
+  <system-err><![CDATA[]]></system-err>
 </testsuite>

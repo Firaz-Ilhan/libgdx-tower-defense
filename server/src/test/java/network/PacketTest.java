@@ -5,7 +5,6 @@ import com.tower.defense.helper.PacketQueue;
 import com.tower.defense.network.client.Client;
 import com.tower.defense.network.packet.Packet;
 import com.tower.defense.network.packet.client.PacketChatMessage;
-import com.tower.defense.network.packet.client.PacketEndOfGame;
 import com.tower.defense.network.packet.client.PacketInfluence;
 import com.tower.defense.network.packet.server.PacketMatchFound;
 import com.tower.defense.network.packet.server.PacketSearchMatch;
@@ -28,12 +27,11 @@ public class PacketTest {
         client1 = new Client("127.0.0.1", Constant.SERVER_PORT);
         client2 = new Client("127.0.0.1", Constant.SERVER_PORT);
 
-        if (client2 != null && client1 != null) {
-            client1.sendPacket(new PacketSearchMatch());
-            client2.sendPacket(new PacketSearchMatch());
-            //to assure that this packets come first
-            sleep(5000);
-        }
+
+        client1.sendPacket(new PacketSearchMatch());
+        client2.sendPacket(new PacketSearchMatch());
+        //to assure that this packets come first
+        sleep(5000);
 
     }
 

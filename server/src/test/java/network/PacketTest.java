@@ -22,28 +22,26 @@ public class PacketTest {
 
     @BeforeEach
     public void initialize() throws InterruptedException {
-        Thread serverThread = new Thread() {
-            @Override
-            public void run() {
-                Server server = new Server();
-            }
-        };
+        Thread serverThread = new Thread(Server::new);
         serverThread.setDaemon(true);
         serverThread.start();
         client1 = new Client("127.0.0.1", Constant.SERVER_PORT);
         client2 = new Client("127.0.0.1", Constant.SERVER_PORT);
 
-        client1.sendPacket(new PacketSearchMatch());
-        client2.sendPacket(new PacketSearchMatch());
-        //to assure that this packets come first
-        sleep(10000);
+        if (client1 != null) {
+            client1.sendPacket(new PacketSearchMatch());
+            client2.sendPacket(new PacketSearchMatch());
+            //to assure that this packets come first
+            sleep(10000);
+        }
+
     }
 
     @Test
     public void testSearchMatchAndConnection() throws InterruptedException {
         sleep(10000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
-        Assertions.assertTrue(packet.getClass() == PacketMatchFound.class);
+        Assertions.assertSame(packet.getClass(), PacketMatchFound.class);
 
     }
 
@@ -52,7 +50,7 @@ public class PacketTest {
         client1.sendPacket(new PacketChatMessage("name", "hallo"));
         sleep(10000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
-        Assertions.assertTrue(packet.getClass() == PacketChatMessage.class);
+        Assertions.assertSame(packet.getClass(), PacketChatMessage.class);
         Assertions.assertEquals("hallo", ((PacketChatMessage) packet).getText());
     }
 
@@ -61,7 +59,7 @@ public class PacketTest {
         client1.sendPacket(new PacketEndOfGame());
         sleep(10000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
-        Assertions.assertTrue(packet.getClass() == PacketEndOfGame.class);
+        Assertions.assertSame(packet.getClass(), PacketEndOfGame.class);
     }
 
     @Test
@@ -69,6 +67,6 @@ public class PacketTest {
         client1.sendPacket(new PacketInfluence());
         sleep(10000);
         Packet packet = PacketQueue.packetQueue.removeFirst();
-        Assertions.assertTrue(packet.getClass() == PacketInfluence.class);
+        Assertions.assertSame(packet.getClass(), PacketInfluence.class);
     }
 }

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import static java.lang.Thread.sleep;
 
-
+/**
 public class PacketTest {
     Client client1, client2;
 
@@ -72,3 +72,5 @@ public class PacketTest {
         Assertions.assertTrue(packet.getClass() == PacketInfluence.class);
     }
 }
+
+ **/

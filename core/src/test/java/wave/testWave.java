@@ -19,14 +19,4 @@ public class testWave {
         assertEquals(2, wave.waveLeft.size);
         assertEquals(2, wave.waveRight.size);
     }
-//@Test
-//doesn't work rn, investigating it later
-//    public void enemiesAreRemoved(){
-//    wave = new Wave();
-//    Player player = new Player("tester",true);
-//    waveLeft.get(0).setLifepoints(7);
-//    wave.renderWave(waveLeft,player);
-//    assertEquals(0,waveLeft.size);
-//
-//    }
 }

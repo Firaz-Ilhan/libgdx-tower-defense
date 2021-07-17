@@ -116,3 +116,9 @@ Thumbs.db
 .vscode/
 
 *.log
+*.html
+*.bin
+*.css
+*.js
+*.xml
+*.idx

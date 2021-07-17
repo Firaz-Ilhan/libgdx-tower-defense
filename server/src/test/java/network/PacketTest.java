@@ -27,8 +27,10 @@ public class PacketTest {
         client1 = new Client("127.0.0.1", Constant.SERVER_PORT);
         Client client2 = new Client("127.0.0.1", Constant.SERVER_PORT);
 
+        client1.setCurrentScreen(new TestMatchMakingScreen(new TestGame()));
         client1.sendPacket(new PacketSearchMatch());
         sleep(4000);
+        client2.setCurrentScreen(new TestMatchMakingScreen(new TestGame()));
         client2.sendPacket(new PacketSearchMatch());
         //to assure that this packets come first
         sleep(4000);

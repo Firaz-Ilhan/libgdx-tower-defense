@@ -415,8 +415,6 @@ public class GameScreen implements Screen {
 
             } else {
                 canDelete = false;
-                //sellState = false;
-
             }
 
 
@@ -504,7 +502,6 @@ public class GameScreen implements Screen {
      * Method to spawn a Tower1 and add him to the turretsPlaced list
      */
     public void spawnTurret1() {
-        //Vector2 mousePosition = stage.screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
 
         tower = new Tower1(turret1Texture, hoveredTilePosition.x * 50, hoveredTilePosition.y * 50, 50, 50, spriteBatch, shootingSound);
         turretsPlaced.add(tower);

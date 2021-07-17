@@ -162,26 +162,6 @@ public class IngameButtonsController {
 
         controlsButton = new ImageButton(controlsStyle);
 
-        controlsButton.addListener(new InputListener() {
-
-
-            public boolean touchDown(InputEvent event, int keycode) {
-                // controlActivePressed = true;
-                return true;
-
-            }
-
-
-            public boolean touchUp(InputEvent event, int keycode) {
-                //controlActivePressed = false;
-                return false;
-
-            }
-        });
-
-
-        //ButtonGroup<ImageButton> controlsGroup = new ButtonGroup<>(controlsButton);
-        //buttonGroup.setMaxCheckCount(1);
 
         controlTable.add(controlsButton);
 

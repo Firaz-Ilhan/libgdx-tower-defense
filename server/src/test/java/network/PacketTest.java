@@ -37,8 +37,8 @@ public class PacketTest {
 
     @Test
     public void testSearchMatchAndConnection() throws InterruptedException {
-        sleep(4000);
-        Packet packet = PacketQueue.packetQueue.removeFirst();
+        //sleep(4000);
+        //Packet packet = PacketQueue.packetQueue.removeFirst();
         // PacketSearchMatch or PacketMatchFound or ...?
         //Assertions.assertSame(packet.getClass(), PacketSearchMatch.class);
 

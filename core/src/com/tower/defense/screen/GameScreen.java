@@ -79,11 +79,11 @@ public class GameScreen implements Screen {
     private Texture turret2Texture;
 
     // list to store own towers
-    private final LinkedList turretsPlaced = new LinkedList<Tower>();
+    private final LinkedList<Tower> turretsPlaced = new LinkedList<Tower>();
     private ListIterator<Tower> tower1ListIterator1;
 
     // list to store towers of the opponent
-    private final LinkedList enemyTowersPlaced = new LinkedList<Tower>();
+    private final LinkedList<Tower> enemyTowersPlaced = new LinkedList<Tower>();
 
 
     private boolean altIsPressed;

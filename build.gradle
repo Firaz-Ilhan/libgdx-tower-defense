@@ -47,7 +47,7 @@ project(":desktop") {
 
     dependencies {
         implementation project(":core")
-        implementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+        implementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
@@ -59,7 +59,7 @@ project(":core") {
 
 
     dependencies {
-        implementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+        implementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
@@ -72,8 +72,20 @@ project(":server") {
 
     dependencies {
         implementation project(":core")
-        implementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
+        implementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
 
+    }
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+
+    systemProperty 'java.util.logging.config.file', "${project.buildDir}/resources/test/logging-test.properties"
+
+    forkEvery = 1
+
+    testLogging {
+        showStandardStreams = true
     }
 }
 

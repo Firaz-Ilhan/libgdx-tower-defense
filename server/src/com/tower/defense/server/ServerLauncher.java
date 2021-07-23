@@ -1,3 +1,5 @@
+package com.tower.defense.server;
+
 import com.tower.defense.server.Server;
 
 public class ServerLauncher {

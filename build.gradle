@@ -61,7 +61,6 @@ project(":core") {
     dependencies {
         implementation 'org.junit.jupiter:junit-jupiter-api:5.5.1'
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
-        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
     }
